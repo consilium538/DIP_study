@@ -57,10 +57,36 @@ unsigned char inverse(unsigned char input)
 
 std::function<unsigned char(unsigned char)> logtransform(double c)
 {
-	return [=](int input) { return (unsigned char)(c * log(1 + input)); };
+	return [=](unsigned char input) {
+        return (unsigned char)(c * log(1 + input));
+    };
 }
 
 std::function<unsigned char(unsigned char)> gammatransform(double c, double r)
 {
-    return [=](int input) { return (unsigned char)(c * pow(input,r)); };
+    return [=](unsigned char input) {
+        return (unsigned char)(c * pow(input/255.0,r) * 255.0);
+    };
+}
+
+std::function<unsigned char(unsigned char)> thresholding(unsigned char threshold)
+{
+    return [=](unsigned char input) {
+        return (unsigned char)input > threshold ? 255 : 0;
+    };
+}
+
+std::function<unsigned char(unsigned char)> levelslicing(int lower, int upper, int level)
+{
+    return [=](unsigned char input) {
+        return (unsigned char)(input <= upper && input >= lower) ? level : input;
+    };
+}
+
+std::function<unsigned char(unsigned char)> bitslicing(unsigned char bitlevel)
+{
+    return [=](unsigned char input) {
+//        return (unsigned char)input & bitlevel ? 1 << bitlevel : 0;
+        return (unsigned char)input & bitlevel ? 255 : 0;
+    };
 }
