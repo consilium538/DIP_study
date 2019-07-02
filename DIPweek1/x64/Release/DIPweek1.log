@@ -1,7 +1,12 @@
-﻿  main.cpp
+﻿  affine.cpp
+C:\Users\dhej1\source\repos\DIP_study\DIPweek1\affine.cpp(91,30): warning C4244:  '초기화 중': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\dhej1\source\repos\DIP_study\DIPweek1\affine.cpp(91,21): warning C4244:  '초기화 중': 'double'에서 'const int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\dhej1\source\repos\DIP_study\DIPweek1\affine.cpp(92,30): warning C4244:  '초기화 중': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  main.cpp
+C:\Users\dhej1\source\repos\DIP_study\DIPweek1\affine.cpp(92,21): warning C4244:  '초기화 중': 'double'에서 'const int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   코드를 생성하고 있습니다.
-  8 of 213 functions ( 3.8%) were compiled, the rest were copied from previous compilation.
-    6 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
+  85 of 256 functions (33.2%) were compiled, the rest were copied from previous compilation.
+    1 functions were new in current compilation
+    22 functions had inline decision re-evaluated but remain unchanged
   코드를 생성했습니다.
   DIPweek1.vcxproj -> C:\Users\dhej1\source\repos\DIP_study\x64\Release\DIPweek1.exe

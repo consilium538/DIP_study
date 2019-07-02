@@ -9,6 +9,9 @@ cv::Mat AffineMat(
     double a21, double a22, double a23
 );
 
+cv::Mat rotateMat(double theta);
+cv::Mat translationMat(double tx, double ty);
+
 std::tuple<double, double> AffineTransform(
     cv::Mat matrix, double x, double y
 );

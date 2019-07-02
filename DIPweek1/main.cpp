@@ -1,3 +1,5 @@
+#define _USE_MATH_DEFINES
+
 #include <opencv2/core/utility.hpp>
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/highgui.hpp>
@@ -6,6 +8,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <cmath>
 
 #include "intensity.hpp"
 #include "affine.hpp"
@@ -16,8 +19,9 @@ using namespace cv;
 int main(int argv, char** argc)
 {
     const string inputPath = "C:\\KDH\\19ysummer\\dip\\DIP4E Book Images Global Edition\\";
-    const string arrowFile = "angiogram-aortic-kidney.tif";
+    const string arrowFile = "wingding-arrow-right.tif";
     Mat originalImg = cv::imread(inputPath + arrowFile);
+    Mat TransformedImg;
 
     //string inputPath;
     //getline(cin, inputPath);
@@ -45,31 +49,30 @@ int main(int argv, char** argc)
     //double c, r;
     //cin >> c >> r;
 
-    //cv::Mat TransformedImg = intensityTransform(
+    //TransformedImg = intensityTransform(
     //    originalImg, gammatransform(c, r)
+    //);
+
+    //TransformedImg = intensityTransform(
+    //    originalImg, thresholding(127)
+    //    originalImg, levelslicing(180, 255, 230)
+    //    originalImg, bitslicing(4)
     //);
 
     // Affine Transform
 
-    //cv::Mat affine = AffineMatrix(1,0,0,0,1,0);
-
-    //cv::Mat TransformedImg = GeometricTransform(
-    //    originalImg, affine
-    //);
-
-    //cv::Mat TransformedImg = ResizeTransform(
+    //TransformedImg = ResizeTransform(
     //    originalImg, 1.0/8.0, 1.0/8.0, 1
     //);
-    cv::Mat TransformedImg = intensityTransform(
-//        originalImg, thresholding(127)
-//        originalImg, levelslicing(180, 255, 230)
-//        originalImg, bitslicing(4)
-    );
 
-    //cv::Mat TransformedImg = ((cv::Mat_<double>(3, 3) <<
-    //    1, 0, 0,
-    //    0, 1, 0,
-    //    0, 0, 1));
+    //TransformedImg = GeometricTransform(
+    //    originalImg,
+    //    translationMat(originalImg.rows/2, originalImg.cols/2) *
+    //    rotateMat(30.0 * 2 * M_PI / 360.0) *
+    //    translationMat(-originalImg.rows / 2, -originalImg.cols / 2)
+    //); // 
+
+    // print result
 
     cv::namedWindow("Transformed", cv::WINDOW_AUTOSIZE);
     cv::moveWindow("Transformed", 600, 20);

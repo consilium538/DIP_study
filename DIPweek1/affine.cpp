@@ -47,6 +47,7 @@ cv::Mat GeometricTransform(
     const int nCols = TransformedImg.cols;
     uchar* pTransformed;
     double k, q;
+    int ik, iq;
     cv::Mat inverseAffine = affine.inv();
 
     //if(sourceImg.type() == CV_8U) {  }
@@ -56,6 +57,37 @@ cv::Mat GeometricTransform(
         for (int j = 0; j < nCols; j++)
         {
             std::tie(k, q) = AffineTransform(inverseAffine, i, j);
+            ik = (int)std::round(k);
+            iq = (int)std::round(q);
+            if (ik >= 0 && ik < sourceImg.rows &&
+                iq >= 0 && iq < sourceImg.cols)
+            {
+
+                if (sourceImg.type() == CV_8U)
+                {
+                    pTransformed[j] = sourceImg.at<unsigned char>(ik, iq);
+                }
+                else if (sourceImg.type() == CV_8UC3)
+                {
+                    pTransformed[3 * j] = sourceImg.at<cv::Vec3b>(ik, iq)[0];
+                    pTransformed[3 * j + 1] = sourceImg.at<cv::Vec3b>(ik, iq)[1];
+                    pTransformed[3 * j + 2] = sourceImg.at<cv::Vec3b>(ik, iq)[2];
+                }
+            }
+
+            else // out off image
+            {
+                if (sourceImg.type() == CV_8U)
+                {
+                    pTransformed[j] = 0;
+                }
+                else if (sourceImg.type() == CV_8UC3)
+                {
+                    pTransformed[3 * j] = 0;
+                    pTransformed[3 * j + 1] = 0;
+                    pTransformed[3 * j + 2] = 0;
+                }
+            }
             // pTransformed[j] = ;
         }
     }
@@ -94,11 +126,11 @@ cv::Mat ResizeTransform(
             for (int j = 0; j < nCols; j++)
             {
                 std::tie(k, q) = AffineTransform(inverseAffine, i, j);
-                if (k >= 0.0 && k < sourceImg.rows &&
-                    q >= 0.0 && q < sourceImg.cols)
-                {
                     ik = (int)std::round(k);
                     iq = (int)std::round(q);
+                if (ik >= 0 && ik < sourceImg.rows &&
+                    iq >= 0 && iq < sourceImg.cols)
+                {
 
                     if (sourceImg.type() == CV_8U)
                     {
@@ -113,7 +145,18 @@ cv::Mat ResizeTransform(
                 }
 
                 else // out off image
-                    pTransformed[j] = 0; // zero padding
+                {
+                    if (sourceImg.type() == CV_8U)
+                    {
+                        pTransformed[j] = 0;
+                    }
+                    else if (sourceImg.type() == CV_8UC3)
+                    {
+                        pTransformed[3 * j] = 0;
+                        pTransformed[3 * j + 1] = 0;
+                        pTransformed[3 * j + 2] = 0;
+                    }
+                }
             }
         }
         break;
