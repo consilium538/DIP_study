@@ -3,6 +3,7 @@
 
 #include <opencv2/core/utility.hpp>
 #include <cmath>
+#include <functional>
 
 cv::Mat intensityLUT(
 	std::function<unsigned char(unsigned char)> func

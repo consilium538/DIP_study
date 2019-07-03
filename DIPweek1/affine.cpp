@@ -102,8 +102,8 @@ cv::Mat ResizeTransform(
     int mode
 )
 {
-    const int nRows = scaleX * sourceImg.rows;
-    const int nCols = scaleY * sourceImg.cols;
+    const int nRows = (int)(scaleX * sourceImg.rows);
+    const int nCols = (int)(scaleY * sourceImg.cols);
     double inversescaleX = ((double)sourceImg.rows - 1.0) / (scaleX * (double)sourceImg.rows - 1.0);
     double inversescaleY = ((double)sourceImg.cols - 1.0) / (scaleY * (double)sourceImg.cols - 1.0);
 
