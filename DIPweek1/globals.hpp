@@ -5,6 +5,7 @@
 
 #include <opencv2/core/utility.hpp>
 #include <cmath>
+#include <array>
 #include <functional>
 
 #endif // GLOBALS_HPP

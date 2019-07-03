@@ -11,6 +11,8 @@ cv::Mat conv2d(cv::Mat large, cv::Mat small, int method)
     int nColS = small.cols;
     cv::Vec3d* ptr;
     cv::Mat focusMat = cv::Mat(small.size(), CV_64FC3);
+    cv::Mat small_a;
+    cv::merge(std::array<cv::Mat, 3>{small, small, small}, small_a);
 
     // int nRow = method == 1 ? large.rows : large.rows + small.rows;
 
@@ -49,7 +51,9 @@ cv::Mat conv2d(cv::Mat large, cv::Mat small, int method)
                               = large.at<cv::Vec3d>(k_centered, l_centered);
                     }
                 }
-                ptr[j] = cv::sum(focusMat.mul(small));
+                ptr[j][0] = cv::sum(focusMat.mul(small_a))[0];
+                ptr[j][1] = cv::sum(focusMat.mul(small_a))[1];
+                ptr[j][2] = cv::sum(focusMat.mul(small_a))[2];
             }
         }
     }

@@ -1,4 +1,2 @@
-﻿  conv.cpp
-C:\Users\dhej1\source\repos\DIP_study\DIPweek1\conv.cpp(52,54): error C2679:  이항 '=': 오른쪽 피연산자로 'cv::Scalar' 형식을 사용하는 연산자가 없거나 허용되는 변환이 없습니다.
-C:\KDH\opencv\opencv\build\include\opencv2\core\matx.hpp(391,1): message :  'cv::Vec<double,3> &cv::Vec<double,3>::operator =(const cv::Vec<double,3> &)'일 수 있습니다.
-C:\Users\dhej1\source\repos\DIP_study\DIPweek1\conv.cpp(52,54): message :  인수 목록 '(cv::Vec3d, cv::Scalar)'을(를) 일치시키는 동안
+﻿  main.cpp
+  DIPweek1.vcxproj -> C:\Users\dhej1\source\repos\DIP_study\x64\Debug\DIPweek1.exe

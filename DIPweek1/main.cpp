@@ -82,6 +82,7 @@ int main(int argv, char** argc)
     // Spatial filter
 
     originalImg.convertTo(MiddleImg, CV_64F);
+    //MiddleImg.convertTo(TransformedImg, CV_8U);
     conv2d(
         MiddleImg,
         (cv::Mat_<double>(3,3) <<
