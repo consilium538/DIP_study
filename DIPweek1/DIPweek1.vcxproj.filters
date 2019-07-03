@@ -30,6 +30,9 @@
     <ClCompile Include="basic.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="conv.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="affine.hpp">
@@ -42,6 +45,12 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="basic.hpp">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="conv.hpp">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="globals.hpp">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

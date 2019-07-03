@@ -1,8 +1,7 @@
 #ifndef AFFINE_HPP
 #define AFFINE_HPP
 
-#include <opencv2/core/utility.hpp>
-#include <cmath>
+#include "globals.hpp"
 
 cv::Mat AffineMat(
     double a11, double a12, double a13,

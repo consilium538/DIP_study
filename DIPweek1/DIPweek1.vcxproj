@@ -132,6 +132,7 @@
     <ClCompile Include="affine.cpp" />
     <ClCompile Include="basic.cpp" />
     <ClCompile Include="color.cpp" />
+    <ClCompile Include="conv.cpp" />
     <ClCompile Include="intensity.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -139,6 +140,8 @@
     <ClInclude Include="affine.hpp" />
     <ClInclude Include="basic.hpp" />
     <ClInclude Include="color.hpp" />
+    <ClInclude Include="conv.hpp" />
+    <ClInclude Include="globals.hpp" />
     <ClInclude Include="intensity.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

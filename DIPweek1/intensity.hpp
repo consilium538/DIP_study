@@ -1,9 +1,7 @@
 #ifndef INTENSITY_HPP
 #define INTENSITY_HPP
 
-#include <opencv2/core/utility.hpp>
-#include <cmath>
-#include <functional>
+#include "globals.hpp"
 
 cv::Mat intensityLUT(
 	std::function<unsigned char(unsigned char)> func

@@ -1,10 +1,7 @@
 #ifndef COLOR_HPP
 #define COLOR_HPP
 
-#define _USE_MATH_DEFINES
-#include <opencv2/core/utility.hpp>
-#include <cmath>
-#include <functional>
+#include "globals.hpp"
 
 #include "basic.hpp"
 

@@ -1,6 +1,5 @@
 #define _USE_MATH_DEFINES
 
-#include <opencv2/core/utility.hpp>
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/highgui.hpp>
 
@@ -8,12 +7,13 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <cmath>
 
+#include "globals.hpp"
 #include "intensity.hpp"
 #include "affine.hpp"
 #include "color.hpp"
 #include "basic.hpp"
+#include "conv.hpp"
 
 using namespace std;
 using namespace cv;
@@ -21,7 +21,7 @@ using namespace cv;
 int main(int argv, char** argc)
 {
     const string inputPath = "C:\\KDH\\19ysummer\\dip\\DIP4E Book Images Global Edition\\";
-    const string arrowFile = "RGB-color-cube.tif";
+    const string arrowFile = "testpattern512.tif";
     Mat originalImg = cv::imread(inputPath + arrowFile);
     Mat TransformedImg, MiddleImg;
 
@@ -76,15 +76,27 @@ int main(int argv, char** argc)
 
     // Color Transform
 
-    MiddleImg = ColorTransform(originalImg, BGR2HSI);
-    TransformedImg = ColorTransform(MiddleImg, HSI2BGR);
-    //TransformedImg = ColorTransform(originalImg, ColorIdentity);
+    //MiddleImg = ColorTransform(originalImg, BGR2HSI);
+    //TransformedImg = ColorTransform(MiddleImg, HSI2BGR);
+    
+    // Spatial filter
+
+    originalImg.convertTo(MiddleImg, CV_64F);
+    conv2d(
+        MiddleImg,
+        (cv::Mat_<double>(3,3) <<
+            1.0 / 9.0, 1.0 / 9.0, 1.0 / 9.0,
+            1.0 / 9.0, 1.0 / 9.0, 1.0 / 9.0, 
+            1.0 / 9.0, 1.0 / 9.0, 1.0 / 9.0),
+        1).convertTo(TransformedImg, CV_8U);
+
+    // Smoothing spatial filter
 
     // print result
 
-    cv::namedWindow("Transformed", cv::WINDOW_AUTOSIZE);
-    cv::moveWindow("Transformed", 600, 20);
-    cv::imshow("Transformed", TransformedImg);
+    cv::namedWindow("Transformed(BGR->HSB->BGR)", cv::WINDOW_AUTOSIZE);
+    cv::moveWindow("Transformed(BGR->HSB->BGR)", 600, 20);
+    cv::imshow("Transformed(BGR->HSB->BGR)", TransformedImg);
 
     cv::waitKey();
     cv::destroyAllWindows();
