@@ -1,11 +1,11 @@
 ﻿  affine.cpp
+C:\Users\dhej1\source\repos\DIP_study\DIPweek1\affine.cpp(176,16): warning C4101:  'dq' :참조되지 않은 지역 변수입니다.
   basic.cpp
   color.cpp
   conv.cpp
   intensity.cpp
   main.cpp
-C:\Users\dhej1\source\repos\DIP_study\DIPweek1\conv.cpp(196,11): warning C4101:  'tmp' :참조되지 않은 지역 변수입니다.
-  컴파일하고 있습니다...
+C:\Users\dhej1\source\repos\DIP_study\DIPweek1\affine.cpp(176,12): warning C4101:  'dk' :참조되지 않은 지역 변수입니다.
   코드를 생성하고 있습니다...
 C:\Users\dhej1\source\repos\DIP_study\DIPweek1\main.cpp(113,23): warning C4244:  '초기화 중': '_Rep'에서 'double'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 C:\Users\dhej1\source\repos\DIP_study\DIPweek1\main.cpp(113,23): warning C4244:         with
@@ -13,25 +13,3 @@ C:\Users\dhej1\source\repos\DIP_study\DIPweek1\main.cpp(113,23): warning C4244: 
 C:\Users\dhej1\source\repos\DIP_study\DIPweek1\main.cpp(113,23): warning C4244:             _Rep=__int64
 C:\Users\dhej1\source\repos\DIP_study\DIPweek1\main.cpp(113,23): warning C4244:         ]
   DIPweek1.vcxproj -> C:\Users\dhej1\source\repos\DIP_study\x64\Debug\DIPweek1.exe
-C:\KDH\opencv\opencv\build\include\opencv2\core\mat.inl.hpp(550): warning C26451: Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2).
-C:\KDH\opencv\opencv\build\include\opencv2\core\mat.inl.hpp(579): warning C26451: Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2).
-C:\KDH\opencv\opencv\build\include\opencv2\core\mat.inl.hpp(1380): warning C26439: This kind of function may not throw. Declare it 'noexcept' (f.6).
-C:\KDH\opencv\opencv\build\include\opencv2\core\mat.inl.hpp(1405): warning C26439: This kind of function may not throw. Declare it 'noexcept' (f.6).
-C:\KDH\opencv\opencv\build\include\opencv2\core\mat.inl.hpp(1513): warning C26495: Variable 'cv::MatStep::buf' is uninitialized. Always initialize a member variable (type.6).
-C:\KDH\opencv\opencv\build\include\opencv2\core\mat.inl.hpp(1519): warning C26495: Variable 'cv::MatStep::buf' is uninitialized. Always initialize a member variable (type.6).
-C:\KDH\opencv\opencv\build\include\opencv2\core\mat.inl.hpp(2185): warning C26451: Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2).
-C:\KDH\opencv\opencv\build\include\opencv2\core\mat.inl.hpp(3875): warning C26439: This kind of function may not throw. Declare it 'noexcept' (f.6).
-C:\KDH\opencv\opencv\build\include\opencv2\core\mat.inl.hpp(3899): warning C26439: This kind of function may not throw. Declare it 'noexcept' (f.6).
-C:\KDH\opencv\opencv\build\include\opencv2\core\utility.hpp(560): warning C26451: Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2).
-C:\KDH\opencv\opencv\build\include\opencv2\core\matx.hpp(846): warning C26495: Variable 'cv::Matx<double,4,1>::val' is uninitialized. Always initialize a member variable (type.6).
-C:\KDH\opencv\opencv\build\include\opencv2\core\matx.hpp(557): warning C6294: for 루프가 잘못 정의되었습니다. 초기 조건이 충족되지 않으므로 루프 본문이 실행되지 않습니다.
-C:\KDH\opencv\opencv\build\include\opencv2\core\matx.hpp(557): warning C6201: 스택에 할당되었을 가능성이 있는 버퍼 'this->val'에 대해 인덱스 '3'이(가) 유효한 인덱스 범위 '0' - '2'을(를) 벗어납니다.
-C:\KDH\opencv\opencv\build\include\opencv2\core\matx.hpp(549): warning C6294: for 루프가 잘못 정의되었습니다. 초기 조건이 충족되지 않으므로 루프 본문이 실행되지 않습니다.
-C:\KDH\opencv\opencv\build\include\opencv2\core\matx.hpp(549): warning C6201: 스택에 할당되었을 가능성이 있는 버퍼 'this->val'에 대해 인덱스 '2'이(가) 유효한 인덱스 범위 '0' - '1'을(를) 벗어납니다.
-C:\KDH\opencv\opencv\build\include\opencv2\core\matx.hpp(565): warning C6294: for 루프가 잘못 정의되었습니다. 초기 조건이 충족되지 않으므로 루프 본문이 실행되지 않습니다.
-C:\KDH\opencv\opencv\build\include\opencv2\core\matx.hpp(565): warning C6201: 스택에 할당되었을 가능성이 있는 버퍼 'this->val'에 대해 인덱스 '4'이(가) 유효한 인덱스 범위 '0' - '3'을(를) 벗어납니다.
-C:\KDH\opencv\opencv\build\include\opencv2\core\matx.hpp(658): warning C26495: Variable 'cv::Matx<double,4,1>::val' is uninitialized. Always initialize a member variable (type.6).
-C:\KDH\opencv\opencv\build\include\opencv2\core\matx.hpp(532): warning C26495: Variable 'cv::Matx<double,4,1>::val' is uninitialized. Always initialize a member variable (type.6).
-C:\Users\dhej1\source\repos\DIP_study\DIPweek1\conv.cpp(137): warning C26451: Arithmetic overflow: Using operator '-' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '-' to avoid overflow (io.2).
-C:\Users\dhej1\source\repos\DIP_study\DIPweek1\conv.cpp(138): warning C26451: Arithmetic overflow: Using operator '-' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '-' to avoid overflow (io.2).
-C:\KDH\opencv\opencv\build\include\opencv2\core\matx.hpp(664): warning C26495: Variable 'cv::Matx<double,3,1>::val' is uninitialized. Always initialize a member variable (type.6).

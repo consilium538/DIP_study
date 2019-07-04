@@ -30,7 +30,9 @@ std::tuple<double, double> AffineTransform( cv::Mat matrix, double x, double y )
                             x * ptr[3] + y * ptr[4] + ptr[5] );
 }
 
-cv::Mat GeometricTransform( cv::Mat sourceImg, cv::Mat affine )
+cv::Mat GeometricTransform( cv::Mat sourceImg,
+                            cv::Mat affine,
+                            InterpolationMethod mode )
 {
     // CV_Assert(sourceImg.type() == CV_8U);
 
@@ -44,47 +46,50 @@ cv::Mat GeometricTransform( cv::Mat sourceImg, cv::Mat affine )
     cv::Mat inverseAffine = affine.inv();
 
     // if(sourceImg.type() == CV_8U) {  }
-    for ( int i = 0; i < nRows; i++ )
-    {
-        pTransformed = TransformedImg.ptr( i );
-        for ( int j = 0; j < nCols; j++ )
-        {
-            std::tie( k, q ) = AffineTransform( inverseAffine, i, j );
-            ik = (int)std::round( k );
-            iq = (int)std::round( q );
-            if ( ik >= 0 && ik < sourceImg.rows && iq >= 0 &&
-                 iq < sourceImg.cols )
-            {
-                if ( sourceImg.type() == CV_8U )
-                {
-                    pTransformed[j] = sourceImg.at<unsigned char>( ik, iq );
-                }
-                else if ( sourceImg.type() == CV_8UC3 )
-                {
-                    pTransformed[3 * j] = sourceImg.at<cv::Vec3b>( ik, iq )[0];
-                    pTransformed[3 * j + 1] =
-                        sourceImg.at<cv::Vec3b>( ik, iq )[1];
-                    pTransformed[3 * j + 2] =
-                        sourceImg.at<cv::Vec3b>( ik, iq )[2];
-                }
-            }
 
-            else  // out off image
-            {
-                if ( sourceImg.type() == CV_8U )
-                {
-                    pTransformed[j] = 0;
-                }
-                else if ( sourceImg.type() == CV_8UC3 )
-                {
-                    pTransformed[3 * j] = 0;
-                    pTransformed[3 * j + 1] = 0;
-                    pTransformed[3 * j + 2] = 0;
-                }
-            }
-            // pTransformed[j] = ;
-        }
-    }
+    // for ( int i = 0; i < nRows; i++ )
+    //{
+    //    pTransformed = TransformedImg.ptr( i );
+    //    for ( int j = 0; j < nCols; j++ )
+    //    {
+    //        std::tie( k, q ) = AffineTransform( inverseAffine, i, j );
+    //        ik = (int)std::round( k );
+    //        iq = (int)std::round( q );
+    //        if ( ik >= 0 && ik < sourceImg.rows && iq >= 0 &&
+    //             iq < sourceImg.cols )
+    //        {
+    //            if ( sourceImg.type() == CV_8U )
+    //            {
+    //                pTransformed[j] = sourceImg.at<unsigned char>( ik, iq );
+    //            }
+    //            else if ( sourceImg.type() == CV_8UC3 )
+    //            {
+    //                pTransformed[3 * j] = sourceImg.at<cv::Vec3b>( ik, iq
+    //                )[0]; pTransformed[3 * j + 1] =
+    //                    sourceImg.at<cv::Vec3b>( ik, iq )[1];
+    //                pTransformed[3 * j + 2] =
+    //                    sourceImg.at<cv::Vec3b>( ik, iq )[2];
+    //            }
+    //        }
+
+    //        else  // out off image
+    //        {
+    //            if ( sourceImg.type() == CV_8U )
+    //            {
+    //                pTransformed[j] = 0;
+    //            }
+    //            else if ( sourceImg.type() == CV_8UC3 )
+    //            {
+    //                pTransformed[3 * j] = 0;
+    //                pTransformed[3 * j + 1] = 0;
+    //                pTransformed[3 * j + 2] = 0;
+    //            }
+    //        }
+    //        // pTransformed[j] = ;
+    //    }
+    //}
+
+    affineLoop( sourceImg, TransformedImg, inverseAffine, mode );
 
     return TransformedImg.clone();
 }
@@ -92,7 +97,7 @@ cv::Mat GeometricTransform( cv::Mat sourceImg, cv::Mat affine )
 cv::Mat ResizeTransform( cv::Mat sourceImg,
                          double scaleX,
                          double scaleY,
-                         int mode )
+                         InterpolationMethod mode )
 {
     const int nRows = (int)( scaleX * sourceImg.rows );
     const int nCols = (int)( scaleY * sourceImg.cols );
@@ -109,55 +114,122 @@ cv::Mat ResizeTransform( cv::Mat sourceImg,
     double k, q;
     int ik, iq;
 
-    switch ( mode )
+    // switch ( mode )
+    //{
+    //    case 1:  // nearleast neighberhood
+    //        for ( int i = 0; i < nRows; i++ )
+    //        {
+    //            pTransformed = TransformedImg.ptr<uchar>( i );
+    //            for ( int j = 0; j < nCols; j++ )
+    //            {
+    //                std::tie( k, q ) = AffineTransform( inverseAffine, i, j );
+    //                ik = (int)std::round( k );
+    //                iq = (int)std::round( q );
+    //                if ( ik >= 0 && ik < sourceImg.rows && iq >= 0 &&
+    //                     iq < sourceImg.cols )
+    //                {
+    //                    if ( sourceImg.type() == CV_8U )
+    //                    {
+    //                        pTransformed[j] =
+    //                            sourceImg.at<unsigned char>( ik, iq );
+    //                    }
+    //                    else if ( sourceImg.type() == CV_8UC3 )
+    //                    {
+    //                        pTransformed[3 * j] =
+    //                            sourceImg.at<cv::Vec3b>( ik, iq )[0];
+    //                        pTransformed[3 * j + 1] =
+    //                            sourceImg.at<cv::Vec3b>( ik, iq )[1];
+    //                        pTransformed[3 * j + 2] =
+    //                            sourceImg.at<cv::Vec3b>( ik, iq )[2];
+    //                    }
+    //                }
+
+    //                else  // out off image
+    //                {
+    //                    if ( sourceImg.type() == CV_8U )
+    //                    {
+    //                        pTransformed[j] = 0;
+    //                    }
+    //                    else if ( sourceImg.type() == CV_8UC3 )
+    //                    {
+    //                        pTransformed[3 * j] = 0;
+    //                        pTransformed[3 * j + 1] = 0;
+    //                        pTransformed[3 * j + 2] = 0;
+    //                    }
+    //                }
+    //            }
+    //        }
+    //        break;
+    //    default:
+    //        break;
+    //}
+
+    affineLoop( sourceImg, TransformedImg, inverseAffine, mode );
+
+    return TransformedImg.clone();
+}
+
+void affineLoop( cv::Mat sourceImg,
+                 cv::Mat TransformedImg,
+                 cv::Mat inverseAffine,
+                 InterpolationMethod mode )
+{
+    const int nRows = sourceImg.rows;
+    const int nCols = sourceImg.cols;
+
+    uchar* pTransformed;
+    double k, q;
+    int ik, iq;
+    double dk, dq;
+
+    for ( int i = 0; i < nRows; i++ )
     {
-        case 1:  // nearleast neighberhood
-            for ( int i = 0; i < nRows; i++ )
+        for ( int j = 0; j < nCols; j++ )
+        {
+            std::tie( k, q ) = AffineTransform( inverseAffine, i, j );
+            ik = (int)std::round( k );
+            iq = (int)std::round( q );
+
+            switch ( mode )
             {
-                pTransformed = TransformedImg.ptr<uchar>( i );
-                for ( int j = 0; j < nCols; j++ )
-                {
-                    std::tie( k, q ) = AffineTransform( inverseAffine, i, j );
-                    ik = (int)std::round( k );
-                    iq = (int)std::round( q );
+                case InterpolationMethod::nearest:  // nearleast neighberhood
                     if ( ik >= 0 && ik < sourceImg.rows && iq >= 0 &&
                          iq < sourceImg.cols )
                     {
                         if ( sourceImg.type() == CV_8U )
                         {
-                            pTransformed[j] =
-                                sourceImg.at<unsigned char>( ik, iq );
+                            TransformedImg.at<uchar>( i, j ) =
+                                sourceImg.at<uchar>( ik, iq );
                         }
                         else if ( sourceImg.type() == CV_8UC3 )
                         {
-                            pTransformed[3 * j] =
-                                sourceImg.at<cv::Vec3b>( ik, iq )[0];
-                            pTransformed[3 * j + 1] =
-                                sourceImg.at<cv::Vec3b>( ik, iq )[1];
-                            pTransformed[3 * j + 2] =
-                                sourceImg.at<cv::Vec3b>( ik, iq )[2];
+                            TransformedImg.at<cv::Vec3b>( i, j ) =
+                                sourceImg.at<cv::Vec3b>( ik, iq );
                         }
                     }
-
                     else  // out off image
                     {
                         if ( sourceImg.type() == CV_8U )
                         {
-                            pTransformed[j] = 0;
+                            TransformedImg.at<uchar>( i, j ) = 0;
                         }
                         else if ( sourceImg.type() == CV_8UC3 )
                         {
-                            pTransformed[3 * j] = 0;
-                            pTransformed[3 * j + 1] = 0;
-                            pTransformed[3 * j + 2] = 0;
+                            TransformedImg.at<cv::Vec3b>( i, j ) = {0, 0, 0};
                         }
                     }
-                }
+                    break;
+                case InterpolationMethod::bilinear:
+                    break;
+                default:
+                    break;
             }
-            break;
-        default:
-            break;
+        }
     }
-
-    return TransformedImg.clone();
 }
+
+
+// ik >= 0 && ik < sourceImg.rows && iq >= 0 &&
+//                     iq < sourceImg.cols
+
+inline bool isBoundery(int x, int y, int xk, int yk)
