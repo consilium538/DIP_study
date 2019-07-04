@@ -191,45 +191,58 @@ cv::Mat sobel_filter( SobelOption dir )
 cv::Mat adaptive_median( cv::Mat orig, int maxWindowSize )
 {
     cv::Mat ret = cv::Mat( orig.size(), orig.type() );
-    cv::Mat window, splitwindow[3];
-    uchar tmp;
+    cv::Mat channels[3];
+    cv::Mat window, splited;
 
     const int nRow = orig.rows;
     const int nCol = orig.cols;
 
-    unsigned char bMax[3];
-    unsigned char bMin[3];
-    unsigned char bMedian[3];
+    unsigned char bMax;
+    unsigned char bMin;
+    unsigned char bMedian;
+    unsigned char bOrig;
 
     int w;
     std::vector<uchar> tmparr;
 
-    for ( int i = 0; i < nRow; i++ )
+    cv::split( orig, channels );
+
+    for ( int k = 0; k < 3; k++ )
     {
-        for ( int j = 0; j < nCol; j++ )
+        splited = channels[k];
+        for ( int i = 0; i < nRow; i++ )
         {
-            w = 1;
-            do
-            {  // j + l - nColS / 2
-                window =
-                    ret( cv::Rect( std::max( i - w, 0 ), std::max( j - w, 0 ),
-                                   std::min( 2 * w + 1, nRow - i + w ),
-                                   std::min( 2 * w + 1, nCol - j + w ) ) );
-                cv::split( window, splitwindow );
-                for ( int k = 0; k < 2; k++ )
+            for ( int j = 0; j < nCol; j++ )
+            {
+                // level A
+                w = 1;
+                do
                 {
+                    window = splited(
+                        cv::Rect( std::max( j - w, 0 ), std::max( i - w, 0 ),
+                                  std::min( 2 * w + 1, nCol - j + w ),
+                                  std::min( 2 * w + 1, nRow - i + w ) ) );
                     tmparr.clear();
-                    tmparr.assign( splitwindow[k].begin<uchar>,
-                                   splitwindow[k].end<uchar> );
+                    tmparr.assign( window.begin<uchar>(), window.end<uchar>() );
                     std::sort( tmparr.begin(), tmparr.end() );
 
-                    bMax[k] = tmparr.back();
-                    bMin[k] = tmparr.front();
-                    bMedian[k] = tmparr.size();
-                }
-                // level A
-            } while ( w < maxWindowSize );
-            // level B
+                    bMax = tmparr.back();
+                    bMin = tmparr.front();
+                    bMedian = tmparr[tmparr.size() / 2];
+
+                    if ( bMin < bMedian && bMedian < bMax )
+                        break;
+                    else
+                        w++;
+                } while ( w < maxWindowSize );
+
+                // level B
+                bOrig = orig.at<cv::Vec3b>( i, j )[k];
+                if ( bMin < bOrig && bOrig < bMax )
+                    ret.at<cv::Vec3b>( i, j )[k] = bOrig;
+                else
+                    ret.at<cv::Vec3b>( i, j )[k] = bMedian;
+            }
         }
     }
 

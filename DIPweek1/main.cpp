@@ -4,7 +4,9 @@
 #include <opencv2/imgcodecs.hpp>
 
 #include <algorithm>
+#include <chrono>
 #include <iostream>
+#include <iomanip>
 #include <string>
 #include <vector>
 
@@ -22,7 +24,7 @@ int main( int argv, char** argc )
 {
     const string inputPath =
         "C:\\KDH\\19ysummer\\dip\\DIP4E Book Images Global Edition\\";
-    const string arrowFile = "RGB-color-cube.tif";
+    const string arrowFile = "circuitboard-saltandpep.tif";
     Mat originalImg = cv::imread( inputPath + arrowFile );
     Mat TransformedImg, MiddleImg;
 
@@ -40,9 +42,9 @@ int main( int argv, char** argc )
     //    return -1;
     //}
 
-     cv::namedWindow("Original", cv::WINDOW_AUTOSIZE);
-     cv::moveWindow("Original", 20, 20);
-     cv::imshow("Original", originalImg);
+    cv::namedWindow( "Original", cv::WINDOW_AUTOSIZE );
+    cv::moveWindow( "Original", 20, 20 );
+    cv::imshow( "Original", originalImg );
 
     // cv::waitKey();
     // cv::destroyAllWindows();
@@ -77,29 +79,44 @@ int main( int argv, char** argc )
 
     // Color Transform
 
-     //MiddleImg = ColorTransform(originalImg, BGR2HSI);
-     //TransformedImg = ColorTransform(MiddleImg, HSI2BGR);
+    // MiddleImg = ColorTransform(originalImg, BGR2HSI);
+    // TransformedImg = ColorTransform(MiddleImg, HSI2BGR);
 
     // Spatial filter
 
     // Smoothing spatial filter
 
-     //originalImg.convertTo(MiddleImg, CV_64F);
-     //conv2d(MiddleImg, gaussian_filter(7,1), Padding::replicate)
-     //   .convertTo(TransformedImg, CV_8U);
+    // originalImg.convertTo(MiddleImg, CV_64F);
+    // conv2d(MiddleImg, gaussian_filter(7,1), Padding::replicate)
+    //   .convertTo(TransformedImg, CV_8U);
 
     //// TransformedImg = originalImg(cv::Rect(160, 240, 100, 100));
-    //split( originalImg( cv::Rect( 160, 240, 20, 20 ) ), MiddleImg );
+    // split( originalImg( cv::Rect( 160, 240, 20, 20 ) ), MiddleImg );
     //// MiddleImg.convertTo(TransformedImg, CV_8UC1);
-    //TransformedImg = MiddleImg[0];
-    //std::vector<uchar> test;
-    //test.assign( TransformedImg.begin<uchar>(), TransformedImg.end<uchar>() );
+    // TransformedImg = MiddleImg[0];
+    // std::vector<uchar> test;
+    // test.assign( TransformedImg.begin<uchar>(), TransformedImg.end<uchar>()
+    // );
     //// cout << test << endl;
-    //std::sort( test.begin(), test.end() );
+    // std::sort( test.begin(), test.end() );
 
-    //for ( auto a : test )
+    // for ( auto a : test )
     //    cout << int{a} << ' ';
-    //cout << endl;
+    // cout << endl;
+
+    // Adaptive median filter
+
+    auto start = chrono::high_resolution_clock::now();
+    TransformedImg = adaptive_median( originalImg, 3 );
+    auto end = chrono::high_resolution_clock::now();
+
+    double time_taken =
+        chrono::duration_cast<chrono::nanoseconds>( end - start ).count();
+
+    time_taken *= 1e-9; 
+
+    cout << "Time taken by program is : " << fixed << time_taken << setprecision( 9 );
+    cout << " sec" << endl;
 
     // print result
 
