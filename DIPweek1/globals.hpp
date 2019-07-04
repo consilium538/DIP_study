@@ -3,10 +3,11 @@
 
 #define _USE_MATH_DEFINES
 
-#include <opencv2/core/utility.hpp>
-#include <cmath>
+#include <algorithm>
 #include <array>
+#include <cmath>
 #include <functional>
+#include <opencv2/core/utility.hpp>
 
-#endif // GLOBALS_HPP
-// #include "globals.hpp"
+#endif  // GLOBALS_HPP
+        // #include "globals.hpp"

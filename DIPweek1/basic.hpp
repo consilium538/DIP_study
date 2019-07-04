@@ -3,6 +3,6 @@
 
 #include "globals.hpp"
 
-uchar threshold(double unlim);
+uchar threshold( double unlim );
 
-#endif //BASIC_HPP
+#endif  // BASIC_HPP
