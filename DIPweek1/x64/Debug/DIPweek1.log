@@ -1,15 +1,1 @@
-﻿  affine.cpp
-C:\Users\dhej1\source\repos\DIP_study\DIPweek1\affine.cpp(176,16): warning C4101:  'dq' :참조되지 않은 지역 변수입니다.
-  basic.cpp
-  color.cpp
-  conv.cpp
-  intensity.cpp
-  main.cpp
-C:\Users\dhej1\source\repos\DIP_study\DIPweek1\affine.cpp(176,12): warning C4101:  'dk' :참조되지 않은 지역 변수입니다.
-  코드를 생성하고 있습니다...
-C:\Users\dhej1\source\repos\DIP_study\DIPweek1\main.cpp(113,23): warning C4244:  '초기화 중': '_Rep'에서 'double'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\dhej1\source\repos\DIP_study\DIPweek1\main.cpp(113,23): warning C4244:         with
-C:\Users\dhej1\source\repos\DIP_study\DIPweek1\main.cpp(113,23): warning C4244:         [
-C:\Users\dhej1\source\repos\DIP_study\DIPweek1\main.cpp(113,23): warning C4244:             _Rep=__int64
-C:\Users\dhej1\source\repos\DIP_study\DIPweek1\main.cpp(113,23): warning C4244:         ]
-  DIPweek1.vcxproj -> C:\Users\dhej1\source\repos\DIP_study\x64\Debug\DIPweek1.exe
+﻿

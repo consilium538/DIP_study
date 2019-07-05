@@ -5,8 +5,8 @@
 
 #include <algorithm>
 #include <chrono>
-#include <iostream>
 #include <iomanip>
+#include <iostream>
 #include <string>
 #include <vector>
 
@@ -24,9 +24,14 @@ int main( int argv, char** argc )
 {
     const string inputPath =
         "C:\\KDH\\19ysummer\\dip\\DIP4E Book Images Global Edition\\";
-    const string arrowFile = "circuitboard-saltandpep.tif";
+    const string arrowFile = "Chronometer.tif";
+
     Mat originalImg = cv::imread( inputPath + arrowFile );
     Mat TransformedImg, MiddleImg;
+    Mat MiddleImgArr[3];
+
+    //cv::split( originalImg, MiddleImgArr );
+    //MiddleImg = MiddleImgArr[0];
 
     // string inputPath;
     // getline(cin, inputPath);
@@ -66,16 +71,19 @@ int main( int argv, char** argc )
 
     // Affine Transform
 
-    // TransformedImg = ResizeTransform(
-    //    originalImg, 1.0/8.0, 1.0/8.0, 1
-    //);
+    MiddleImg = ResizeTransform<Vec3b>( originalImg, 1.0 / 2.0, 1.0 / 2.0,
+                                        InterpolationMethod::bilinear );
+    TransformedImg = ResizeTransform<Vec3b>( MiddleImg, 2.0, 2.0,
+                                        InterpolationMethod::bilinear );
 
-    // TransformedImg = GeometricTransform(
+    // originalImg.convertTo(MiddleImg,CV_8UC1);
+
+    // TransformedImg = GeometricTransform<Vec3b>(
     //    originalImg,
-    //    translationMat(originalImg.rows/2, originalImg.cols/2) *
-    //    rotateMat(30.0 * 2 * M_PI / 360.0) *
-    //    translationMat(-originalImg.rows / 2, -originalImg.cols / 2)
-    //); //
+    //    translationMat( originalImg.rows / 2, originalImg.cols / 2 ) *
+    //        rotateMat( 30.0 * 2 * M_PI / 360.0 ) *
+    //        translationMat( -originalImg.rows / 2, -originalImg.cols / 2 ),
+    //    InterpolationMethod::bilinear );  //
 
     // Color Transform
 
@@ -106,25 +114,30 @@ int main( int argv, char** argc )
 
     // Adaptive median filter
 
-    auto start = chrono::high_resolution_clock::now();
-    TransformedImg = adaptive_median( originalImg, 3 );
-    auto end = chrono::high_resolution_clock::now();
+    // auto start = chrono::high_resolution_clock::now();
+    // TransformedImg = adaptive_median( originalImg, 3 );
+    // auto end = chrono::high_resolution_clock::now();
 
-    double time_taken =
-        chrono::duration_cast<chrono::nanoseconds>( end - start ).count();
+    // double time_taken =
+    //    chrono::duration_cast<chrono::nanoseconds>( end - start ).count();
 
-    time_taken *= 1e-9; 
+    // time_taken *= 1e-9;
 
-    cout << "Time taken by program is : " << fixed << time_taken << setprecision( 9 );
-    cout << " sec" << endl;
+    // cout << "Time taken by program is : " << fixed << time_taken
+    //     << setprecision( 9 );
+    // cout << " sec" << endl;
 
     // print result
 
+    cv::namedWindow( "MiddleImg", cv::WINDOW_AUTOSIZE );
+    cv::moveWindow( "MiddleImg", 500, 20 );
+    cv::imshow( "MiddleImg", MiddleImg );
+
     cv::namedWindow( "Transformed", cv::WINDOW_AUTOSIZE );
-    cv::moveWindow( "Transformed", 600, 20 );
+    cv::moveWindow( "Transformed", 1000, 20 );
     cv::imshow( "Transformed", TransformedImg );
 
-    cv::waitKey();
+    cv::waitKey( 3000 );
     cv::destroyAllWindows();
 
     return 0;
