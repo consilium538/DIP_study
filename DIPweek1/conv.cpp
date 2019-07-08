@@ -134,9 +134,9 @@ cv::Mat gaussian_filter( int size, double deviation )
         for ( int j = 0; j < size; j++ )
         {
             tmp =
-                std::exp( -( std::pow( (double)( i - ( size - 1 ) / 2 ), 2 ) +
-                             std::pow( (double)( j - ( size - 1 ) / 2 ), 2 ) ) /
-                          2 * std::pow( deviation, 2 ) );
+                std::exp( -( std::pow( ( i - ( (double)size - 1 ) / 2 ), 2 ) +
+                             std::pow( ( j - ( (double)size - 1 ) / 2 ), 2 ) ) /
+                          (2 * std::pow( deviation, 2 )) );
             filter.at<double>( i, j ) = tmp;
         }
     }
