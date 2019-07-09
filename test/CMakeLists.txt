@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.1)
 
-project(dip_week2
+project(opencv_test
         LANGUAGES    CXX
         VERSION     0.0.1
 )
@@ -26,8 +26,8 @@ message(STATUS "    include path: ${OpenCV_INCLUDE_DIRS}")
 
 INCLUDE_DIRECTORIES( /usr/include/opencv4 )
 
-add_executable(dip_week2 main.cpp intensity.cpp)
+add_executable(opencv_test main.cpp intensity.cpp histo.cpp color.cpp basic.cpp)
 
-target_link_libraries(dip_week2
+target_link_libraries(opencv_test
     ${OpenCV_LIBS}
 )
