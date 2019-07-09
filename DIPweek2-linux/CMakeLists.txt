@@ -7,10 +7,6 @@ project(dip_week2
 
 set(CMAKE_MAKE_PROGRAM make)
 
-# INCLUDE(CMakeForceCompiler)
-# CMAKE_FORCE_C_COMPILER(gcc GNU)
-# CMAKE_FORCE_CXX_COMPILER(g++ GNU)
-
 set(CMAKE_C_COMPILER gcc)
 set(CMAKE_CXX_COMPILER g++)
 set(CMAKE_CXX_STANDARD 17)

@@ -52,7 +52,7 @@ unsigned char inverse( unsigned char input )
 std::function<unsigned char( unsigned char )> logtransform( double c )
 {
     return [=]( unsigned char input ) {
-        return (unsigned char)( c * std::log( 1 + (double)input) );
+        return (unsigned char)( c * std::log( 1 + (double)input ) );
     };
 }
 
