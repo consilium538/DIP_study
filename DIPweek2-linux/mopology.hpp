@@ -4,6 +4,7 @@
 #include "globals.hpp"
 
 cv::Mat rectSE( const int size );
+cv::Mat rectSE( const int x, const int y );
 
 // A (-) B
 cv::Mat erosion( cv::Mat A, cv::Mat B );

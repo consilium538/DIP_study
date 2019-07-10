@@ -10,10 +10,7 @@ cv::Mat rectSE( const int x, const int y )
     return cv::Mat( x, y, CV_8UC1, cv::Scalar( 255 ) );
 }
 
-//std::function<void(Pixel&,const int*)> singleerosion( cv::Mat& A, cv::Mat& B );
-//auto singledilation( cv::Mat& A, cv::Mat& B );
-
-auto singleerosion( cv::Mat& A, cv::Mat& B )
+std::function<void(Pixel&,const int*)> singleerosion( cv::Mat& A, cv::Mat& B )
 {
     return [&]( Pixel& p, const int* position ) -> void {
         for ( int k = -( B.rows / 2 ); k <= ( B.rows / 2 ); k++ )
@@ -21,7 +18,7 @@ auto singleerosion( cv::Mat& A, cv::Mat& B )
                 if ( position[0] + k >= 0 && position[0] + k < A.rows &&
                      position[1] + l >= 0 && position[1] + l < A.cols &&
                      A.at<uchar>( position[0] + k, position[1] + l ) !=
-                         B.at<uchar>( ( B.rows / 2 ) + k, ( B.cols / 2 ) + l ) )
+                         B.at<uchar>( ( B.rows / 2 ) - k, ( B.cols / 2 ) - l ) )
                 {
                     p = 0;
                     return;
@@ -54,7 +51,7 @@ cv::Mat erosion( cv::Mat A, cv::Mat B )
     return C;
 }
 
-auto singledilation( cv::Mat& A, cv::Mat& B )
+std::function<void(Pixel&,const int*)> singledilation( cv::Mat& A, cv::Mat& B )
 {
     return [&]( Pixel& p, const int* position ) -> void {
         for ( int k = -( B.rows / 2 ); k <= ( B.rows / 2 ); k++ )
@@ -62,7 +59,7 @@ auto singledilation( cv::Mat& A, cv::Mat& B )
                 if ( position[0] + k >= 0 && position[0] + k < A.rows &&
                      position[1] + l >= 0 && position[1] + l < A.cols &&
                      A.at<uchar>( position[0] + k, position[1] + l ) ==
-                         B.at<uchar>( ( B.rows / 2 ) + k, ( B.cols / 2 ) + l ) )
+                         B.at<uchar>( ( B.rows / 2 ) - k, ( B.cols / 2 ) - l ) )
                 {
                     p = 255;
                     return;
