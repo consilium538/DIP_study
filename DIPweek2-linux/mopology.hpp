@@ -5,6 +5,7 @@
 
 cv::Mat rectSE( const int size );
 cv::Mat rectSE( const int x, const int y );
+cv::Mat crossSE();
 
 // A (-) B
 cv::Mat erosion( cv::Mat A, cv::Mat B );

@@ -3,20 +3,20 @@
 // #define RUN_ALL
 
 #ifndef RUN_ALL
-    #define SKIP_EROSION
-    #define SKIP_DILATION
-    #define SKIP_OPENING
-    #define SKIP_BOUNDARY
-    #define SKIP_HOLE
-    #define SKIP_CONNECTED
-    #define SKIP_RECONSTRUCTION
-    #define SKIP_GLOBAL
-    #define SKIP_OTSU
-    #define SKIP_EDGE_GRAD
-    #define SKIP_LAPLACE_GRAD
-    #define SKIP_MULTIPLE_GRAD
-    #define SKIP_VARIABLE
-#endif // RUN_ALL
+#define SKIP_EROSION
+#define SKIP_DILATION
+#define SKIP_OPENING
+#define SKIP_BOUNDARY
+//    #define SKIP_HOLE
+#define SKIP_CONNECTED
+#define SKIP_RECONSTRUCTION
+#define SKIP_GLOBAL
+#define SKIP_OTSU
+#define SKIP_EDGE_GRAD
+#define SKIP_LAPLACE_GRAD
+#define SKIP_MULTIPLE_GRAD
+#define SKIP_VARIABLE
+#endif  // RUN_ALL
 
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgcodecs.hpp>
@@ -36,18 +36,19 @@ using namespace cv;
 
 int main( int argv, char** argc )
 {
-    const string inputPath =
-        "./srcImg/";
+    const string inputPath = "./srcImg/";
     const string savepath = "./tmpImg/";
-    std::vector<std::tuple<cv::Mat,string>> ImgArr;
+    std::vector<std::tuple<cv::Mat, string>> ImgArr;
 
 ////////////////////////////////////////
 #ifndef SKIP_EROSION
 
-    auto circuitmask_orig = cv::imread( inputPath + "circuitmask.tif", cv::IMREAD_GRAYSCALE );
-    ImgArr.push_back(std::make_tuple(circuitmask_orig,"circuitmask_orig"));
+    auto circuitmask_orig =
+        cv::imread( inputPath + "circuitmask.tif", cv::IMREAD_GRAYSCALE );
+    ImgArr.push_back( std::make_tuple( circuitmask_orig, "circuitmask_orig" ) );
 
-    cv::resize(circuitmask_orig, circuitmask_orig, Size(), 0.5, 0.5, INTER_NEAREST);
+    cv::resize( circuitmask_orig, circuitmask_orig, Size(), 0.5, 0.5,
+                INTER_NEAREST );
     if ( circuitmask_orig.empty() )
     {
         cout << "image load failed!" << endl;
@@ -55,20 +56,21 @@ int main( int argv, char** argc )
     }
 
     auto circuitmask_11 = erosion( circuitmask_orig, rectSE( 11 ) );
-    ImgArr.push_back(std::make_tuple(circuitmask_11,"circuitmask_11"));
+    ImgArr.push_back( std::make_tuple( circuitmask_11, "circuitmask_11" ) );
 
     auto circuitmask_15 = erosion( circuitmask_orig, rectSE( 15 ) );
-    ImgArr.push_back(std::make_tuple(circuitmask_15,"circuitmask_15"));
+    ImgArr.push_back( std::make_tuple( circuitmask_15, "circuitmask_15" ) );
 
     auto circuitmask_45 = erosion( circuitmask_orig, rectSE( 45 ) );
-    ImgArr.push_back(std::make_tuple(circuitmask_45,"circuitmask_45"));
+    ImgArr.push_back( std::make_tuple( circuitmask_45, "circuitmask_45" ) );
 
-#endif // SKIP_EROSION
+#endif  // SKIP_EROSION
 ////////////////////////////////////////
-#ifndef SKIP_DILATION // text-broken.tif
+#ifndef SKIP_DILATION  // text-broken.tif
 
-    auto text_broken_orig = cv::imread( inputPath + "text-broken.tif", cv::IMREAD_GRAYSCALE );
-    ImgArr.push_back(std::make_tuple(text_broken_orig,"text_broken_orig"));
+    auto text_broken_orig =
+        cv::imread( inputPath + "text-broken.tif", cv::IMREAD_GRAYSCALE );
+    ImgArr.push_back( std::make_tuple( text_broken_orig, "text_broken_orig" ) );
 
     if ( text_broken_orig.empty() )
     {
@@ -77,14 +79,15 @@ int main( int argv, char** argc )
     }
 
     auto text_broken_dil = dilation( text_broken_orig, rectSE( 3 ) );
-    ImgArr.push_back(std::make_tuple(text_broken_dil,"text_broken_dil"));
+    ImgArr.push_back( std::make_tuple( text_broken_dil, "text_broken_dil" ) );
 
-#endif // SKIP_DILATION
+#endif  // SKIP_DILATION
 ////////////////////////////////////////
 #ifndef SKIP_OPENING
 
-    auto finger_orig = cv::imread( inputPath + "fingerprint-noisy.tif", cv::IMREAD_GRAYSCALE );
-    ImgArr.push_back(std::make_tuple(finger_orig,"finger_orig"));
+    auto finger_orig =
+        cv::imread( inputPath + "fingerprint-noisy.tif", cv::IMREAD_GRAYSCALE );
+    ImgArr.push_back( std::make_tuple( finger_orig, "finger_orig" ) );
 
     if ( finger_orig.empty() )
     {
@@ -95,81 +98,112 @@ int main( int argv, char** argc )
     auto se = rectSE( 3 );
 
     auto finger_eroded = erosion( finger_orig, se );
-    ImgArr.push_back(std::make_tuple(finger_eroded,"finger_eroded"));
+    ImgArr.push_back( std::make_tuple( finger_eroded, "finger_eroded" ) );
 
     auto finger_open = opening( finger_orig, se );
-    ImgArr.push_back(std::make_tuple(finger_open,"finger_open"));
+    ImgArr.push_back( std::make_tuple( finger_open, "finger_open" ) );
 
     auto finger_open_close = closing( finger_open, se );
-    ImgArr.push_back(std::make_tuple(finger_open_close,"finger_open_close"));
+    ImgArr.push_back(
+        std::make_tuple( finger_open_close, "finger_open_close" ) );
 
-///    for(auto it:ImgArr)
-///    {
-///        std::get<0>(it);
-///    }
+    ///    for(auto it:ImgArr)
+    ///    {
+    ///        std::get<0>(it);
+    ///    }
 
-#endif // SKIP_OPENING
+#endif  // SKIP_OPENING
 ////////////////////////////////////////
 #ifndef SKIP_BOUNDARY
 
+    auto ball_orig =
+        cv::imread( inputPath + "lincoln.tif", cv::IMREAD_GRAYSCALE );
+    ImgArr.push_back( std::make_tuple( ball_orig, "ball_orig" ) );
 
+    if ( ball_orig.empty() )
+    {
+        cout << "image load failed!" << endl;
+        return -1;
+    }
 
-#endif // SKIP_BOUNDARY
+    auto lincoln_eros = erosion( ball_orig, rectSE( 3 ) );
+    auto lincoln_bound =
+        cv::Mat_<uchar>( ball_orig.size(), ball_orig.channels() );
+    lincoln_bound.forEach( [&]( Pixel& p, const int* i ) {
+        p = cv::saturate_cast<uchar>( ball_orig.at<uchar>( i[0], i[1] ) -
+                                      lincoln_eros.at<uchar>( i[0], i[1] ) );
+    } );
+    ImgArr.push_back( std::make_tuple( lincoln_bound, "lincoln_bound" ) );
+
+#endif  // SKIP_BOUNDARY
 ////////////////////////////////////////
-#ifndef SKIP_HOLE
+#ifndef SKIP_HOLE  // balls-with-reflections.tif
+                   // crossSE
+    auto ball_orig = cv::imread( inputPath + "balls-with-reflections.tif",
+                                 cv::IMREAD_GRAYSCALE );
+    ImgArr.push_back( std::make_tuple( ball_orig, "ball_orig" ) );
+
+    if ( ball_orig.empty() )
+    {
+        cout << "image load failed!" << endl;
+        return -1;
+    }
+
+    std::vector<std::tuple<int,int>> hole_init = {
+        {60,50},
+        {180,45},
+        {363,39},
+        {93,159},
+        {178,203},
+        {262,148},
+        {414,233},
+        {461,142},
+        {104,299},
+        {236,308},
+        {}
+    };
+
+    cv::Mat ball_filled = cv::Mat( ball_orig.size(), CV_8UC1, cv::Scalar(0) );
+    for(auto it: hole_init)
+    {
+        ball_filled.at<uchar>(std::get<1>(it),std::get<0>(it)) = 255;
+    }
 
 
-
-#endif // SKIP_HOLE
+#endif  // SKIP_HOLE
 ////////////////////////////////////////
-#ifndef SKIP_CONNECTED
+#ifndef SKIP_CONNECTED  // chickenXray.tif
 
-
-
-#endif // SKIP_CONNECTED
+#endif  // SKIP_CONNECTED
 ////////////////////////////////////////
-#ifndef SKIP_RECONSTRUCTION
+#ifndef SKIP_RECONSTRUCTION  // text.tif
 
-
-
-#endif // SKIP_RECONSTRUCTION
+#endif  // SKIP_RECONSTRUCTION
 ////////////////////////////////////////
-#ifndef SKIP_GLOBAL
+#ifndef SKIP_GLOBAL  //
 
-
-
-#endif // SKIP_GLOBAL
+#endif  // SKIP_GLOBAL
 ////////////////////////////////////////
-#ifndef SKIP_OTSU
+#ifndef SKIP_OTSU  //
 
-
-
-#endif // SKIP_OTSU
+#endif  // SKIP_OTSU
 ////////////////////////////////////////
-#ifndef SKIP_EDGE_GRAD
+#ifndef SKIP_EDGE_GRAD  //
 
-
-
-#endif // SKIP_EDGE_GRAD
+#endif  // SKIP_EDGE_GRAD
 ////////////////////////////////////////
-#ifndef SKIP_LAPLACE_GRAD
+#ifndef SKIP_LAPLACE_GRAD  //
 
-
-
-#endif // SKIP_LAPLACE_GRAD
+#endif  // SKIP_LAPLACE_GRAD
 ////////////////////////////////////////
-#ifndef SKIP_MULTIPLE_GRAD
+#ifndef SKIP_MULTIPLE_GRAD  //
 
-
-
-#endif // SKIP_MULTIPLE_GRAD
+#endif  // SKIP_MULTIPLE_GRAD
 ////////////////////////////////////////
-#ifndef SKIP_VARIABLE
+#ifndef SKIP_VARIABLE  //
 
-
-
-#endif // SKIP_VARIABLE
-////////////////////////////////////////
+#endif  // SKIP_VARIABLE
+        ////////////////////////////////////////
 
     return 0;
 }

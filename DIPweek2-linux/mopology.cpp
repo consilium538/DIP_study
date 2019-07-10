@@ -10,7 +10,13 @@ cv::Mat rectSE( const int x, const int y )
     return cv::Mat( x, y, CV_8UC1, cv::Scalar( 255 ) );
 }
 
-std::function<void(Pixel&,const int*)> singleerosion( cv::Mat& A, cv::Mat& B )
+cv::Mat crossSE()
+{
+    return ( cv::Mat_<uchar>( 3, 3 ) << 0, 255, 0, 255, 255, 255, 0, 255, 0 );
+}
+
+std::function<void( Pixel&, const int* )> singleerosion( cv::Mat& A,
+                                                         cv::Mat& B )
 {
     return [&]( Pixel& p, const int* position ) -> void {
         for ( int k = -( B.rows / 2 ); k <= ( B.rows / 2 ); k++ )
@@ -44,14 +50,16 @@ cv::Mat erosion( cv::Mat A, cv::Mat B )
         {
             // C.at<uchar>( i, j ) = singleerosion( A, B, i, j );
 
-            p[0] = i; p[1] = j;
+            p[0] = i;
+            p[1] = j;
             f( C.at<uchar>( i, j ), p );
         }
 
     return C;
 }
 
-std::function<void(Pixel&,const int*)> singledilation( cv::Mat& A, cv::Mat& B )
+std::function<void( Pixel&, const int* )> singledilation( cv::Mat& A,
+                                                          cv::Mat& B )
 {
     return [&]( Pixel& p, const int* position ) -> void {
         for ( int k = -( B.rows / 2 ); k <= ( B.rows / 2 ); k++ )
