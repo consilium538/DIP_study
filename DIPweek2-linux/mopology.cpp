@@ -23,8 +23,9 @@ std::function<void( Pixel&, const int* )> singleerosion( cv::Mat& A,
             for ( int l = -( B.cols / 2 ); l <= ( B.cols / 2 ); l++ )
                 if ( position[0] + k >= 0 && position[0] + k < A.rows &&
                      position[1] + l >= 0 && position[1] + l < A.cols &&
-                     A.at<uchar>( position[0] + k, position[1] + l ) !=
-                         B.at<uchar>( ( B.rows / 2 ) - k, ( B.cols / 2 ) - l ) )
+                     B.at<uchar>( ( B.rows / 2 ) - k, ( B.cols / 2 ) - l ) ==
+                         255 &&
+                     A.at<uchar>( position[0] + k, position[1] + l ) == 0 )
                 {
                     p = 0;
                     return;
@@ -66,8 +67,9 @@ std::function<void( Pixel&, const int* )> singledilation( cv::Mat& A,
             for ( int l = -( B.cols / 2 ); l <= ( B.cols / 2 ); l++ )
                 if ( position[0] + k >= 0 && position[0] + k < A.rows &&
                      position[1] + l >= 0 && position[1] + l < A.cols &&
-                     A.at<uchar>( position[0] + k, position[1] + l ) ==
-                         B.at<uchar>( ( B.rows / 2 ) - k, ( B.cols / 2 ) - l ) )
+                     B.at<uchar>( ( B.rows / 2 ) - k, ( B.cols / 2 ) - l ) ==
+                         255 &&
+                     A.at<uchar>( position[0] + k, position[1] + l ) == 255 )
                 {
                     p = 255;
                     return;

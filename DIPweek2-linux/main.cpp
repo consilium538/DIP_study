@@ -116,21 +116,21 @@ int main( int argv, char** argc )
 ////////////////////////////////////////
 #ifndef SKIP_BOUNDARY
 
-    auto ball_orig =
+    auto lincoln_orig =
         cv::imread( inputPath + "lincoln.tif", cv::IMREAD_GRAYSCALE );
-    ImgArr.push_back( std::make_tuple( ball_orig, "ball_orig" ) );
+    ImgArr.push_back( std::make_tuple( lincoln_orig, "lincoln_orig" ) );
 
-    if ( ball_orig.empty() )
+    if ( lincoln_orig.empty() )
     {
         cout << "image load failed!" << endl;
         return -1;
     }
 
-    auto lincoln_eros = erosion( ball_orig, rectSE( 3 ) );
-    auto lincoln_bound =
-        cv::Mat_<uchar>( ball_orig.size(), ball_orig.channels() );
+    auto lincoln_eros = erosion( lincoln_orig, rectSE( 3 ) );
+    auto lincoln_bound = cv::Mat_<uchar>( lincoln_orig.size(),
+                                          ball_lincoln_origorig.channels() );
     lincoln_bound.forEach( [&]( Pixel& p, const int* i ) {
-        p = cv::saturate_cast<uchar>( ball_orig.at<uchar>( i[0], i[1] ) -
+        p = cv::saturate_cast<uchar>( lincoln_orig.at<uchar>( i[0], i[1] ) -
                                       lincoln_eros.at<uchar>( i[0], i[1] ) );
     } );
     ImgArr.push_back( std::make_tuple( lincoln_bound, "lincoln_bound" ) );
@@ -149,26 +149,47 @@ int main( int argv, char** argc )
         return -1;
     }
 
-    std::vector<std::tuple<int,int>> hole_init = {
-        {60,50},
-        {180,45},
-        {363,39},
-        {93,159},
-        {178,203},
-        {262,148},
-        {414,233},
-        {461,142},
-        {104,299},
-        {236,308},
-        {}
-    };
+    std::vector<std::tuple<int, int>> hole_init = {
+        {60, 50},   {180, 45},  {363, 39},  {93, 159},  {178, 203},
+        {262, 148}, {414, 233}, {461, 142}, {104, 299}, {236, 308},
+        {386, 371}, {489, 357}, {56, 451},  {235, 460}, {388, 371},
+        {489, 358}, {58, 451},  {234, 459}, {505, 490}, {399, 471}};
 
-    cv::Mat ball_filled = cv::Mat( ball_orig.size(), CV_8UC1, cv::Scalar(0) );
-    for(auto it: hole_init)
+    auto ball_hole = cv::Mat( ball_orig.size(), CV_8UC1, cv::Scalar( 0 ) );
+
+    for ( auto it : hole_init )
+        ball_hole.at<uchar>( std::get<1>( it ), std::get<0>( it ) ) = 255;
+
+    cv::Mat ball_dilated;
+    auto ball_filled = cv::Mat( ball_orig.size(), CV_8UC1, cv::Scalar( 0 ) );
+    bool noChange = true;
+
+    for ( int i = 0; i < 50; i++ )
     {
-        ball_filled.at<uchar>(std::get<1>(it),std::get<0>(it)) = 255;
+        ball_dilated = dilation( ball_hole, crossSE() );
+
+        ball_filled.forEach<uchar>( [&]( Pixel& p, const int* i ) {
+            p = ball_orig.at<uchar>( i[0], i[1] ) == 0 &&
+                        ball_dilated.at<uchar>( i[0], i[1] ) == 255
+                    ? 255
+                    : 0;
+            if ( p != ball_hole.at<uchar>( i[0], i[1] ) )
+                noChange = false;
+        } );
+
+        if ( noChange == true )
+            break;
+
+        noChange = true;
+        ball_hole.release();
+        ball_hole = ball_filled.clone();
     }
 
+    auto ball_completed = cv::Mat( ball_orig.size(), CV_8UC1, cv::Scalar( 0 ) );
+    ball_completed.forEach<uchar>( [&]( Pixel& p, const int* i ) {
+        p = cv::saturate_cast<uchar>( ball_orig.at<uchar>( i[0], i[1] ) +
+                                      ball_hole.at<uchar>( i[0], i[1] ) );
+    } );
 
 #endif  // SKIP_HOLE
 ////////////////////////////////////////
