@@ -123,33 +123,6 @@ dip_week2/fast:
 	$(MAKE) -f CMakeFiles/dip_week2.dir/build.make CMakeFiles/dip_week2.dir/build
 .PHONY : dip_week2/fast
 
-intensity.o: intensity.cpp.o
-
-.PHONY : intensity.o
-
-# target to build an object file
-intensity.cpp.o:
-	$(MAKE) -f CMakeFiles/dip_week2.dir/build.make CMakeFiles/dip_week2.dir/intensity.cpp.o
-.PHONY : intensity.cpp.o
-
-intensity.i: intensity.cpp.i
-
-.PHONY : intensity.i
-
-# target to preprocess a source file
-intensity.cpp.i:
-	$(MAKE) -f CMakeFiles/dip_week2.dir/build.make CMakeFiles/dip_week2.dir/intensity.cpp.i
-.PHONY : intensity.cpp.i
-
-intensity.s: intensity.cpp.s
-
-.PHONY : intensity.s
-
-# target to generate assembly for a file
-intensity.cpp.s:
-	$(MAKE) -f CMakeFiles/dip_week2.dir/build.make CMakeFiles/dip_week2.dir/intensity.cpp.s
-.PHONY : intensity.cpp.s
-
 main.o: main.cpp.o
 
 .PHONY : main.o
@@ -177,6 +150,33 @@ main.cpp.s:
 	$(MAKE) -f CMakeFiles/dip_week2.dir/build.make CMakeFiles/dip_week2.dir/main.cpp.s
 .PHONY : main.cpp.s
 
+mopology.o: mopology.cpp.o
+
+.PHONY : mopology.o
+
+# target to build an object file
+mopology.cpp.o:
+	$(MAKE) -f CMakeFiles/dip_week2.dir/build.make CMakeFiles/dip_week2.dir/mopology.cpp.o
+.PHONY : mopology.cpp.o
+
+mopology.i: mopology.cpp.i
+
+.PHONY : mopology.i
+
+# target to preprocess a source file
+mopology.cpp.i:
+	$(MAKE) -f CMakeFiles/dip_week2.dir/build.make CMakeFiles/dip_week2.dir/mopology.cpp.i
+.PHONY : mopology.cpp.i
+
+mopology.s: mopology.cpp.s
+
+.PHONY : mopology.s
+
+# target to generate assembly for a file
+mopology.cpp.s:
+	$(MAKE) -f CMakeFiles/dip_week2.dir/build.make CMakeFiles/dip_week2.dir/mopology.cpp.s
+.PHONY : mopology.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -186,12 +186,12 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... dip_week2"
 	@echo "... edit_cache"
-	@echo "... intensity.o"
-	@echo "... intensity.i"
-	@echo "... intensity.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... mopology.o"
+	@echo "... mopology.i"
+	@echo "... mopology.s"
 .PHONY : help
 
 

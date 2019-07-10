@@ -49,6 +49,12 @@
             "label": "execute",
             "command": "cd ${workspaceRoot} && ./dip_week2 ",
             "group": "test"
+        },
+
+        {
+            "label" : "cleanup",
+            "command" : "cd ${workspaceRoot} && make clean && rm -r CMakeFiles",
+            "group" : "test"
         }
 
     ]

@@ -10,7 +10,7 @@
 #include <string>
 #include <vector>
 
-#include "intensity.hpp"
+#include "mopology.hpp"
 
 using namespace std;
 using namespace cv;
@@ -19,26 +19,32 @@ int main( int argv, char** argc )
 {
     const string inputPath =
         "/mnt/win/KDH/19ysummer/dip/DIP4E Book Images Global Edition/";
-    const string arrowFile = "spine.tif";
+    const string arrowFile = "fingerprint-noisy.tiffingerprint-noisy.tif";
     const string savepath = "./tmpImg/";
 
     Mat originalImg = cv::imread( inputPath + arrowFile, cv::IMREAD_GRAYSCALE );
-    Mat TransformedImg, MiddleImg, AbcImg;
-    Mat MiddleImgArr[3];
+    auto se = rectSE(3);
 
-    TransformedImg =
-        intensityTransform( originalImg, gammatransform( 1, 0.4 ) );
+//    auto TransformedImg = erosion(originalImg, rectSE(91));
+//    auto TransformedImg = dilation(originalImg, rectSE(3));
 
-    cv::namedWindow( "Original", cv::WINDOW_AUTOSIZE );
-    cv::moveWindow( "Original", 20, 20 );
-    cv::imshow( "Original", originalImg );
+    auto eroded = erosion(originalImg, se);
+    auto open = opening(originalImg, se);
+    auto open_close = closing(originalImg,se);
 
-    cv::namedWindow( "Transformed", cv::WINDOW_AUTOSIZE );
-    cv::moveWindow( "Transformed", 600, 20 );
-    cv::imshow( "Transformed", TransformedImg );
+//    cv::namedWindow( "Original", cv::WINDOW_AUTOSIZE );
+//    cv::moveWindow( "Original", 20, 20 );
+//    cv::imshow( "Original", originalImg );
 
-    cv::waitKey( 3000 );
-    cv::destroyAllWindows();
+//    cv::namedWindow( "Erosion(91)", cv::WINDOW_AUTOSIZE );
+//    cv::moveWindow( "Erosion(91)", 500, 20 );
+//    cv::imshow( "Erosion(91)", TransformedImg );
+//    cv::namedWindow( "Dilation", cv::WINDOW_AUTOSIZE );
+//    cv::moveWindow( "Dilation", 500, 20 );
+//    cv::imshow( "Dilation", TransformedImg );
+
+//    cv::waitKey( 0 );
+//    cv::destroyAllWindows();
 
     return 0;
 }
