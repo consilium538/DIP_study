@@ -19,7 +19,7 @@ int main( int argv, char** argc )
 {
     const string inputPath =
         "/mnt/win/KDH/19ysummer/dip/DIP4E Book Images Global Edition/";
-    const string arrowFile = "fingerprint-noisy.tif_";
+    const string arrowFile = "fingerprint-noisy.tif";
     const string savepath = "./tmpImg/";
 
     Mat originalImg = cv::imread( inputPath + arrowFile, cv::IMREAD_GRAYSCALE );

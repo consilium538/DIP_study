@@ -53,7 +53,7 @@
 
         {
             "label" : "cleanup",
-            "command" : "cd ${workspaceRoot} && make clean && rm -r CMakeFiles",
+            "command" : "cd ${workspaceRoot} && make clean && rm -r CMakeFiles && rm CMakeCache.txt",
             "group" : "test"
         }
 

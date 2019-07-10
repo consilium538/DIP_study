@@ -9,5 +9,7 @@
 #include <functional>
 #include <opencv2/core/utility.hpp>
 
+using Pixel = uchar;
+
 #endif  // GLOBALS_HPP
         // #include "globals.hpp"
