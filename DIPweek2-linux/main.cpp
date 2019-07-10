@@ -19,32 +19,39 @@ int main( int argv, char** argc )
 {
     const string inputPath =
         "/mnt/win/KDH/19ysummer/dip/DIP4E Book Images Global Edition/";
-    const string arrowFile = "fingerprint-noisy.tiffingerprint-noisy.tif";
+    const string arrowFile = "fingerprint-noisy.tif_";
     const string savepath = "./tmpImg/";
 
     Mat originalImg = cv::imread( inputPath + arrowFile, cv::IMREAD_GRAYSCALE );
-    auto se = rectSE(3);
 
-//    auto TransformedImg = erosion(originalImg, rectSE(91));
-//    auto TransformedImg = dilation(originalImg, rectSE(3));
+    if ( originalImg.empty() )
+    {
+        cout << "image load failed!" << endl;
+        return -1;
+    }
 
-    auto eroded = erosion(originalImg, se);
-    auto open = opening(originalImg, se);
-    auto open_close = closing(originalImg,se);
+    auto se = rectSE( 3 );
 
-//    cv::namedWindow( "Original", cv::WINDOW_AUTOSIZE );
-//    cv::moveWindow( "Original", 20, 20 );
-//    cv::imshow( "Original", originalImg );
+    //    auto TransformedImg = erosion(originalImg, rectSE(91));
+    //    auto TransformedImg = dilation(originalImg, rectSE(3));
 
-//    cv::namedWindow( "Erosion(91)", cv::WINDOW_AUTOSIZE );
-//    cv::moveWindow( "Erosion(91)", 500, 20 );
-//    cv::imshow( "Erosion(91)", TransformedImg );
-//    cv::namedWindow( "Dilation", cv::WINDOW_AUTOSIZE );
-//    cv::moveWindow( "Dilation", 500, 20 );
-//    cv::imshow( "Dilation", TransformedImg );
+    auto eroded = erosion( originalImg, se );
+    auto open = opening( originalImg, se );
+    auto open_close = closing( open, se );
 
-//    cv::waitKey( 0 );
-//    cv::destroyAllWindows();
+    //    cv::namedWindow( "Original", cv::WINDOW_AUTOSIZE );
+    //    cv::moveWindow( "Original", 20, 20 );
+    //    cv::imshow( "Original", originalImg );
+
+    //    cv::namedWindow( "Erosion(91)", cv::WINDOW_AUTOSIZE );
+    //    cv::moveWindow( "Erosion(91)", 500, 20 );
+    //    cv::imshow( "Erosion(91)", TransformedImg );
+    //    cv::namedWindow( "Dilation", cv::WINDOW_AUTOSIZE );
+    //    cv::moveWindow( "Dilation", 500, 20 );
+    //    cv::imshow( "Dilation", TransformedImg );
+
+    //    cv::waitKey( 0 );
+    //    cv::destroyAllWindows();
 
     return 0;
 }

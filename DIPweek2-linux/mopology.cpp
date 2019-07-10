@@ -1,13 +1,13 @@
 #include "mopology.hpp"
 
-cv::Mat rectSE(const int size)
+cv::Mat rectSE( const int size )
 {
-    return cv::Mat(size, size, CV_8UC1, cv::Scalar(255));
+    return cv::Mat( size, size, CV_8UC1, cv::Scalar( 255 ) );
 }
 
-cv::Mat rectSE(const int x, const int y)
+cv::Mat rectSE( const int x, const int y )
 {
-    return cv::Mat(x, y, CV_8UC1, cv::Scalar(255));
+    return cv::Mat( x, y, CV_8UC1, cv::Scalar( 255 ) );
 }
 
 uchar singleerosion( cv::Mat& A, cv::Mat& B, const int i, const int j );
@@ -69,10 +69,10 @@ uchar singledilation( cv::Mat& A, cv::Mat& B, const int i, const int j )
 
 cv::Mat opening( cv::Mat A, cv::Mat B )
 {
-    return dilation(erosion(A,B),B);
+    return dilation( erosion( A, B ), B );
 }
 
 cv::Mat closing( cv::Mat A, cv::Mat B )
 {
-    return erosion(dilation(A,B),B);
+    return erosion( dilation( A, B ), B );
 }
