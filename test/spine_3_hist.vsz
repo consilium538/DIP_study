@@ -1,5 +1,5 @@
 # Veusz saved document (version 3.0.1)
-# Saved at 2019-07-09T14:54:41.941437
+# Saved at 2019-07-11T13:45:16.413326
 
 AddImportPath(u'/home/dhej1/Desktop/DIP/DIP_study/test')
 ImportString(u'original(numeric)','''
@@ -536,6 +536,13 @@ Add('axis', name=u'axis1', autoadd=False)
 Add('function', name=u'function1', autoadd=False)
 To(u'function1')
 Set('function', u'x**0.3')
+To('..')
+Add('label', name=u'label1', autoadd=False)
+To(u'label1')
+Set('label', u's = r^{0.3}')
+Set('xPos', [0.646])
+Set('yPos', [0.666])
+Set('Text/size', u'24pt')
 To('..')
 To('..')
 Add('graph', name=u'graph1', autoadd=False)

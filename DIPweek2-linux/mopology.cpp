@@ -180,7 +180,8 @@ cv::Mat auto_hole( cv::Mat I )
     const int nCol = F.cols;
 
     F.forEach<uchar>( [&]( Pixel& p, const int* i ) {
-        p = (( i[0] == 0 || i[0] == nRow - 1 || i[1] == 0 || i[1] == nCol - 1 ))
+        p = ( ( i[0] == 0 || i[0] == nRow - 1 || i[1] == 0 ||
+                i[1] == nCol - 1 ) )
                 ? p
                 : 0;
     } );
@@ -197,10 +198,11 @@ cv::Mat border_clean( cv::Mat I )
     const int nCol = F.cols;
 
     F.forEach<uchar>( [&]( Pixel& p, const int* i ) {
-        p = (( i[0] == 0 || i[0] == nRow - 1 || i[1] == 0 || i[1] == nCol - 1 ))
+        p = ( ( i[0] == 0 || i[0] == nRow - 1 || i[1] == 0 ||
+                i[1] == nCol - 1 ) )
                 ? p
                 : 0;
     } );
 
-    return I - geodesic_reconst_D(F,I,rectSE(3));
+    return I - geodesic_reconst_D( F, I, rectSE( 3 ) );
 }

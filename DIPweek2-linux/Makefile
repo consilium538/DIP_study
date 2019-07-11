@@ -123,6 +123,60 @@ dip_week2/fast:
 	$(MAKE) -f CMakeFiles/dip_week2.dir/build.make CMakeFiles/dip_week2.dir/build
 .PHONY : dip_week2/fast
 
+histo.o: histo.cpp.o
+
+.PHONY : histo.o
+
+# target to build an object file
+histo.cpp.o:
+	$(MAKE) -f CMakeFiles/dip_week2.dir/build.make CMakeFiles/dip_week2.dir/histo.cpp.o
+.PHONY : histo.cpp.o
+
+histo.i: histo.cpp.i
+
+.PHONY : histo.i
+
+# target to preprocess a source file
+histo.cpp.i:
+	$(MAKE) -f CMakeFiles/dip_week2.dir/build.make CMakeFiles/dip_week2.dir/histo.cpp.i
+.PHONY : histo.cpp.i
+
+histo.s: histo.cpp.s
+
+.PHONY : histo.s
+
+# target to generate assembly for a file
+histo.cpp.s:
+	$(MAKE) -f CMakeFiles/dip_week2.dir/build.make CMakeFiles/dip_week2.dir/histo.cpp.s
+.PHONY : histo.cpp.s
+
+intensity.o: intensity.cpp.o
+
+.PHONY : intensity.o
+
+# target to build an object file
+intensity.cpp.o:
+	$(MAKE) -f CMakeFiles/dip_week2.dir/build.make CMakeFiles/dip_week2.dir/intensity.cpp.o
+.PHONY : intensity.cpp.o
+
+intensity.i: intensity.cpp.i
+
+.PHONY : intensity.i
+
+# target to preprocess a source file
+intensity.cpp.i:
+	$(MAKE) -f CMakeFiles/dip_week2.dir/build.make CMakeFiles/dip_week2.dir/intensity.cpp.i
+.PHONY : intensity.cpp.i
+
+intensity.s: intensity.cpp.s
+
+.PHONY : intensity.s
+
+# target to generate assembly for a file
+intensity.cpp.s:
+	$(MAKE) -f CMakeFiles/dip_week2.dir/build.make CMakeFiles/dip_week2.dir/intensity.cpp.s
+.PHONY : intensity.cpp.s
+
 main.o: main.cpp.o
 
 .PHONY : main.o
@@ -186,6 +240,12 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... dip_week2"
 	@echo "... edit_cache"
+	@echo "... histo.o"
+	@echo "... histo.i"
+	@echo "... histo.s"
+	@echo "... intensity.o"
+	@echo "... intensity.i"
+	@echo "... intensity.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

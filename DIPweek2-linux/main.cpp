@@ -11,6 +11,8 @@
 #include <string>
 #include <vector>
 
+#include "histo.hpp"
+#include "intensity.hpp"
 #include "main.hpp"
 #include "mopology.hpp"
 
@@ -198,6 +200,12 @@ int main( int argv, char** argc )
                              // 25*1
 
     auto text_orig = cv::imread( inputPath + "text.tif", cv::IMREAD_GRAYSCALE );
+    if ( text_orig.empty() )
+    {
+        cout << "image load failed!" << endl;
+        return -1;
+    }
+
     cv::resize( text_orig, text_orig, Size(), 0.5, 0.5, INTER_NEAREST );
     ImgArr.push_back( std::make_tuple( text_orig, "text_orig" ) );
 
@@ -225,17 +233,29 @@ int main( int argv, char** argc )
 #endif  // SKIP_RECON_FILL
 
 #ifndef SKIP_RECON_BORDER
-    auto text_border_clean = border_clean(text_orig);
+    auto text_border_clean = border_clean( text_orig );
     cv::Mat text_border = text_orig - text_border_clean;
 #endif  // SKIP_RECON_BORD
 
 #endif  // SKIP_RECONSTRUCTION
 ////////////////////////////////////////
-#ifndef SKIP_GLOBAL  //
+#ifndef SKIP_GLOBAL  // fingerprint.tif
+    auto finger_orig =
+        cv::imread( inputPath + "fingerprint.tif", cv::IMREAD_GRAYSCALE );
+    if ( finger_orig.empty() )
+    {
+        cout << "image load failed!" << endl;
+        return -1;
+    }
+    ImgArr.push_back( std::make_tuple( finger_orig, "finger_orig" ) );
+    auto finger_global_th = global_threshold( finger_orig );
+
+    auto finger_global_seg =
+        intensityTransform( finger_orig, thresholding( finger_global_th ) );
 
 #endif  // SKIP_GLOBAL
 ////////////////////////////////////////
-#ifndef SKIP_OTSU  //
+#ifndef SKIP_OTSU  // polymercell.tif
 
 #endif  // SKIP_OTSU
 ////////////////////////////////////////

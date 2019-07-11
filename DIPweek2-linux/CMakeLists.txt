@@ -22,7 +22,7 @@ message(STATUS "    include path: ${OpenCV_INCLUDE_DIRS}")
 
 INCLUDE_DIRECTORIES( /usr/include/opencv4 )
 
-add_executable(dip_week2 main.cpp mopology.cpp)
+add_executable(dip_week2 main.cpp mopology.cpp histo.cpp intensity.cpp)
 
 target_link_libraries(dip_week2
     ${OpenCV_LIBS}
