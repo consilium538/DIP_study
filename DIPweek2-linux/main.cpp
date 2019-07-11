@@ -1,23 +1,5 @@
 #define _USE_MATH_DEFINES
 
-// #define RUN_ALL
-
-#ifndef RUN_ALL
-#define SKIP_EROSION
-#define SKIP_DILATION
-#define SKIP_OPENING
-#define SKIP_BOUNDARY
-//    #define SKIP_HOLE
-#define SKIP_CONNECTED
-#define SKIP_RECONSTRUCTION
-#define SKIP_GLOBAL
-#define SKIP_OTSU
-#define SKIP_EDGE_GRAD
-#define SKIP_LAPLACE_GRAD
-#define SKIP_MULTIPLE_GRAD
-#define SKIP_VARIABLE
-#endif  // RUN_ALL
-
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/imgproc.hpp>
@@ -29,6 +11,7 @@
 #include <string>
 #include <vector>
 
+#include "main.hpp"
 #include "mopology.hpp"
 
 using namespace std;
@@ -45,10 +28,10 @@ int main( int argv, char** argc )
 
     auto circuitmask_orig =
         cv::imread( inputPath + "circuitmask.tif", cv::IMREAD_GRAYSCALE );
-    ImgArr.push_back( std::make_tuple( circuitmask_orig, "circuitmask_orig" ) );
-
     cv::resize( circuitmask_orig, circuitmask_orig, Size(), 0.5, 0.5,
                 INTER_NEAREST );
+    ImgArr.push_back( std::make_tuple( circuitmask_orig, "circuitmask_orig" ) );
+
     if ( circuitmask_orig.empty() )
     {
         cout << "image load failed!" << endl;
@@ -190,14 +173,61 @@ int main( int argv, char** argc )
         p = cv::saturate_cast<uchar>( ball_orig.at<uchar>( i[0], i[1] ) +
                                       ball_hole.at<uchar>( i[0], i[1] ) );
     } );
+    ImgArr.push_back( std::make_tuple( ball_completed, "ball_completed" ) );
 
 #endif  // SKIP_HOLE
 ////////////////////////////////////////
 #ifndef SKIP_CONNECTED  // chickenXray.tif
 
+    auto chicken_orig = cv::imread( inputPath + "chickenXray-thresholded.tif",
+                                    cv::IMREAD_GRAYSCALE );
+    cv::resize( chicken_orig, chicken_orig, Size(), 0.5, 0.5, INTER_NEAREST );
+    ImgArr.push_back( std::make_tuple( chicken_orig, "chicken_orig" ) );
+
+    if ( chicken_orig.empty() )
+    {
+        cout << "image load failed!" << endl;
+        return -1;
+    }
+
+    std::vector<std::tuple<int, int>> cc_init = {{0, 0}};
+
 #endif  // SKIP_CONNECTED
 ////////////////////////////////////////
 #ifndef SKIP_RECONSTRUCTION  // text.tif
+                             // 25*1
+
+    auto text_orig = cv::imread( inputPath + "text.tif", cv::IMREAD_GRAYSCALE );
+    cv::resize( text_orig, text_orig, Size(), 0.5, 0.5, INTER_NEAREST );
+    ImgArr.push_back( std::make_tuple( text_orig, "text_orig" ) );
+
+#ifndef SKIP_RECON_OPEN
+    auto text_eros = erosion( text_orig, rectSE( 25, 1 ) );
+    auto text_opening = opening( text_orig, rectSE( 25, 1 ) );
+    auto text_reconst =
+        geodesic_reconst_D( text_opening, text_orig, rectSE( 3 ) );
+#endif  // SKIP_RECON_OPEN
+
+#ifndef SKIP_RECON_FILL
+    cv::Mat text_invert = 255 - text_orig;
+    auto text_filled = auto_hole( text_orig );
+
+//    cv::namedWindow("text_orig",WINDOW_AUTOSIZE);
+//    cv::moveWindow("text_orig", 20, 20);
+//    cv::imshow("test_orig",text_orig);
+//
+//    cv::namedWindow("text_filled",WINDOW_AUTOSIZE);
+//    cv::moveWindow("text_filled", 20, 20);
+//    cv::imshow("text_filled",text_filled);
+//
+//    cv::waitKey(0);
+//    cv::destroyAllWindows();
+#endif  // SKIP_RECON_FILL
+
+#ifndef SKIP_RECON_BORDER
+    auto text_border_clean = border_clean(text_orig);
+    cv::Mat text_border = text_orig - text_border_clean;
+#endif  // SKIP_RECON_BORD
 
 #endif  // SKIP_RECONSTRUCTION
 ////////////////////////////////////////
