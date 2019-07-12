@@ -4,8 +4,11 @@
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/imgproc.hpp>
 
+#include <cpuid.h>
 #include <algorithm>
 #include <chrono>
+#include <cstring>
+#include <fstream>
 #include <iomanip>
 #include <iostream>
 #include <string>
@@ -25,8 +28,12 @@ int main( int argv, char** argc )
     const string savepath = "./tmpImg/";
     std::vector<std::tuple<cv::Mat, string>> ImgArr;
 
+    catCPUID( std::cout );
+
 ////////////////////////////////////////
 #ifndef SKIP_EROSION
+
+    std::cout << "/////////////////////////////\n";
 
     auto circuitmask_orig =
         cv::imread( inputPath + "circuitmask.tif", cv::IMREAD_GRAYSCALE );
@@ -49,9 +56,13 @@ int main( int argv, char** argc )
     auto circuitmask_45 = erosion( circuitmask_orig, rectSE( 45 ) );
     ImgArr.push_back( std::make_tuple( circuitmask_45, "circuitmask_45" ) );
 
+    std::cout << "// process end! //\n" << std::endl;
+
 #endif  // SKIP_EROSION
 ////////////////////////////////////////
 #ifndef SKIP_DILATION  // text-broken.tif
+
+    std::cout << "/////////////////////////////\n";
 
     auto text_broken_orig =
         cv::imread( inputPath + "text-broken.tif", cv::IMREAD_GRAYSCALE );
@@ -66,9 +77,13 @@ int main( int argv, char** argc )
     auto text_broken_dil = dilation( text_broken_orig, rectSE( 3 ) );
     ImgArr.push_back( std::make_tuple( text_broken_dil, "text_broken_dil" ) );
 
+    std::cout << "// process end! //\n" << std::endl;
+
 #endif  // SKIP_DILATION
 ////////////////////////////////////////
 #ifndef SKIP_OPENING
+
+    std::cout << "/////////////////////////////\n";
 
     auto finger_orig =
         cv::imread( inputPath + "fingerprint-noisy.tif", cv::IMREAD_GRAYSCALE );
@@ -92,14 +107,13 @@ int main( int argv, char** argc )
     ImgArr.push_back(
         std::make_tuple( finger_open_close, "finger_open_close" ) );
 
-    ///    for(auto it:ImgArr)
-    ///    {
-    ///        std::get<0>(it);
-    ///    }
+    std::cout << "// process end! //\n" << std::endl;
 
 #endif  // SKIP_OPENING
 ////////////////////////////////////////
 #ifndef SKIP_BOUNDARY
+
+    std::cout << "/////////////////////////////\n";
 
     auto lincoln_orig =
         cv::imread( inputPath + "lincoln.tif", cv::IMREAD_GRAYSCALE );
@@ -120,10 +134,15 @@ int main( int argv, char** argc )
     } );
     ImgArr.push_back( std::make_tuple( lincoln_bound, "lincoln_bound" ) );
 
+    std::cout << "// process end! //\n" << std::endl;
+
 #endif  // SKIP_BOUNDARY
 ////////////////////////////////////////
 #ifndef SKIP_HOLE  // balls-with-reflections.tif
                    // crossSE
+
+    std::cout << "/////////////////////////////\n";
+
     auto ball_orig = cv::imread( inputPath + "balls-with-reflections.tif",
                                  cv::IMREAD_GRAYSCALE );
     ImgArr.push_back( std::make_tuple( ball_orig, "ball_orig" ) );
@@ -177,9 +196,13 @@ int main( int argv, char** argc )
     } );
     ImgArr.push_back( std::make_tuple( ball_completed, "ball_completed" ) );
 
+    std::cout << "// process end! //\n" << std::endl;
+
 #endif  // SKIP_HOLE
 ////////////////////////////////////////
 #ifndef SKIP_CONNECTED  // chickenXray.tif
+
+    std::cout << "/////////////////////////////\n";
 
     auto chicken_orig = cv::imread( inputPath + "chickenXray-thresholded.tif",
                                     cv::IMREAD_GRAYSCALE );
@@ -194,10 +217,14 @@ int main( int argv, char** argc )
 
     std::vector<std::tuple<int, int>> cc_init = {{0, 0}};
 
+    std::cout << "// process end! //\n" << std::endl;
+
 #endif  // SKIP_CONNECTED
 ////////////////////////////////////////
 #ifndef SKIP_RECONSTRUCTION  // text.tif
                              // 25*1
+
+    std::cout << "/////////////////////////////\n";
 
     auto text_orig = cv::imread( inputPath + "text.tif", cv::IMREAD_GRAYSCALE );
     if ( text_orig.empty() )
@@ -209,37 +236,61 @@ int main( int argv, char** argc )
     cv::resize( text_orig, text_orig, Size(), 0.5, 0.5, INTER_NEAREST );
     ImgArr.push_back( std::make_tuple( text_orig, "text_orig" ) );
 
+    std::cout << "// process end! //\n" << std::endl;
+
 #ifndef SKIP_RECON_OPEN
+
+    std::cout << "/////////////////////////////\n";
+
     auto text_eros = erosion( text_orig, rectSE( 25, 1 ) );
     auto text_opening = opening( text_orig, rectSE( 25, 1 ) );
     auto text_reconst =
         geodesic_reconst_D( text_opening, text_orig, rectSE( 3 ) );
+    ImgArr.push_back( std::make_tuple( text_reconst, "text_reconst" ) );
 #endif  // SKIP_RECON_OPEN
 
 #ifndef SKIP_RECON_FILL
+
+    std::cout << "/////////////////////////////\n";
+
     cv::Mat text_invert = 255 - text_orig;
     auto text_filled = auto_hole( text_orig );
+    ImgArr.push_back( std::make_tuple( text_filled, "text_filled" ) );
 
-//    cv::namedWindow("text_orig",WINDOW_AUTOSIZE);
-//    cv::moveWindow("text_orig", 20, 20);
-//    cv::imshow("test_orig",text_orig);
-//
-//    cv::namedWindow("text_filled",WINDOW_AUTOSIZE);
-//    cv::moveWindow("text_filled", 20, 20);
-//    cv::imshow("text_filled",text_filled);
-//
-//    cv::waitKey(0);
-//    cv::destroyAllWindows();
+    //    cv::namedWindow("text_orig",WINDOW_AUTOSIZE);
+    //    cv::moveWindow("text_orig", 20, 20);
+    //    cv::imshow("test_orig",text_orig);
+    //
+    //    cv::namedWindow("text_filled",WINDOW_AUTOSIZE);
+    //    cv::moveWindow("text_filled", 20, 20);
+    //    cv::imshow("text_filled",text_filled);
+    //
+    //    cv::waitKey(0);
+    //    cv::destroyAllWindows();
+
+    std::cout << "// process end! //\n" << std::endl;
+
 #endif  // SKIP_RECON_FILL
 
 #ifndef SKIP_RECON_BORDER
+
+    std::cout << "/////////////////////////////\n";
+
     auto text_border_clean = border_clean( text_orig );
     cv::Mat text_border = text_orig - text_border_clean;
+    ImgArr.push_back(
+        std::make_tuple( text_border_clean, "text_border_clean" ) );
+
+    std::cout << "// process end! //\n" << std::endl;
+
 #endif  // SKIP_RECON_BORD
 
 #endif  // SKIP_RECONSTRUCTION
 ////////////////////////////////////////
 #ifndef SKIP_GLOBAL  // fingerprint.tif
+
+    std::cout << "/////////////////////////////\n";
+
     auto finger_orig =
         cv::imread( inputPath + "fingerprint.tif", cv::IMREAD_GRAYSCALE );
     if ( finger_orig.empty() )
@@ -252,26 +303,65 @@ int main( int argv, char** argc )
 
     auto finger_global_seg =
         intensityTransform( finger_orig, thresholding( finger_global_th ) );
+    ImgArr.push_back(
+        std::make_tuple( finger_global_seg, "finger_global_seg" ) );
+
+    std::cout << "// process end! //\n" << std::endl;
 
 #endif  // SKIP_GLOBAL
 ////////////////////////////////////////
 #ifndef SKIP_OTSU  // polymercell.tif
 
+    std::cout << "/////////////////////////////\n";
+
+    auto polymercell_orig =
+        cv::imread( inputPath + "polymercell.tif", cv::IMREAD_GRAYSCALE );
+    if ( polymercell_orig.empty() )
+    {
+        cout << "image load failed!" << endl;
+        return -1;
+    }
+    ImgArr.push_back( std::make_tuple( polymercell_orig, "finger_orig" ) );
+
+    auto polymercell_otsu_th = otsu_threshold( polymercell_orig );
+    auto polymercell_otsu_seg = intensityTransform(
+        polymercell_orig, thresholding( polymercell_otsu_th ) );
+    ImgArr.push_back(
+        std::make_tuple( polymercell_otsu_seg, "polymercell_otsu_seg" ) );
+
+    std::cout << "// process end! //\n" << std::endl;
+
 #endif  // SKIP_OTSU
 ////////////////////////////////////////
 #ifndef SKIP_EDGE_GRAD  //
+
+    std::cout << "/////////////////////////////\n";
+
+    std::cout << "// process end! //\n" << std::endl;
 
 #endif  // SKIP_EDGE_GRAD
 ////////////////////////////////////////
 #ifndef SKIP_LAPLACE_GRAD  //
 
+    std::cout << "/////////////////////////////\n";
+
+    std::cout << "// process end! //\n" << std::endl;
+
 #endif  // SKIP_LAPLACE_GRAD
 ////////////////////////////////////////
 #ifndef SKIP_MULTIPLE_GRAD  //
 
+    std::cout << "/////////////////////////////\n";
+
+    std::cout << "// process end! //\n" << std::endl;
+
 #endif  // SKIP_MULTIPLE_GRAD
 ////////////////////////////////////////
 #ifndef SKIP_VARIABLE  //
+
+    std::cout << "/////////////////////////////\n";
+
+    std::cout << "// process end! //\n" << std::endl;
 
 #endif  // SKIP_VARIABLE
         ////////////////////////////////////////

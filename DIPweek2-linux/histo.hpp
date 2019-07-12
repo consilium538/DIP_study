@@ -9,4 +9,7 @@ std::array<int, 256> histogram( cv::Mat& img );
 // estimate global threshold
 double global_threshold( cv::Mat Img );
 
+// estimate otsu threshold
+double otsu_threshold( cv::Mat Img );
+
 #endif  // HISTO_HPP

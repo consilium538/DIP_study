@@ -70,3 +70,29 @@ double global_threshold( cv::Mat Img )
 
     return threshold;
 }
+
+double otsu_threshold( cv::Mat Img )
+{
+    double threshold;
+
+    auto hist = histogram( Img );
+    std::array<double, 256> prob, prob_cum, mean, mean_cum, var_bc;
+    for ( int i = 0; i < 256; i++ )
+    {
+        prob[i] = double( hist[i] ) / ( Img.cols * Img.rows );
+        prob_cum[i] = prob[i] + ( i == 0 ? 0 : prob_cum[i - 1] );
+        mean[i] = double( i ) / prob[i] + ( i == 0 ? 0 : mean[i - 1] );
+        mean_cum[i] = mean[i] / prob_cum[i];
+    }
+    auto mean_g = mean[255];
+
+    for ( int i = 0; i < 256; i++ )
+    {
+        var_bc[i] = ( std::pow( mean_g * prob_cum[i] - mean_cum[i], 2 ) ) /
+                    ( prob_cum[i] * ( 1 - prob_cum[i] ) );
+    }
+
+    std::vector<int> largest_label;
+
+    return threshold;
+}
