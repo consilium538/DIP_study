@@ -1,26 +1,4 @@
-#define _USE_MATH_DEFINES
-
-#include <opencv2/highgui.hpp>
-#include <opencv2/imgcodecs.hpp>
-#include <opencv2/imgproc.hpp>
-
-#include <cpuid.h>
-#include <algorithm>
-#include <chrono>
-#include <cstring>
-#include <fstream>
-#include <iomanip>
-#include <iostream>
-#include <string>
-#include <vector>
-
-#include "histo.hpp"
-#include "intensity.hpp"
 #include "main.hpp"
-#include "mopology.hpp"
-
-using namespace std;
-using namespace cv;
 
 int main( int argv, char** argc )
 {
@@ -307,6 +285,8 @@ int main( int argv, char** argc )
         std::make_tuple( finger_global_seg, "finger_global_seg" ) );
 
     std::cout << "// process end! //\n" << std::endl;
+
+    img_cat(ImgArr);
 
 #endif  // SKIP_GLOBAL
 ////////////////////////////////////////

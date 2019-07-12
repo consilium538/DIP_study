@@ -1,6 +1,29 @@
 #ifndef MAIN_HPP
 #define MAIN_HPP
 
+#define _USE_MATH_DEFINES
+
+#include <opencv2/highgui.hpp>
+#include <opencv2/imgcodecs.hpp>
+#include <opencv2/imgproc.hpp>
+
+#include <cpuid.h>
+#include <algorithm>
+#include <chrono>
+#include <cstring>
+#include <fstream>
+#include <iomanip>
+#include <iostream>
+#include <string>
+#include <vector>
+
+#include "histo.hpp"
+#include "intensity.hpp"
+#include "mopology.hpp"
+
+using namespace std;
+using namespace cv;
+
 // #define RUN_ALL
 
 #ifndef RUN_ALL
@@ -16,8 +39,8 @@
 #define SKIP_RECON_FILL
 #define SKIP_RECON_BORDER
 /////
-#define SKIP_GLOBAL
-//#define SKIP_OTSU
+//#define SKIP_GLOBAL
+#define SKIP_OTSU
 #define SKIP_EDGE_GRAD
 #define SKIP_LAPLACE_GRAD
 #define SKIP_MULTIPLE_GRAD
@@ -47,6 +70,23 @@ void catCPUID( std::ostream& out )
     }
 
     out << "CPU Type: " << CPUBrandString << std::endl;
+}
+
+void img_cat(std::vector<std::tuple<cv::Mat, string>> ImgArr)
+{
+    int a = 20;
+    for(auto it: ImgArr)
+    {
+        cv::namedWindow(std::get<1>(it),cv::WINDOW_AUTOSIZE);
+        cv::moveWindow(std::get<1>(it), a, 20);
+        cv::imshow(std::get<1>(it),std::get<0>(it));
+        a += 50;
+    }
+
+    cv::waitKey(0);
+    cv::destroyAllWindows();
+
+    return;
 }
 
 #endif  // MAIN_HPP
