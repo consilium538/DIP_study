@@ -82,10 +82,24 @@ void img_cat( std::vector<std::tuple<cv::Mat, string>> ImgArr )
         a += 50;
     }
 
-    cv::waitKey( 0 );
-    cv::destroyAllWindows();
+    if( ImgArr.size() != 0 )
+    {
+        cv::waitKey( 0 );
+        cv::destroyAllWindows();
+    }
 
     return;
+}
+
+void img_save( std::vector<std::tuple<cv::Mat, string>> ImgArr,
+               const string savepath, const string postfix,
+               const std::vector<int>& params = std::vector< int >() )
+{
+    for ( auto it : ImgArr )
+    {
+        cv::imwrite( savepath + std::get<1>( it ) + postfix, std::get<0>( it ),
+                     params );
+    }
 }
 
 #endif  // MAIN_HPP

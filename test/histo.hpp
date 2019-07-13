@@ -4,6 +4,6 @@
 #include "globals.hpp"
 
 // template<typename _Tx>
-std::array<int, 256> histogram(cv::Mat& img);
+std::array<int, 256> histogram( cv::Mat& img );
 
-#endif // HISTO_HPP
+#endif  // HISTO_HPP
