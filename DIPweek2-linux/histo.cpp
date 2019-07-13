@@ -73,26 +73,48 @@ double global_threshold( cv::Mat Img )
 
 double otsu_threshold( cv::Mat Img )
 {
-    double threshold;
-
     auto hist = histogram( Img );
     std::array<double, 256> prob, prob_cum, mean, mean_cum, var_bc;
     for ( int i = 0; i < 256; i++ )
     {
         prob[i] = double( hist[i] ) / ( Img.cols * Img.rows );
         prob_cum[i] = prob[i] + ( i == 0 ? 0 : prob_cum[i - 1] );
-        mean[i] = double( i ) / prob[i] + ( i == 0 ? 0 : mean[i - 1] );
-        mean_cum[i] = mean[i] / prob_cum[i];
+        mean[i] = double( i ) * prob[i] + ( i == 0 ? 0 : mean[i - 1] );
+        mean_cum[i] = prob_cum[i] > 0 ? mean[i] / prob_cum[i] : 0;
     }
     auto mean_g = mean[255];
 
+    double tmp;
+
     for ( int i = 0; i < 256; i++ )
     {
-        var_bc[i] = ( std::pow( mean_g * prob_cum[i] - mean_cum[i], 2 ) ) /
-                    ( prob_cum[i] * ( 1 - prob_cum[i] ) );
+        tmp = prob_cum[i] * ( 1 - prob_cum[i] );
+        
+        var_bc[i] = tmp > 0 ? ( std::pow( mean_g * prob_cum[i] - mean[i], 2 ) ) /
+                    ( prob_cum[i] * ( 1 - prob_cum[i] ) ) : 0;
     }
 
     std::vector<int> largest_label;
+    double max_var_bc;
 
-    return threshold;
+    for ( int i = 0; i < 256; i++ )
+    {
+        if ( var_bc[i] > max_var_bc )
+        {
+            max_var_bc = var_bc[i];
+            largest_label.clear();
+            largest_label.push_back( i );
+        }
+        else if ( var_bc[i] == max_var_bc )
+        {
+            largest_label.push_back( i );
+        }
+    }
+
+    if ( largest_label.size() == 1 )
+        return largest_label[0];
+    else
+        return (double)std::accumulate( largest_label.begin(),
+                                        largest_label.end(), 0 ) /
+               largest_label.size();
 }

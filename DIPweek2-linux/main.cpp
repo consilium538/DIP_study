@@ -202,7 +202,7 @@ int main( int argv, char** argc )
 #ifndef SKIP_RECONSTRUCTION  // text.tif
                              // 25*1
 
-    std::cout << "/////////////////////////////\n";
+    std::cout << "// start of reconstruction process //\n";
 
     auto text_orig = cv::imread( inputPath + "text.tif", cv::IMREAD_GRAYSCALE );
     if ( text_orig.empty() )
@@ -211,57 +211,84 @@ int main( int argv, char** argc )
         return -1;
     }
 
-    cv::resize( text_orig, text_orig, Size(), 0.5, 0.5, INTER_NEAREST );
+    // cv::resize( text_orig, text_orig, Size(), 0.5, 0.5, INTER_NEAREST );
     ImgArr.push_back( std::make_tuple( text_orig, "text_orig" ) );
-
-    std::cout << "// process end! //\n" << std::endl;
 
 #ifndef SKIP_RECON_OPEN
 
-    std::cout << "/////////////////////////////\n";
+    std::cout << "// start of reconstruction_open process //\n";
+    auto start_recon_open = chrono::high_resolution_clock::now();
 
-    auto text_eros = erosion( text_orig, rectSE( 25, 1 ) );
-    auto text_opening = opening( text_orig, rectSE( 25, 1 ) );
+    auto text_eros = erosion( text_orig, rectSE( 51, 1 ) );
+    auto text_opening = opening( text_orig, rectSE( 51, 1 ) );
     auto text_reconst =
         geodesic_reconst_D( text_opening, text_orig, rectSE( 3 ) );
     ImgArr.push_back( std::make_tuple( text_reconst, "text_reconst" ) );
+
+    auto end_recon_open = chrono::high_resolution_clock::now();
+    double time_taken_recon_open =
+        std::chrono::duration_cast<chrono::nanoseconds>( end_recon_open -
+                                                         start_recon_open )
+            .count();
+    time_taken_recon_open *= 1e-9;
+
+    std::cout << "// reconstruction_open process end! //\n";
+    std::cout << "time taken by reconstruction_open process is : " << fixed
+              << time_taken_recon_open << setprecision( 9 );
+    std::cout << " sec\n" << endl;
+
 #endif  // SKIP_RECON_OPEN
 
 #ifndef SKIP_RECON_FILL
 
-    std::cout << "/////////////////////////////\n";
+    std::cout << "// start of reconstruction_fill process //\n";
+    auto start_recon_fill = chrono::high_resolution_clock::now();
 
     cv::Mat text_invert = 255 - text_orig;
     auto text_filled = auto_hole( text_orig );
     ImgArr.push_back( std::make_tuple( text_filled, "text_filled" ) );
 
-    //    cv::namedWindow("text_orig",WINDOW_AUTOSIZE);
-    //    cv::moveWindow("text_orig", 20, 20);
-    //    cv::imshow("test_orig",text_orig);
-    //
-    //    cv::namedWindow("text_filled",WINDOW_AUTOSIZE);
-    //    cv::moveWindow("text_filled", 20, 20);
-    //    cv::imshow("text_filled",text_filled);
-    //
-    //    cv::waitKey(0);
-    //    cv::destroyAllWindows();
+    auto end_recon_fill = chrono::high_resolution_clock::now();
+    double time_taken_recon_fill =
+        std::chrono::duration_cast<chrono::nanoseconds>( end_recon_fill -
+                                                         start_recon_fill )
+            .count();
+    time_taken_recon_fill *= 1e-9;
 
-    std::cout << "// process end! //\n" << std::endl;
+    std::cout << "// reconstruction_fill process end! //\n";
+    std::cout << "time taken by reconstruction_fill process is : " << fixed
+              << time_taken_recon_fill << setprecision( 9 );
+    std::cout << " sec\n" << endl;
 
 #endif  // SKIP_RECON_FILL
 
 #ifndef SKIP_RECON_BORDER
 
-    std::cout << "/////////////////////////////\n";
+    std::cout << "// start of reconstruction_border process //\n";
+    auto start_recon_border = chrono::high_resolution_clock::now();
 
     auto text_border_clean = border_clean( text_orig );
     cv::Mat text_border = text_orig - text_border_clean;
     ImgArr.push_back(
         std::make_tuple( text_border_clean, "text_border_clean" ) );
 
-    std::cout << "// process end! //\n" << std::endl;
+    auto end_recon_border = chrono::high_resolution_clock::now();
+    double time_taken_recon_border =
+        std::chrono::duration_cast<chrono::nanoseconds>( end_recon_border -
+                                                         start_recon_border )
+            .count();
+    time_taken_recon_border *= 1e-9;
+
+    std::cout << "// reconstruction_border process end! //\n";
+    std::cout << "time taken by reconstruction_border process is : " << fixed
+              << time_taken_recon_border << setprecision( 9 );
+    std::cout << " sec\n" << endl;
 
 #endif  // SKIP_RECON_BORD
+
+    std::cout << "// reconstruction process end! //\n" << std::endl;
+
+    img_cat( ImgArr );
 
 #endif  // SKIP_RECONSTRUCTION
 ////////////////////////////////////////
@@ -286,13 +313,13 @@ int main( int argv, char** argc )
 
     std::cout << "// process end! //\n" << std::endl;
 
-    img_cat(ImgArr);
+    img_cat( ImgArr );
 
 #endif  // SKIP_GLOBAL
 ////////////////////////////////////////
 #ifndef SKIP_OTSU  // polymercell.tif
 
-    std::cout << "/////////////////////////////\n";
+    std::cout << "// start of otsu process //\n";
 
     auto polymercell_orig =
         cv::imread( inputPath + "polymercell.tif", cv::IMREAD_GRAYSCALE );
@@ -303,13 +330,26 @@ int main( int argv, char** argc )
     }
     ImgArr.push_back( std::make_tuple( polymercell_orig, "finger_orig" ) );
 
+    auto start_otsu = chrono::high_resolution_clock::now();
+
     auto polymercell_otsu_th = otsu_threshold( polymercell_orig );
     auto polymercell_otsu_seg = intensityTransform(
         polymercell_orig, thresholding( polymercell_otsu_th ) );
     ImgArr.push_back(
         std::make_tuple( polymercell_otsu_seg, "polymercell_otsu_seg" ) );
 
-    std::cout << "// process end! //\n" << std::endl;
+    auto end_otsu = chrono::high_resolution_clock::now();
+    double time_taken_otsu =
+        std::chrono::duration_cast<chrono::nanoseconds>( end_otsu - start_otsu )
+            .count();
+    time_taken_otsu *= 1e-9;
+
+    std::cout << "// process end! //\n";
+    std::cout << "time taken by otsu process is : " << fixed << time_taken_otsu
+              << setprecision( 9 );
+    std::cout << " sec\n" << endl;
+
+    img_cat( ImgArr );
 
 #endif  // SKIP_OTSU
 ////////////////////////////////////////
@@ -348,13 +388,5 @@ int main( int argv, char** argc )
 
     return 0;
 }
-
-// fig 9.5   : circuitmask.tif
-// fig 9.7   : text-broken.tif
-// fig 9.11  : fingerprint-noisy.tif
-// fig 9.16  : lincoln.tif
-// fig 9.18  : balls-with-reflections.tif
-// fig 9.20  : chickenXray.tif
-// fig 9.33~ : text.tif
 
 //    cv::imwrite( savepath + "moon-blurred.tif", TransformedImg );

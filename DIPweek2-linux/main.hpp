@@ -13,7 +13,6 @@
 #include <cstring>
 #include <fstream>
 #include <iomanip>
-#include <iostream>
 #include <string>
 #include <vector>
 
@@ -34,13 +33,13 @@ using namespace cv;
 #define SKIP_HOLE
 #define SKIP_CONNECTED
 #define SKIP_RECONSTRUCTION
-/////
+//
 #define SKIP_RECON_OPEN
 #define SKIP_RECON_FILL
 #define SKIP_RECON_BORDER
-/////
-//#define SKIP_GLOBAL
-#define SKIP_OTSU
+//
+#define SKIP_GLOBAL
+// #define SKIP_OTSU
 #define SKIP_EDGE_GRAD
 #define SKIP_LAPLACE_GRAD
 #define SKIP_MULTIPLE_GRAD
@@ -72,18 +71,18 @@ void catCPUID( std::ostream& out )
     out << "CPU Type: " << CPUBrandString << std::endl;
 }
 
-void img_cat(std::vector<std::tuple<cv::Mat, string>> ImgArr)
+void img_cat( std::vector<std::tuple<cv::Mat, string>> ImgArr )
 {
     int a = 20;
-    for(auto it: ImgArr)
+    for ( auto it : ImgArr )
     {
-        cv::namedWindow(std::get<1>(it),cv::WINDOW_AUTOSIZE);
-        cv::moveWindow(std::get<1>(it), a, 20);
-        cv::imshow(std::get<1>(it),std::get<0>(it));
+        cv::namedWindow( std::get<1>( it ), cv::WINDOW_AUTOSIZE );
+        cv::moveWindow( std::get<1>( it ), a, 20 );
+        cv::imshow( std::get<1>( it ), std::get<0>( it ) );
         a += 50;
     }
 
-    cv::waitKey(0);
+    cv::waitKey( 0 );
     cv::destroyAllWindows();
 
     return;
