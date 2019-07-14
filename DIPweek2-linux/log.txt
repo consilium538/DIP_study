@@ -20,3 +20,25 @@ time taken by reconstruction_border process is : 1.487175048 sec
 /////////////////////////////
 
 
+CPU Type: Intel(R) Core(TM) i5-4200H CPU @ 2.80GHz
+Process start at Sun Jul 14 20:40:44 2019
+
+// start of reconstruction process //
+// start of reconstruction_open process //
+// reconstruction_open process end! //
+time taken by reconstruction_open process is : 9.654113 sec
+
+// start of reconstruction_fill process //
+// reconstruction_fill process end! //
+time taken by reconstruction_fill process is : 51.971174961 sec
+
+// start of reconstruction_border process //
+// reconstruction_border process end! //
+time taken by reconstruction_border process is : 3.053638572 sec
+
+// reconstruction process end! //
+
+
+/////////////////////////////
+
+
