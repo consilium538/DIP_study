@@ -7,6 +7,8 @@ int main( int argv, char** argc )
     std::vector<std::tuple<cv::Mat, string>> ImgArr;
 
     catCPUID( std::cout );
+    auto now = std::time(nullptr);
+    std::cout << "Process start at " << std::ctime(&now) << std::endl;
 
 ////////////////////////////////////////
 #ifndef SKIP_EROSION
@@ -385,6 +387,8 @@ int main( int argv, char** argc )
 
 #endif  // SKIP_VARIABLE
         ////////////////////////////////////////
+
+    std::cout << "\n/////////////////////////////\n\n" << std::endl;
 
     return 0;
 }

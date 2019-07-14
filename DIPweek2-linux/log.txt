@@ -1,0 +1,22 @@
+CPU Type: AMD Ryzen 5 2400G with Radeon Vega Graphics    
+Process start at Sun Jul 14 11:58:20 2019
+
+// start of reconstruction process //
+// start of reconstruction_open process //
+// reconstruction_open process end! //
+time taken by reconstruction_open process is : 4.984356 sec
+
+// start of reconstruction_fill process //
+// reconstruction_fill process end! //
+time taken by reconstruction_fill process is : 22.770782364 sec
+
+// start of reconstruction_border process //
+// reconstruction_border process end! //
+time taken by reconstruction_border process is : 1.487175048 sec
+
+// reconstruction process end! //
+
+
+/////////////////////////////
+
+

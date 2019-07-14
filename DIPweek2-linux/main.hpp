@@ -15,6 +15,7 @@
 #include <iomanip>
 #include <string>
 #include <vector>
+#include <ctime>
 
 #include "histo.hpp"
 #include "intensity.hpp"
@@ -32,14 +33,14 @@ using namespace cv;
 #define SKIP_BOUNDARY
 #define SKIP_HOLE
 #define SKIP_CONNECTED
-#define SKIP_RECONSTRUCTION
+//#define SKIP_RECONSTRUCTION
 //
-#define SKIP_RECON_OPEN
-#define SKIP_RECON_FILL
-#define SKIP_RECON_BORDER
+//#define SKIP_RECON_OPEN
+//#define SKIP_RECON_FILL
+//#define SKIP_RECON_BORDER
 //
 #define SKIP_GLOBAL
-// #define SKIP_OTSU
+#define SKIP_OTSU
 #define SKIP_EDGE_GRAD
 #define SKIP_LAPLACE_GRAD
 #define SKIP_MULTIPLE_GRAD
