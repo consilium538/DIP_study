@@ -1,0 +1,61 @@
+{
+    "version": "2.0.0",
+    "runner": "terminal",
+    "type": "shell",
+    "echoCommand": true,
+    "presentation" : { "reveal": "always" },
+    "tasks": [
+        {
+            "label": "debug option",
+            "command": "cd ${workspaceRoot} && cmake -DCMAKE_BUILD_TYPE=Debug . && make",
+            "group": "build",
+            "problemMatcher": {
+                "fileLocation": [
+                    "relative",
+                    "${workspaceRoot}"
+                ],
+                "pattern": {
+                    "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning error):\\s+(.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "severity": 4,
+                    "message": 5
+                }
+            }
+        },
+
+        {
+            "label": "release option",
+            "command": "cd ${workspaceRoot} && cmake . && make",
+            "group": "build",
+            "problemMatcher": {
+                "fileLocation": [
+                    "relative",
+                    "${workspaceRoot}"
+                ],
+                "pattern": {
+                    "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning error):\\s+(.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "severity": 4,
+                    "message": 5
+                }
+            }
+        },
+
+        {
+            "label": "execute",
+            "command": "cd ${workspaceRoot} && ./dip_week2 ",
+            "group": "test"
+        },
+
+        {
+            "label" : "cleanup",
+            "command" : "cd ${workspaceRoot} && make clean && rm -r CMakeFiles && rm CMakeCache.txt",
+            "group" : "test"
+        }
+
+    ]
+}
