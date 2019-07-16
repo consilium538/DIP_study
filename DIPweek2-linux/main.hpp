@@ -11,12 +11,13 @@
 #include <algorithm>
 #include <chrono>
 #include <cstring>
+#include <ctime>
 #include <fstream>
 #include <iomanip>
 #include <string>
 #include <vector>
-#include <ctime>
 
+#include "conv.hpp"
 #include "histo.hpp"
 #include "intensity.hpp"
 #include "mopology.hpp"
@@ -33,18 +34,20 @@ using namespace cv;
 #define SKIP_BOUNDARY
 #define SKIP_HOLE
 #define SKIP_CONNECTED
-//#define SKIP_RECONSTRUCTION
+#define SKIP_RECONSTRUCTION
 //
-//#define SKIP_RECON_OPEN
-//#define SKIP_RECON_FILL
-//#define SKIP_RECON_BORDER
+#define SKIP_RECON_OPEN
+#define SKIP_RECON_FILL
+#define SKIP_RECON_BORDER
 //
 #define SKIP_GLOBAL
 #define SKIP_OTSU
-#define SKIP_EDGE_GRAD
-#define SKIP_LAPLACE_GRAD
+#define SKIP_SMOOTH_GLOBAL
+//#define SKIP_EDGE_GRAD
+#define SKIP_EDGE_LAPLACE
 #define SKIP_MULTIPLE_GRAD
-#define SKIP_VARIABLE
+#define SKIP_VARIABLE_IMG_LOCAL
+#define SKIP_VARIABLE_MOVING_AVG
 #endif  // RUN_ALL
 
 void catCPUID( std::ostream& out )
@@ -83,7 +86,7 @@ void img_cat( std::vector<std::tuple<cv::Mat, string>> ImgArr )
         a += 50;
     }
 
-    if( ImgArr.size() != 0 )
+    if ( ImgArr.size() != 0 )
     {
         cv::waitKey( 0 );
         cv::destroyAllWindows();
@@ -93,8 +96,9 @@ void img_cat( std::vector<std::tuple<cv::Mat, string>> ImgArr )
 }
 
 void img_save( std::vector<std::tuple<cv::Mat, string>> ImgArr,
-               const string savepath, const string postfix,
-               const std::vector<int>& params = std::vector< int >() )
+               const string savepath,
+               const string postfix,
+               const std::vector<int>& params = std::vector<int>() )
 {
     for ( auto it : ImgArr )
     {

@@ -89,9 +89,11 @@ double otsu_threshold( cv::Mat Img )
     for ( int i = 0; i < 256; i++ )
     {
         tmp = prob_cum[i] * ( 1 - prob_cum[i] );
-        
-        var_bc[i] = tmp > 0 ? ( std::pow( mean_g * prob_cum[i] - mean[i], 2 ) ) /
-                    ( prob_cum[i] * ( 1 - prob_cum[i] ) ) : 0;
+
+        var_bc[i] = tmp > 0
+                        ? ( std::pow( mean_g * prob_cum[i] - mean[i], 2 ) ) /
+                              ( prob_cum[i] * ( 1 - prob_cum[i] ) )
+                        : 0;
     }
 
     std::vector<int> largest_label;

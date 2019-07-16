@@ -123,6 +123,33 @@ dip_week2/fast:
 	$(MAKE) -f CMakeFiles/dip_week2.dir/build.make CMakeFiles/dip_week2.dir/build
 .PHONY : dip_week2/fast
 
+conv.o: conv.cpp.o
+
+.PHONY : conv.o
+
+# target to build an object file
+conv.cpp.o:
+	$(MAKE) -f CMakeFiles/dip_week2.dir/build.make CMakeFiles/dip_week2.dir/conv.cpp.o
+.PHONY : conv.cpp.o
+
+conv.i: conv.cpp.i
+
+.PHONY : conv.i
+
+# target to preprocess a source file
+conv.cpp.i:
+	$(MAKE) -f CMakeFiles/dip_week2.dir/build.make CMakeFiles/dip_week2.dir/conv.cpp.i
+.PHONY : conv.cpp.i
+
+conv.s: conv.cpp.s
+
+.PHONY : conv.s
+
+# target to generate assembly for a file
+conv.cpp.s:
+	$(MAKE) -f CMakeFiles/dip_week2.dir/build.make CMakeFiles/dip_week2.dir/conv.cpp.s
+.PHONY : conv.cpp.s
+
 histo.o: histo.cpp.o
 
 .PHONY : histo.o
@@ -240,6 +267,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... dip_week2"
 	@echo "... edit_cache"
+	@echo "... conv.o"
+	@echo "... conv.i"
+	@echo "... conv.s"
 	@echo "... histo.o"
 	@echo "... histo.i"
 	@echo "... histo.s"

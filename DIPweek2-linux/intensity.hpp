@@ -23,5 +23,6 @@ std::function<unsigned char( unsigned char )> levelslicing( int lower,
                                                             int level );
 std::function<unsigned char( unsigned char )> bitslicing(
     unsigned char bitlevel );
+cv::Mat testGaussian( cv::Mat Img, double mean, double stddev );
 
 #endif  // INTENSITY_HPP

@@ -7,8 +7,8 @@ int main( int argv, char** argc )
     std::vector<std::tuple<cv::Mat, string>> ImgArr;
 
     catCPUID( std::cout );
-    auto now = std::time(nullptr);
-    std::cout << "Process start at " << std::ctime(&now) << std::endl;
+    auto now = std::time( nullptr );
+    std::cout << "Process start at " << std::ctime( &now ) << std::endl;
 
 ////////////////////////////////////////
 #ifndef SKIP_EROSION
@@ -296,7 +296,7 @@ int main( int argv, char** argc )
 ////////////////////////////////////////
 #ifndef SKIP_GLOBAL  // fingerprint.tif
 
-    std::cout << "/////////////////////////////\n";
+    std::cout << "// start of global thresholding process //\n";
 
     auto finger_orig =
         cv::imread( inputPath + "fingerprint.tif", cv::IMREAD_GRAYSCALE );
@@ -346,7 +346,7 @@ int main( int argv, char** argc )
             .count();
     time_taken_otsu *= 1e-9;
 
-    std::cout << "// process end! //\n";
+    std::cout << "// otsu process end! //\n";
     std::cout << "time taken by otsu process is : " << fixed << time_taken_otsu
               << setprecision( 9 );
     std::cout << " sec\n" << endl;
@@ -355,39 +355,116 @@ int main( int argv, char** argc )
 
 #endif  // SKIP_OTSU
 ////////////////////////////////////////
-#ifndef SKIP_EDGE_GRAD  //
+#ifndef SKIP_SMOOTH_GLOBAL
 
-    std::cout << "/////////////////////////////\n";
+    std::cout << "// start of global thresholding by smoothing process //\n";
 
-    std::cout << "// process end! //\n" << std::endl;
+    auto septagon_orig =
+        cv::imread( inputPath + "septagon.tif", cv::IMREAD_GRAYSCALE );
+    if ( septagon_orig.empty() )
+    {
+        cout << "image load failed!" << endl;
+        return -1;
+    }
+    // ImgArr.push_back( std::make_tuple( septagon_orig, "septagon_orig" ) );
+
+    auto start_smooth_global = chrono::high_resolution_clock::now();
+
+    auto septagon_gauss = testGaussian( septagon_orig, 0.0, 50.0 );
+    ImgArr.push_back( std::make_tuple( septagon_gauss, "septagon_gauss_50" ) );
+
+    cv::Mat septagon_double;
+    septagon_gauss.convertTo( septagon_double, CV_64F );
+    cv::Mat septagon_smooth;
+    conv2d( septagon_double, box_filter( 5 ), Padding::replicate )
+        .convertTo( septagon_smooth, CV_8U );
+    ImgArr.push_back(
+        std::make_tuple( septagon_smooth, "septagon_smooth_5" ) );
+
+    auto septagon_global_th = global_threshold( septagon_smooth );
+    auto septagon_global_seg = intensityTransform(
+        septagon_smooth, thresholding( septagon_global_th ) );
+    ImgArr.push_back(
+        std::make_tuple( septagon_global_seg, "septagon_global_seg" ) );
+
+    auto end_smooth_global = chrono::high_resolution_clock::now();
+    double time_taken_smooth_global =
+        std::chrono::duration_cast<chrono::nanoseconds>( end_smooth_global -
+        start_smooth_global )
+            .count();
+    time_taken_smooth_global *= 1e-9;
+
+    std::cout << "// global thresholding by smoothing process end! //\n";
+    std::cout << "time taken by global thresholding by smoothing process
+    is : " << fixed << time_taken_smooth_global
+              << setprecision( 9 );
+    std::cout << " sec\n" << endl;
+
+    img_cat( ImgArr );
+
+#endif  // SKIP_SMOOTH_GLOBAL
+////////////////////////////////////////
+#ifndef SKIP_EDGE_GRAD  // septagon-small.tif
+
+    std::cout << "// start of EDGE_GRAD process //\n";
+
+    auto septagon_small_orig =
+        cv::imread( inputPath + "septagon-small.tif", cv::IMREAD_GRAYSCALE );
+    if ( septagon_small_orig.empty() )
+    {
+        cout << "image load failed!" << endl;
+        return -1;
+    }
+
+    auto start_edge_grad = chrono::high_resolution_clock::now();
+
+    auto end_edge_grad = chrono::high_resolution_clock::now();
+    double time_taken_edge_grad =
+        std::chrono::duration_cast<chrono::nanoseconds>( end_edge_grad -
+        start_edge_grad )
+            .count();
+    time_taken_edge_grad *= 1e-9;
+
+    std::cout << "// EDGE_GRAD process end! //\n";
+    std::cout << "time taken by EDGE_GRAD process is : "
+              << fixed << time_taken_edge_grad << setprecision( 9 );
+    std::cout << " sec\n" << endl;
+
+    img_cat( ImgArr );
 
 #endif  // SKIP_EDGE_GRAD
 ////////////////////////////////////////
-#ifndef SKIP_LAPLACE_GRAD  //
+#ifndef SKIP_EDGE_LAPLACE  // yeast-cells.tif
 
-    std::cout << "/////////////////////////////\n";
+    std::cout << "// start of EDGE_LAPLACE process //\n";
 
-    std::cout << "// process end! //\n" << std::endl;
+    std::cout << "// EDGE_LAPLACE process end! //\n" << std::endl;
 
-#endif  // SKIP_LAPLACE_GRAD
+#endif  // SKIP_EDGE_LAPLACE
 ////////////////////////////////////////
-#ifndef SKIP_MULTIPLE_GRAD  //
+#ifndef SKIP_MULTIPLE_GRAD  // iceberg.tif
 
-    std::cout << "/////////////////////////////\n";
+    std::cout << "// start of MULTIPLE_GRAD process //\n";
 
-    std::cout << "// process end! //\n" << std::endl;
+    std::cout << "// MULTIPLE_GRAD process end! //\n" << std::endl;
 
 #endif  // SKIP_MULTIPLE_GRAD
 ////////////////////////////////////////
-#ifndef SKIP_VARIABLE  //
+#ifndef SKIP_VARIABLE_IMG_LOCAL  // yeast-cells.tif
 
-    std::cout << "/////////////////////////////\n";
+    std::cout << "// start of VARIABLE_IMG_LOCAL process //\n";
 
     std::cout << "// process end! //\n" << std::endl;
 
-#endif  // SKIP_VARIABLE
-        ////////////////////////////////////////
+#endif // SKIP_VARIABLE_IMG_LOCAL
+////////////////////////////////////////
+#ifndef SKIP_VARIABLE_MOVING_AVG  // text-sineshade.tif, text-spotshade.tif
 
+    std::cout << "// start of VARIABLE_MOVING_AVG process //\n";
+
+    std::cout << "// process end! //\n" << std::endl;
+
+#endif  // SKIP_VARIABLE_MOVING_AVG
     std::cout << "\n/////////////////////////////\n\n" << std::endl;
 
     return 0;

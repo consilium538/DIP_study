@@ -90,3 +90,18 @@ std::function<unsigned char( unsigned char )> bitslicing(
         return (unsigned char)input & bitlevel ? 255 : 0;
     };
 }
+
+cv::Mat testGaussian( cv::Mat Img, double mean, double stddev )
+{
+    cv::Mat gaussian = cv::Mat_<uchar>( Img.size() );
+    std::random_device rd{};
+    std::mt19937_64 gen{rd()};
+
+    std::normal_distribution<> d{mean, stddev};
+
+    gaussian.forEach<uchar>( [&]( uchar& p, const int* i ) {
+        p = cv::saturate_cast<uchar>( Img.at<uchar>( i[0], i[1] ) + d( gen ) );
+    } );
+
+    return gaussian;
+}

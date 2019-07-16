@@ -3,13 +3,14 @@
 
 #define _USE_MATH_DEFINES
 
-#include <iostream>
 #include <algorithm>
 #include <array>
 #include <cmath>
 #include <functional>
+#include <iostream>
 #include <numeric>
 #include <opencv2/core/utility.hpp>
+#include <random>
 
 using Pixel = uchar;
 
