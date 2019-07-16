@@ -413,6 +413,7 @@ int main( int argv, char** argc )
         cout << "image load failed!" << endl;
         return -1;
     }
+    ImgArr.push_back( std::make_tuple( septagon_small_orig, "septagon_small_orig" ) );
 
     auto start_edge_grad = chrono::high_resolution_clock::now();
 
@@ -474,17 +475,105 @@ int main( int argv, char** argc )
 
     std::cout << "// start of EDGE_LAPLACE process //\n";
 
-    std::cout << "// EDGE_LAPLACE process end! //\n" << std::endl;
+    auto yeast_cell_orig =
+        cv::imread( inputPath + "yeast-cells.tif", cv::IMREAD_GRAYSCALE );
+    if ( yeast_cell_orig.empty() )
+    {
+        cout << "image load failed!" << endl;
+        return -1;
+    }
+    ImgArr.push_back( std::make_tuple( yeast_cell_orig, "yeast_cell_orig" ) );
+
+    auto start_edge_laplace = chrono::high_resolution_clock::now();
+
+    cv::Mat yeast_cell_double;
+    yeast_cell_orig.convertTo( yeast_cell_double, CV_64F );
+    cv::Mat yeast_cell_laplace = cv::abs(conv2d(
+        yeast_cell_double, laplacian_filter(LaplaceOption::eight), Padding::replicate
+    ));
+    cv::Mat yeast_cell_laplace_norm;
+    yeast_cell_laplace.convertTo( yeast_cell_laplace_norm, CV_8U, 0.25 );
+    ImgArr.push_back( std::make_tuple(
+        yeast_cell_laplace_norm, "yeast_cell_laplace_norm"
+    ) );
+    auto yeast_cell_laplace_hist = histogram_ex( yeast_cell_laplace );
+
+    // for( auto it: yeast_cell_laplace_hist )
+    //     std::cout << it << " ";
+    // std::cout << std::endl;
+
+    const int yeast_cell_pixels = yeast_cell_orig.rows * yeast_cell_orig.cols;
+    int yeast_cell_laplace_th = 1023;
+    int yeast_cell_laplace_cum = 0;
+    for( ; yeast_cell_laplace_th > 0; yeast_cell_laplace_th-- )
+    {
+        yeast_cell_laplace_cum += yeast_cell_laplace_hist[yeast_cell_laplace_th];
+        if ( yeast_cell_laplace_cum > (double)yeast_cell_pixels * 0.003 )
+            break;
+    }
+
+    cv::Mat yeast_cell_index = yeast_cell_laplace > yeast_cell_laplace_th;
+    ImgArr.push_back( std::make_tuple(
+        yeast_cell_index, "yeast_cell_index"
+    ) );
+
+    auto yeast_cell_hist = indexed_histogram( 
+        yeast_cell_orig, yeast_cell_index
+    );
+    auto yeast_cell_th = otsu_threshold_indexed(
+        yeast_cell_orig, yeast_cell_index
+    );
+    auto yeast_cell_seg = intensityTransform(
+        yeast_cell_orig, thresholding( yeast_cell_th ) );
+    ImgArr.push_back(
+        std::make_tuple( yeast_cell_seg, "yeast_cell_edge_laplace" ) );
+
+    auto end_edge_laplace = chrono::high_resolution_clock::now();
+    double time_taken_edge_laplace =
+        std::chrono::duration_cast<chrono::nanoseconds>( end_edge_laplace -
+                                                         start_edge_laplace )
+            .count();
+    time_taken_edge_laplace *= 1e-9;
+
+    std::cout << "// EDGE_LAPLACE process end! //\n";
+    std::cout << "time taken by EDGE_LAPLACE process is : " << fixed
+              << time_taken_edge_laplace << setprecision( 9 );
+    std::cout << " sec\n" << endl;
+
+    img_cat( ImgArr );
 
 #endif  // SKIP_EDGE_LAPLACE
 ////////////////////////////////////////
-#ifndef SKIP_MULTIPLE_GRAD  // iceberg.tif
+#ifndef SKIP_MULTIPLE_TH  // iceberg.tif
 
-    std::cout << "// start of MULTIPLE_GRAD process //\n";
+    std::cout << "// start of MULTIPLE_TH process //\n";
 
-    std::cout << "// MULTIPLE_GRAD process end! //\n" << std::endl;
+    auto iceberg_orig =
+        cv::imread( inputPath + "iceberg.tif", cv::IMREAD_GRAYSCALE );
+    if ( iceberg_orig.empty() )
+    {
+        cout << "image load failed!" << endl;
+        return -1;
+    }
+    ImgArr.push_back( std::make_tuple( iceberg_orig, "iceberg_orig" ) );
 
-#endif  // SKIP_MULTIPLE_GRAD
+    auto start_edge_laplace = chrono::high_resolution_clock::now();
+
+    auto end_edge_laplace = chrono::high_resolution_clock::now();
+    double time_taken_edge_laplace =
+        std::chrono::duration_cast<chrono::nanoseconds>( end_edge_laplace -
+                                                         start_edge_laplace )
+            .count();
+    time_taken_edge_laplace *= 1e-9;
+
+    std::cout << "// MULTIPLE_TH process end! //\n";
+    std::cout << "time taken by MULTIPLE_TH process is : " << fixed
+              << time_taken_edge_laplace << setprecision( 9 );
+    std::cout << " sec\n" << endl;
+
+    img_cat( ImgArr );
+
+#endif  // SKIP_MULTIPLE_TH
 ////////////////////////////////////////
 #ifndef SKIP_VARIABLE_IMG_LOCAL  // yeast-cells.tif
 

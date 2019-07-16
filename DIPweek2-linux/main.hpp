@@ -43,9 +43,9 @@ using namespace cv;
 #define SKIP_GLOBAL
 #define SKIP_OTSU
 #define SKIP_SMOOTH_GLOBAL
-//#define SKIP_EDGE_GRAD
+#define SKIP_EDGE_GRAD
 #define SKIP_EDGE_LAPLACE
-#define SKIP_MULTIPLE_GRAD
+//#define SKIP_MULTIPLE_TH
 #define SKIP_VARIABLE_IMG_LOCAL
 #define SKIP_VARIABLE_MOVING_AVG
 #endif  // RUN_ALL
