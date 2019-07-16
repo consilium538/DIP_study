@@ -44,8 +44,7 @@ cv::Mat conv2d( cv::Mat large, cv::Mat small, Padding method )
                                 focusMat.at<double>( k, l ) = 0.0;
                             else
                                 focusMat.at<double>( k, l ) =
-                                    large.at<double>( k_centered,
-                                                         l_centered );
+                                    large.at<double>( k_centered, l_centered );
                         }
                         break;
 
@@ -99,7 +98,6 @@ cv::Mat conv2d( cv::Mat large, cv::Mat small, Padding method )
             ptr[j] = sum[0];
         }
     }
-
 
     return conv;
 }
@@ -234,4 +232,22 @@ cv::Mat adaptive_median( cv::Mat orig, int maxWindowSize )
     }
 
     return ret;
+}
+
+cv::Mat grad2d( cv::Mat Img )
+{
+    cv::Mat Img_double;
+    if ( Img.type() != CV_64FC1 )
+        Img.convertTo( Img_double, CV_64F );
+    else
+        Img_double = Img;
+
+    auto xdir = conv2d( Img_double, sobel_filter( SobelOption::xdir ),
+                        Padding::replicate );
+    auto ydir = conv2d( Img_double, sobel_filter( SobelOption::ydir ),
+                        Padding::replicate );
+
+    cv::Mat grad = cv::abs( xdir ) + cv::abs( ydir );
+
+    return grad;
 }

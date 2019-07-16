@@ -378,8 +378,7 @@ int main( int argv, char** argc )
     cv::Mat septagon_smooth;
     conv2d( septagon_double, box_filter( 5 ), Padding::replicate )
         .convertTo( septagon_smooth, CV_8U );
-    ImgArr.push_back(
-        std::make_tuple( septagon_smooth, "septagon_smooth_5" ) );
+    ImgArr.push_back( std::make_tuple( septagon_smooth, "septagon_smooth_5" ) );
 
     auto septagon_global_th = global_threshold( septagon_smooth );
     auto septagon_global_seg = intensityTransform(
@@ -390,14 +389,13 @@ int main( int argv, char** argc )
     auto end_smooth_global = chrono::high_resolution_clock::now();
     double time_taken_smooth_global =
         std::chrono::duration_cast<chrono::nanoseconds>( end_smooth_global -
-        start_smooth_global )
+                                                         start_smooth_global )
             .count();
     time_taken_smooth_global *= 1e-9;
 
     std::cout << "// global thresholding by smoothing process end! //\n";
-    std::cout << "time taken by global thresholding by smoothing process
-    is : " << fixed << time_taken_smooth_global
-              << setprecision( 9 );
+    std::cout << "time taken by global thresholding by smoothing process is : "
+              << fixed << time_taken_smooth_global << setprecision( 9 );
     std::cout << " sec\n" << endl;
 
     img_cat( ImgArr );
@@ -418,16 +416,54 @@ int main( int argv, char** argc )
 
     auto start_edge_grad = chrono::high_resolution_clock::now();
 
+    auto sept_small_grad = grad2d( septagon_small_orig );
+    cv::Mat sept_small_grad_norm;
+    sept_small_grad.convertTo( sept_small_grad_norm, CV_8U, 0.25 );
+    ImgArr.push_back( std::make_tuple(
+        sept_small_grad_norm, "sept_small_grad_norm"
+    ) );
+    auto sept_small_grad_hist = histogram_ex( sept_small_grad );
+
+    // for( auto it: sept_small_grad_hist )
+    //     std::cout << it << " ";
+    // std::cout << std::endl;
+
+    const int sept_small_pixels = septagon_small_orig.rows * septagon_small_orig.cols;
+    int sept_small_grad_th = 1023;
+    int sept_small_grad_cum = 0;
+    for( ; sept_small_grad_th > 0; sept_small_grad_th-- )
+    {
+        sept_small_grad_cum += sept_small_grad_hist[sept_small_grad_th];
+        if ( sept_small_grad_cum > (double)sept_small_pixels * 0.003 )
+            break;
+    }
+
+    cv::Mat sept_small_index = sept_small_grad > sept_small_grad_th;
+    ImgArr.push_back( std::make_tuple(
+        sept_small_index, "sept_small_index"
+    ) );
+
+    auto sept_small_hist = indexed_histogram( 
+        septagon_small_orig, sept_small_index
+    );
+    auto sept_small_th = otsu_threshold_indexed(
+        septagon_small_orig, sept_small_index
+    );
+    auto sept_small_seg = intensityTransform(
+        septagon_small_orig, thresholding( sept_small_th ) );
+    ImgArr.push_back(
+        std::make_tuple( sept_small_seg, "sept_small_edge_grad" ) );
+
     auto end_edge_grad = chrono::high_resolution_clock::now();
     double time_taken_edge_grad =
         std::chrono::duration_cast<chrono::nanoseconds>( end_edge_grad -
-        start_edge_grad )
+                                                         start_edge_grad )
             .count();
     time_taken_edge_grad *= 1e-9;
 
     std::cout << "// EDGE_GRAD process end! //\n";
-    std::cout << "time taken by EDGE_GRAD process is : "
-              << fixed << time_taken_edge_grad << setprecision( 9 );
+    std::cout << "time taken by EDGE_GRAD process is : " << fixed
+              << time_taken_edge_grad << setprecision( 9 );
     std::cout << " sec\n" << endl;
 
     img_cat( ImgArr );
@@ -456,7 +492,7 @@ int main( int argv, char** argc )
 
     std::cout << "// process end! //\n" << std::endl;
 
-#endif // SKIP_VARIABLE_IMG_LOCAL
+#endif  // SKIP_VARIABLE_IMG_LOCAL
 ////////////////////////////////////////
 #ifndef SKIP_VARIABLE_MOVING_AVG  // text-sineshade.tif, text-spotshade.tif
 

@@ -34,5 +34,6 @@ cv::Mat sobel_filter( SobelOption dir );
 
 // specific algorithme
 cv::Mat adaptive_median( cv::Mat orig, int maxWindowSize );
+cv::Mat grad2d( cv::Mat Img );
 
 #endif  // CONV_HPP
