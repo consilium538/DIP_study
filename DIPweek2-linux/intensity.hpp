@@ -18,6 +18,8 @@ std::function<unsigned char( unsigned char )> gammatransform( double c,
                                                               double r );
 std::function<unsigned char( unsigned char )> thresholding(
     unsigned char threshold );
+std::function<unsigned char( unsigned char )> thresholding_2(
+    std::tuple<int, int> threshold );
 std::function<unsigned char( unsigned char )> levelslicing( int lower,
                                                             int upper,
                                                             int level );

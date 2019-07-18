@@ -1,4 +1,4 @@
-# Install script for directory: /home/dhej1/Desktop/DIP/DIP_study/DIPweek2-linux
+# Install script for directory: /mnt/data/study/sogang/19ysum/DIP_study/DIPweek2-linux
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/dhej1/Desktop/DIP/DIP_study/DIPweek2-linux/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/mnt/data/study/sogang/19ysum/DIP_study/DIPweek2-linux/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

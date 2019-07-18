@@ -2,18 +2,42 @@
 
 int main( int argv, char** argc )
 {
+    namespace fs = std::filesystem;
+
     const string inputPath = "./srcImg/";
-    const string savepath = "./tmpImg/";
+    auto savepath = fs::path( "./dstImg/" );
+    if ( !fs::exists( savepath ) )
+        fs::create_directory( savepath );
+
+    auto logpath = fs::path( "./log" );
+    if ( !fs::exists( logpath ) )
+        fs::create_directory( logpath );
+    auto logfile = logpath / "log.txt";
+
+    std::streambuf* log_buf;
+    std::ofstream log_fs;
+    if ( isLogFile )
+    {
+        log_fs.open( logfile.string(), std::ios::app );
+        log_buf = log_fs.rdbuf();
+    }
+    else
+    {
+        log_buf = std::cout.rdbuf();
+    }
+    std::ostream log_out( log_buf );
+    // testout << "test log" << std::endl;
+
     std::vector<std::tuple<cv::Mat, string>> ImgArr;
 
-    catCPUID( std::cout );
+    catCPUID( log_out );
     auto now = std::time( nullptr );
-    std::cout << "Process start at " << std::ctime( &now ) << std::endl;
+    log_out << "Process start at " << std::ctime( &now ) << std::endl;
 
 ////////////////////////////////////////
 #ifndef SKIP_EROSION
 
-    std::cout << "/////////////////////////////\n";
+    log_out << "/////////////////////////////\n";
 
     auto circuitmask_orig =
         cv::imread( inputPath + "circuitmask.tif", cv::IMREAD_GRAYSCALE );
@@ -36,13 +60,13 @@ int main( int argv, char** argc )
     auto circuitmask_45 = erosion( circuitmask_orig, rectSE( 45 ) );
     ImgArr.push_back( std::make_tuple( circuitmask_45, "circuitmask_45" ) );
 
-    std::cout << "// process end! //\n" << std::endl;
+    log_out << "// process end! //\n" << std::endl;
 
 #endif  // SKIP_EROSION
 ////////////////////////////////////////
 #ifndef SKIP_DILATION  // text-broken.tif
 
-    std::cout << "/////////////////////////////\n";
+    log_out << "/////////////////////////////\n";
 
     auto text_broken_orig =
         cv::imread( inputPath + "text-broken.tif", cv::IMREAD_GRAYSCALE );
@@ -57,13 +81,13 @@ int main( int argv, char** argc )
     auto text_broken_dil = dilation( text_broken_orig, rectSE( 3 ) );
     ImgArr.push_back( std::make_tuple( text_broken_dil, "text_broken_dil" ) );
 
-    std::cout << "// process end! //\n" << std::endl;
+    log_out << "// process end! //\n" << std::endl;
 
 #endif  // SKIP_DILATION
 ////////////////////////////////////////
 #ifndef SKIP_OPENING
 
-    std::cout << "/////////////////////////////\n";
+    log_out << "/////////////////////////////\n";
 
     auto finger_orig =
         cv::imread( inputPath + "fingerprint-noisy.tif", cv::IMREAD_GRAYSCALE );
@@ -87,13 +111,13 @@ int main( int argv, char** argc )
     ImgArr.push_back(
         std::make_tuple( finger_open_close, "finger_open_close" ) );
 
-    std::cout << "// process end! //\n" << std::endl;
+    log_out << "// process end! //\n" << std::endl;
 
 #endif  // SKIP_OPENING
 ////////////////////////////////////////
 #ifndef SKIP_BOUNDARY
 
-    std::cout << "/////////////////////////////\n";
+    log_out << "/////////////////////////////\n";
 
     auto lincoln_orig =
         cv::imread( inputPath + "lincoln.tif", cv::IMREAD_GRAYSCALE );
@@ -114,14 +138,14 @@ int main( int argv, char** argc )
     } );
     ImgArr.push_back( std::make_tuple( lincoln_bound, "lincoln_bound" ) );
 
-    std::cout << "// process end! //\n" << std::endl;
+    log_out << "// process end! //\n" << std::endl;
 
 #endif  // SKIP_BOUNDARY
 ////////////////////////////////////////
 #ifndef SKIP_HOLE  // balls-with-reflections.tif
                    // crossSE
 
-    std::cout << "/////////////////////////////\n";
+    log_out << "/////////////////////////////\n";
 
     auto ball_orig = cv::imread( inputPath + "balls-with-reflections.tif",
                                  cv::IMREAD_GRAYSCALE );
@@ -176,13 +200,13 @@ int main( int argv, char** argc )
     } );
     ImgArr.push_back( std::make_tuple( ball_completed, "ball_completed" ) );
 
-    std::cout << "// process end! //\n" << std::endl;
+    log_out << "// process end! //\n" << std::endl;
 
 #endif  // SKIP_HOLE
 ////////////////////////////////////////
 #ifndef SKIP_CONNECTED  // chickenXray.tif
 
-    std::cout << "/////////////////////////////\n";
+    log_out << "/////////////////////////////\n";
 
     auto chicken_orig = cv::imread( inputPath + "chickenXray-thresholded.tif",
                                     cv::IMREAD_GRAYSCALE );
@@ -197,14 +221,14 @@ int main( int argv, char** argc )
 
     std::vector<std::tuple<int, int>> cc_init = {{0, 0}};
 
-    std::cout << "// process end! //\n" << std::endl;
+    log_out << "// process end! //\n" << std::endl;
 
 #endif  // SKIP_CONNECTED
 ////////////////////////////////////////
 #ifndef SKIP_RECONSTRUCTION  // text.tif
                              // 25*1
 
-    std::cout << "// start of reconstruction process //\n";
+    log_out << "// start of reconstruction process //\n";
 
     auto text_orig = cv::imread( inputPath + "text.tif", cv::IMREAD_GRAYSCALE );
     if ( text_orig.empty() )
@@ -218,7 +242,7 @@ int main( int argv, char** argc )
 
 #ifndef SKIP_RECON_OPEN
 
-    std::cout << "// start of reconstruction_open process //\n";
+    log_out << "// start of reconstruction_open process //\n";
     auto start_recon_open = chrono::high_resolution_clock::now();
 
     auto text_eros = erosion( text_orig, rectSE( 51, 1 ) );
@@ -234,16 +258,16 @@ int main( int argv, char** argc )
             .count();
     time_taken_recon_open *= 1e-9;
 
-    std::cout << "// reconstruction_open process end! //\n";
-    std::cout << "time taken by reconstruction_open process is : " << fixed
-              << time_taken_recon_open << setprecision( 9 );
-    std::cout << " sec\n" << endl;
+    log_out << "// reconstruction_open process end! //\n";
+    log_out << "time taken by reconstruction_open process is : " << fixed
+            << time_taken_recon_open << setprecision( 9 );
+    log_out << " sec\n" << endl;
 
 #endif  // SKIP_RECON_OPEN
 
 #ifndef SKIP_RECON_FILL
 
-    std::cout << "// start of reconstruction_fill process //\n";
+    log_out << "// start of reconstruction_fill process //\n";
     auto start_recon_fill = chrono::high_resolution_clock::now();
 
     cv::Mat text_invert = 255 - text_orig;
@@ -257,16 +281,16 @@ int main( int argv, char** argc )
             .count();
     time_taken_recon_fill *= 1e-9;
 
-    std::cout << "// reconstruction_fill process end! //\n";
-    std::cout << "time taken by reconstruction_fill process is : " << fixed
-              << time_taken_recon_fill << setprecision( 9 );
-    std::cout << " sec\n" << endl;
+    log_out << "// reconstruction_fill process end! //\n";
+    log_out << "time taken by reconstruction_fill process is : " << fixed
+            << time_taken_recon_fill << setprecision( 9 );
+    log_out << " sec\n" << endl;
 
 #endif  // SKIP_RECON_FILL
 
 #ifndef SKIP_RECON_BORDER
 
-    std::cout << "// start of reconstruction_border process //\n";
+    log_out << "// start of reconstruction_border process //\n";
     auto start_recon_border = chrono::high_resolution_clock::now();
 
     auto text_border_clean = border_clean( text_orig );
@@ -281,14 +305,14 @@ int main( int argv, char** argc )
             .count();
     time_taken_recon_border *= 1e-9;
 
-    std::cout << "// reconstruction_border process end! //\n";
-    std::cout << "time taken by reconstruction_border process is : " << fixed
-              << time_taken_recon_border << setprecision( 9 );
-    std::cout << " sec\n" << endl;
+    log_out << "// reconstruction_border process end! //\n";
+    log_out << "time taken by reconstruction_border process is : " << fixed
+            << time_taken_recon_border << setprecision( 9 );
+    log_out << " sec\n" << endl;
 
 #endif  // SKIP_RECON_BORD
 
-    std::cout << "// reconstruction process end! //\n" << std::endl;
+    log_out << "// reconstruction process end! //\n" << std::endl;
 
     img_cat( ImgArr );
 
@@ -296,7 +320,7 @@ int main( int argv, char** argc )
 ////////////////////////////////////////
 #ifndef SKIP_GLOBAL  // fingerprint.tif
 
-    std::cout << "// start of global thresholding process //\n";
+    log_out << "// start of global thresholding process //\n";
 
     auto finger_orig =
         cv::imread( inputPath + "fingerprint.tif", cv::IMREAD_GRAYSCALE );
@@ -313,7 +337,7 @@ int main( int argv, char** argc )
     ImgArr.push_back(
         std::make_tuple( finger_global_seg, "finger_global_seg" ) );
 
-    std::cout << "// process end! //\n" << std::endl;
+    log_out << "// process end! //\n" << std::endl;
 
     img_cat( ImgArr );
 
@@ -321,7 +345,7 @@ int main( int argv, char** argc )
 ////////////////////////////////////////
 #ifndef SKIP_OTSU  // polymercell.tif
 
-    std::cout << "// start of otsu process //\n";
+    log_out << "// start of otsu process //\n";
 
     auto polymercell_orig =
         cv::imread( inputPath + "polymercell.tif", cv::IMREAD_GRAYSCALE );
@@ -346,10 +370,10 @@ int main( int argv, char** argc )
             .count();
     time_taken_otsu *= 1e-9;
 
-    std::cout << "// otsu process end! //\n";
-    std::cout << "time taken by otsu process is : " << fixed << time_taken_otsu
-              << setprecision( 9 );
-    std::cout << " sec\n" << endl;
+    log_out << "// otsu process end! //\n";
+    log_out << "time taken by otsu process is : " << fixed << time_taken_otsu
+            << setprecision( 9 );
+    log_out << " sec\n" << endl;
 
     img_cat( ImgArr );
 
@@ -357,7 +381,7 @@ int main( int argv, char** argc )
 ////////////////////////////////////////
 #ifndef SKIP_SMOOTH_GLOBAL
 
-    std::cout << "// start of global thresholding by smoothing process //\n";
+    log_out << "// start of global thresholding by smoothing process //\n";
 
     auto septagon_orig =
         cv::imread( inputPath + "septagon.tif", cv::IMREAD_GRAYSCALE );
@@ -393,10 +417,10 @@ int main( int argv, char** argc )
             .count();
     time_taken_smooth_global *= 1e-9;
 
-    std::cout << "// global thresholding by smoothing process end! //\n";
-    std::cout << "time taken by global thresholding by smoothing process is : "
-              << fixed << time_taken_smooth_global << setprecision( 9 );
-    std::cout << " sec\n" << endl;
+    log_out << "// global thresholding by smoothing process end! //\n";
+    log_out << "time taken by global thresholding by smoothing process is : "
+            << fixed << time_taken_smooth_global << setprecision( 9 );
+    log_out << " sec\n" << endl;
 
     img_cat( ImgArr );
 
@@ -404,7 +428,7 @@ int main( int argv, char** argc )
 ////////////////////////////////////////
 #ifndef SKIP_EDGE_GRAD  // septagon-small.tif
 
-    std::cout << "// start of EDGE_GRAD process //\n";
+    log_out << "// start of EDGE_GRAD process //\n";
 
     auto septagon_small_orig =
         cv::imread( inputPath + "septagon-small.tif", cv::IMREAD_GRAYSCALE );
@@ -413,26 +437,27 @@ int main( int argv, char** argc )
         cout << "image load failed!" << endl;
         return -1;
     }
-    ImgArr.push_back( std::make_tuple( septagon_small_orig, "septagon_small_orig" ) );
+    ImgArr.push_back(
+        std::make_tuple( septagon_small_orig, "septagon_small_orig" ) );
 
     auto start_edge_grad = chrono::high_resolution_clock::now();
 
     auto sept_small_grad = grad2d( septagon_small_orig );
     cv::Mat sept_small_grad_norm;
     sept_small_grad.convertTo( sept_small_grad_norm, CV_8U, 0.25 );
-    ImgArr.push_back( std::make_tuple(
-        sept_small_grad_norm, "sept_small_grad_norm"
-    ) );
+    ImgArr.push_back(
+        std::make_tuple( sept_small_grad_norm, "sept_small_grad_norm" ) );
     auto sept_small_grad_hist = histogram_ex( sept_small_grad );
 
     // for( auto it: sept_small_grad_hist )
-    //     std::cout << it << " ";
-    // std::cout << std::endl;
+    //     log_out << it << " ";
+    // log_out << std::endl;
 
-    const int sept_small_pixels = septagon_small_orig.rows * septagon_small_orig.cols;
+    const int sept_small_pixels =
+        septagon_small_orig.rows * septagon_small_orig.cols;
     int sept_small_grad_th = 1023;
     int sept_small_grad_cum = 0;
-    for( ; sept_small_grad_th > 0; sept_small_grad_th-- )
+    for ( ; sept_small_grad_th > 0; sept_small_grad_th-- )
     {
         sept_small_grad_cum += sept_small_grad_hist[sept_small_grad_th];
         if ( sept_small_grad_cum > (double)sept_small_pixels * 0.003 )
@@ -440,18 +465,14 @@ int main( int argv, char** argc )
     }
 
     cv::Mat sept_small_index = sept_small_grad > sept_small_grad_th;
-    ImgArr.push_back( std::make_tuple(
-        sept_small_index, "sept_small_index"
-    ) );
+    ImgArr.push_back( std::make_tuple( sept_small_index, "sept_small_index" ) );
 
-    auto sept_small_hist = indexed_histogram( 
-        septagon_small_orig, sept_small_index
-    );
-    auto sept_small_th = otsu_threshold_indexed(
-        septagon_small_orig, sept_small_index
-    );
-    auto sept_small_seg = intensityTransform(
-        septagon_small_orig, thresholding( sept_small_th ) );
+    auto sept_small_hist =
+        indexed_histogram( septagon_small_orig, sept_small_index );
+    auto sept_small_th =
+        otsu_threshold_indexed( septagon_small_orig, sept_small_index );
+    auto sept_small_seg = intensityTransform( septagon_small_orig,
+                                              thresholding( sept_small_th ) );
     ImgArr.push_back(
         std::make_tuple( sept_small_seg, "sept_small_edge_grad" ) );
 
@@ -462,10 +483,10 @@ int main( int argv, char** argc )
             .count();
     time_taken_edge_grad *= 1e-9;
 
-    std::cout << "// EDGE_GRAD process end! //\n";
-    std::cout << "time taken by EDGE_GRAD process is : " << fixed
-              << time_taken_edge_grad << setprecision( 9 );
-    std::cout << " sec\n" << endl;
+    log_out << "// EDGE_GRAD process end! //\n";
+    log_out << "time taken by EDGE_GRAD process is : " << fixed
+            << time_taken_edge_grad << setprecision( 9 );
+    log_out << " sec\n" << endl;
 
     img_cat( ImgArr );
 
@@ -473,7 +494,7 @@ int main( int argv, char** argc )
 ////////////////////////////////////////
 #ifndef SKIP_EDGE_LAPLACE  // yeast-cells.tif
 
-    std::cout << "// start of EDGE_LAPLACE process //\n";
+    log_out << "// start of EDGE_LAPLACE process //\n";
 
     auto yeast_cell_orig =
         cv::imread( inputPath + "yeast-cells.tif", cv::IMREAD_GRAYSCALE );
@@ -488,43 +509,39 @@ int main( int argv, char** argc )
 
     cv::Mat yeast_cell_double;
     yeast_cell_orig.convertTo( yeast_cell_double, CV_64F );
-    cv::Mat yeast_cell_laplace = cv::abs(conv2d(
-        yeast_cell_double, laplacian_filter(LaplaceOption::eight), Padding::replicate
-    ));
+    cv::Mat yeast_cell_laplace = cv::abs(
+        conv2d( yeast_cell_double, laplacian_filter( LaplaceOption::eight ),
+                Padding::replicate ) );
     cv::Mat yeast_cell_laplace_norm;
     yeast_cell_laplace.convertTo( yeast_cell_laplace_norm, CV_8U, 0.25 );
-    ImgArr.push_back( std::make_tuple(
-        yeast_cell_laplace_norm, "yeast_cell_laplace_norm"
-    ) );
+    ImgArr.push_back(
+        std::make_tuple( yeast_cell_laplace_norm, "yeast_cell_laplace_norm" ) );
     auto yeast_cell_laplace_hist = histogram_ex( yeast_cell_laplace );
 
     // for( auto it: yeast_cell_laplace_hist )
-    //     std::cout << it << " ";
-    // std::cout << std::endl;
+    //     log_out << it << " ";
+    // log_out << std::endl;
 
     const int yeast_cell_pixels = yeast_cell_orig.rows * yeast_cell_orig.cols;
     int yeast_cell_laplace_th = 1023;
     int yeast_cell_laplace_cum = 0;
-    for( ; yeast_cell_laplace_th > 0; yeast_cell_laplace_th-- )
+    for ( ; yeast_cell_laplace_th > 0; yeast_cell_laplace_th-- )
     {
-        yeast_cell_laplace_cum += yeast_cell_laplace_hist[yeast_cell_laplace_th];
+        yeast_cell_laplace_cum +=
+            yeast_cell_laplace_hist[yeast_cell_laplace_th];
         if ( yeast_cell_laplace_cum > (double)yeast_cell_pixels * 0.003 )
             break;
     }
 
     cv::Mat yeast_cell_index = yeast_cell_laplace > yeast_cell_laplace_th;
-    ImgArr.push_back( std::make_tuple(
-        yeast_cell_index, "yeast_cell_index"
-    ) );
+    ImgArr.push_back( std::make_tuple( yeast_cell_index, "yeast_cell_index" ) );
 
-    auto yeast_cell_hist = indexed_histogram( 
-        yeast_cell_orig, yeast_cell_index
-    );
-    auto yeast_cell_th = otsu_threshold_indexed(
-        yeast_cell_orig, yeast_cell_index
-    );
-    auto yeast_cell_seg = intensityTransform(
-        yeast_cell_orig, thresholding( yeast_cell_th ) );
+    auto yeast_cell_hist =
+        indexed_histogram( yeast_cell_orig, yeast_cell_index );
+    auto yeast_cell_th =
+        otsu_threshold_indexed( yeast_cell_orig, yeast_cell_index );
+    auto yeast_cell_seg =
+        intensityTransform( yeast_cell_orig, thresholding( yeast_cell_th ) );
     ImgArr.push_back(
         std::make_tuple( yeast_cell_seg, "yeast_cell_edge_laplace" ) );
 
@@ -535,10 +552,10 @@ int main( int argv, char** argc )
             .count();
     time_taken_edge_laplace *= 1e-9;
 
-    std::cout << "// EDGE_LAPLACE process end! //\n";
-    std::cout << "time taken by EDGE_LAPLACE process is : " << fixed
-              << time_taken_edge_laplace << setprecision( 9 );
-    std::cout << " sec\n" << endl;
+    log_out << "// EDGE_LAPLACE process end! //\n";
+    log_out << "time taken by EDGE_LAPLACE process is : " << fixed
+            << time_taken_edge_laplace << setprecision( 9 );
+    log_out << " sec\n" << endl;
 
     img_cat( ImgArr );
 
@@ -546,7 +563,7 @@ int main( int argv, char** argc )
 ////////////////////////////////////////
 #ifndef SKIP_MULTIPLE_TH  // iceberg.tif
 
-    std::cout << "// start of MULTIPLE_TH process //\n";
+    log_out << "// start of MULTIPLE_TH process //\n";
 
     auto iceberg_orig =
         cv::imread( inputPath + "iceberg.tif", cv::IMREAD_GRAYSCALE );
@@ -557,40 +574,66 @@ int main( int argv, char** argc )
     }
     ImgArr.push_back( std::make_tuple( iceberg_orig, "iceberg_orig" ) );
 
-    auto start_edge_laplace = chrono::high_resolution_clock::now();
+    auto start_multiple_th = chrono::high_resolution_clock::now();
 
-    auto end_edge_laplace = chrono::high_resolution_clock::now();
-    double time_taken_edge_laplace =
-        std::chrono::duration_cast<chrono::nanoseconds>( end_edge_laplace -
-                                                         start_edge_laplace )
+    auto iceberg_otsu_th = multi_otsu_threshold( iceberg_orig );
+    auto iceberg_otsu_seg =
+        intensityTransform( iceberg_orig, thresholding_2( iceberg_otsu_th ) );
+    ImgArr.push_back( std::make_tuple( iceberg_otsu_seg, "iceberg_otsu_seg" ) );
+
+    auto end_multiple_th = chrono::high_resolution_clock::now();
+    double time_taken_multiple_th =
+        std::chrono::duration_cast<chrono::nanoseconds>( end_multiple_th -
+                                                         start_multiple_th )
             .count();
-    time_taken_edge_laplace *= 1e-9;
+    time_taken_multiple_th *= 1e-9;
 
-    std::cout << "// MULTIPLE_TH process end! //\n";
-    std::cout << "time taken by MULTIPLE_TH process is : " << fixed
-              << time_taken_edge_laplace << setprecision( 9 );
-    std::cout << " sec\n" << endl;
+    log_out << "// MULTIPLE_TH process end! //\n";
+    log_out << "time taken by MULTIPLE_TH process is : " << fixed
+            << time_taken_multiple_th << setprecision( 9 );
+    log_out << " sec\n" << endl;
 
-    img_cat( ImgArr );
+    // img_cat( ImgArr );
 
 #endif  // SKIP_MULTIPLE_TH
 ////////////////////////////////////////
 #ifndef SKIP_VARIABLE_IMG_LOCAL  // yeast-cells.tif
 
-    std::cout << "// start of VARIABLE_IMG_LOCAL process //\n";
+    log_out << "// start of VARIABLE_IMG_LOCAL process //\n";
 
-    std::cout << "// process end! //\n" << std::endl;
+    auto yeast_orig =
+        cv::imread( inputPath + "yeast-cells.tif", cv::IMREAD_GRAYSCALE );
+    if ( yeast_orig.empty() )
+    {
+        cout << "image load failed!" << endl;
+        return -1;
+    }
+    ImgArr.push_back( std::make_tuple( yeast_orig, "yeast_orig" ) );
+
+    auto start_img_local = chrono::high_resolution_clock::now();
+
+    auto end_img_local = chrono::high_resolution_clock::now();
+    double time_taken_img_local =
+        std::chrono::duration_cast<chrono::nanoseconds>( end_img_local -
+                                                         start_img_local )
+            .count();
+    time_taken_img_local *= 1e-9;
+
+    log_out << "// VARIABLE_IMG_LOCAL process end! //\n";
+    log_out << "time taken by VARIABLE_IMG_LOCAL process is : " << fixed
+            << time_taken_img_local << setprecision( 9 );
+    log_out << " sec\n" << endl;
 
 #endif  // SKIP_VARIABLE_IMG_LOCAL
 ////////////////////////////////////////
 #ifndef SKIP_VARIABLE_MOVING_AVG  // text-sineshade.tif, text-spotshade.tif
 
-    std::cout << "// start of VARIABLE_MOVING_AVG process //\n";
+    log_out << "// start of VARIABLE_MOVING_AVG process //\n";
 
-    std::cout << "// process end! //\n" << std::endl;
+    log_out << "// process end! //\n" << std::endl;
 
 #endif  // SKIP_VARIABLE_MOVING_AVG
-    std::cout << "\n/////////////////////////////\n\n" << std::endl;
+    log_out << "/////////////////////////////\n" << std::endl;
 
     return 0;
 }

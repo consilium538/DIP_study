@@ -80,9 +80,9 @@ std::array<int, 1024> histogram_ex( cv::Mat& img )
     CV_Assert( img.channels() == 1 );
     std::array<int, 1024> hist;
     cv::Mat img_short;
-    img.convertTo(img_short, CV_16U);
+    img.convertTo( img_short, CV_16U );
 
-    unsigned short *p;
+    unsigned short* p;
 
     int nRows = img.rows;
     int nCols = img.cols;
@@ -149,7 +149,7 @@ double global_threshold( cv::Mat Img )
 double otsu_threshold_indexed( cv::Mat Img, cv::Mat Index )
 {
     auto hist = indexed_histogram( Img, Index );
-    int pixels = std::accumulate(hist.begin(),hist.end(),0);
+    int pixels = std::accumulate( hist.begin(), hist.end(), 0 );
     std::array<double, 256> prob, prob_cum, mean, mean_cum, var_bc;
     for ( int i = 0; i < 256; i++ )
     {
@@ -206,7 +206,6 @@ double otsu_threshold( cv::Mat Img )
         prob[i] = double( hist[i] ) / ( Img.cols * Img.rows );
         prob_cum[i] = prob[i] + ( i == 0 ? 0 : prob_cum[i - 1] );
         mean[i] = double( i ) * prob[i] + ( i == 0 ? 0 : mean[i - 1] );
-        mean_cum[i] = prob_cum[i] > 0 ? mean[i] / prob_cum[i] : 0;
     }
     auto mean_g = mean[255];
 
@@ -215,7 +214,6 @@ double otsu_threshold( cv::Mat Img )
     for ( int i = 0; i < 256; i++ )
     {
         tmp = prob_cum[i] * ( 1 - prob_cum[i] );
-
         var_bc[i] = tmp > 0
                         ? ( std::pow( mean_g * prob_cum[i] - mean[i], 2 ) ) /
                               ( prob_cum[i] * ( 1 - prob_cum[i] ) )
@@ -245,4 +243,76 @@ double otsu_threshold( cv::Mat Img )
         return (double)std::accumulate( largest_label.begin(),
                                         largest_label.end(), 0 ) /
                largest_label.size();
+}
+
+std::tuple<int, int> multi_otsu_threshold( cv::Mat Img )
+{
+    auto hist = histogram( Img );
+    std::array<double, 256> prob, prob_cum, prob_cum_rev, mean, mean_rev,
+        mean_cum, mean_cum_rev;
+    // std::unordered_map<std::tuple<int,int>,double> var_bc;
+    for ( int i = 0; i < 256; i++ )
+    {
+        prob[i] = double( hist[i] ) / ( Img.cols * Img.rows );
+        prob_cum[i] = prob[i] + ( i == 0 ? 0 : prob_cum[i - 1] );
+        mean[i] = double( i ) * prob[i] + ( i == 0 ? 0 : mean[i - 1] );
+        mean_cum[i] = prob_cum[i] > 0 ? mean[i] / prob_cum[i] : 0;
+    }
+    for ( int i = 255; i >= 0; i-- )
+    {
+        prob_cum_rev[i] = prob[i] + ( i == 255 ? 0 : prob_cum_rev[i + 1] );
+        mean_rev[i] =
+            double( i ) * prob[i] + ( i == 255 ? 0 : mean_rev[i + 1] );
+        mean_cum_rev[i] =
+            prob_cum_rev[i] > 0 ? mean_rev[i] / prob_cum_rev[i] : 0;
+    }
+    auto mean_g = mean[255];
+
+    double tmp;
+    double prob_middle;
+    double mean_middle;
+    double var_bc;
+    double var_bc_max;
+    std::tuple<int, int> var_max_pair = std::make_tuple( 0, 0 );
+
+    for ( int i = 1; i < 256; i++ )
+    {
+        for ( int j = 0; j < i; j++ )
+        {
+            prob_middle = 1 - ( prob_cum[j] + prob_cum_rev[i] );
+            mean_middle =
+                prob_middle > 0
+                    ? ( mean_g - ( mean[j] + mean_rev[i] ) ) / ( prob_middle )
+                    : 0;
+
+            var_bc =
+                ( std::pow( mean_cum[j] - mean_g, 2 ) * prob_cum[j] +
+                  std::pow( mean_cum_rev[i] - mean_g, 2 ) * prob_cum_rev[i] +
+                  std::pow( mean_middle - mean_g, 2 ) * prob_middle );
+
+            if ( var_bc >= var_bc_max )
+            {
+                var_bc_max = var_bc;
+                var_max_pair = std::make_tuple( j, i );
+            }
+        }
+    }
+
+    return var_max_pair;
+}
+
+cv::Mat local_var( cv::Mat Img, unsigned int size )
+{
+    cv::Mat ret = cv::Mat_<double>( Img.size() );
+
+    ret.forEach<double>( [&]( double& p, const int* i ) {
+        cv::Mat cutImg =
+            Img( cv::Range( i[0] < 1 ? 0 : i[0] - 1,
+                            i[0] > Img.rows - 2 ? Img.rows - 1 : i[0] + 1 ),
+                 cv::Range( i[1] < 1 ? 0 : i[1] - 1,
+                            i[1] > Img.cols - 2 ? Img.cols - 1 : i[1] + 1 ) );
+        p = 1;
+    } );
+
+    return ret;
 }

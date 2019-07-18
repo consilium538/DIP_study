@@ -7,7 +7,7 @@
     "tasks": [
         {
             "label": "debug option",
-            "command": "cd ${workspaceRoot} && cmake -DCMAKE_BUILD_TYPE=Debug . && make",
+            "command": "cd ${workspaceRoot} && cmake -DCMAKE_BUILD_TYPE=Debug . && make -j",
             "group": "build",
             "problemMatcher": {
                 "fileLocation": [
@@ -27,7 +27,7 @@
 
         {
             "label": "release option",
-            "command": "cd ${workspaceRoot} && cmake . && make",
+            "command": "cd ${workspaceRoot} && cmake . && make -j",
             "group": "build",
             "problemMatcher": {
                 "fileLocation": [

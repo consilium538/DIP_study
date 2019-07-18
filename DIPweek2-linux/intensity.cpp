@@ -72,6 +72,17 @@ std::function<unsigned char( unsigned char )> thresholding(
     };
 }
 
+std::function<unsigned char( unsigned char )> thresholding_2(
+    std::tuple<int, int> threshold )
+{
+    return [=]( unsigned char input ) {
+        return (unsigned char)input > std::get<1>( threshold )
+                   ? 255
+                   : ( (unsigned char)input > std::get<0>( threshold ) ? 127
+                                                                       : 0 );
+    };
+}
+
 std::function<unsigned char( unsigned char )> levelslicing( int lower,
                                                             int upper,
                                                             int level )
