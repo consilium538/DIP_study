@@ -18,38 +18,10 @@
 #include <string>
 #include <vector>
 
-#include "conv.hpp"
-#include "histo.hpp"
-#include "intensity.hpp"
-#include "mopology.hpp"
+#include "globals.hpp"
 
 using namespace std;
 using namespace cv;
-
-// #define RUN_ALL
-
-#ifndef RUN_ALL
-#define SKIP_EROSION
-#define SKIP_DILATION
-#define SKIP_OPENING
-#define SKIP_BOUNDARY
-#define SKIP_HOLE
-#define SKIP_CONNECTED
-#define SKIP_RECONSTRUCTION
-//
-#define SKIP_RECON_OPEN
-#define SKIP_RECON_FILL
-#define SKIP_RECON_BORDER
-//
-#define SKIP_GLOBAL
-// #define SKIP_OTSU
-#define SKIP_SMOOTH_GLOBAL
-#define SKIP_EDGE_GRAD
-#define SKIP_EDGE_LAPLACE
-#define SKIP_MULTIPLE_TH
-#define SKIP_VARIABLE_IMG_LOCAL
-#define SKIP_VARIABLE_MOVING_AVG
-#endif  // RUN_ALL
 
 const bool isLogFile = true;
 

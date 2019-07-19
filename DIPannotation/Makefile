@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/dhej1/Desktop/DIP/DIP_study/DIPweek2-linux
+CMAKE_SOURCE_DIR = /home/dhej1/Desktop/DIP/DIP_study/DIPannotation
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/dhej1/Desktop/DIP/DIP_study/DIPweek2-linux
+CMAKE_BINARY_DIR = /home/dhej1/Desktop/DIP/DIP_study/DIPannotation
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/dhej1/Desktop/DIP/DIP_study/DIPweek2-linux/CMakeFiles /home/dhej1/Desktop/DIP/DIP_study/DIPweek2-linux/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/dhej1/Desktop/DIP/DIP_study/DIPannotation/CMakeFiles /home/dhej1/Desktop/DIP/DIP_study/DIPannotation/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/dhej1/Desktop/DIP/DIP_study/DIPweek2-linux/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/dhej1/Desktop/DIP/DIP_study/DIPannotation/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -111,98 +111,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named dip_week2
+# Target rules for targets named dip_anno
 
 # Build rule for target.
-dip_week2: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 dip_week2
-.PHONY : dip_week2
+dip_anno: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 dip_anno
+.PHONY : dip_anno
 
 # fast build rule for target.
-dip_week2/fast:
-	$(MAKE) -f CMakeFiles/dip_week2.dir/build.make CMakeFiles/dip_week2.dir/build
-.PHONY : dip_week2/fast
-
-conv.o: conv.cpp.o
-
-.PHONY : conv.o
-
-# target to build an object file
-conv.cpp.o:
-	$(MAKE) -f CMakeFiles/dip_week2.dir/build.make CMakeFiles/dip_week2.dir/conv.cpp.o
-.PHONY : conv.cpp.o
-
-conv.i: conv.cpp.i
-
-.PHONY : conv.i
-
-# target to preprocess a source file
-conv.cpp.i:
-	$(MAKE) -f CMakeFiles/dip_week2.dir/build.make CMakeFiles/dip_week2.dir/conv.cpp.i
-.PHONY : conv.cpp.i
-
-conv.s: conv.cpp.s
-
-.PHONY : conv.s
-
-# target to generate assembly for a file
-conv.cpp.s:
-	$(MAKE) -f CMakeFiles/dip_week2.dir/build.make CMakeFiles/dip_week2.dir/conv.cpp.s
-.PHONY : conv.cpp.s
-
-histo.o: histo.cpp.o
-
-.PHONY : histo.o
-
-# target to build an object file
-histo.cpp.o:
-	$(MAKE) -f CMakeFiles/dip_week2.dir/build.make CMakeFiles/dip_week2.dir/histo.cpp.o
-.PHONY : histo.cpp.o
-
-histo.i: histo.cpp.i
-
-.PHONY : histo.i
-
-# target to preprocess a source file
-histo.cpp.i:
-	$(MAKE) -f CMakeFiles/dip_week2.dir/build.make CMakeFiles/dip_week2.dir/histo.cpp.i
-.PHONY : histo.cpp.i
-
-histo.s: histo.cpp.s
-
-.PHONY : histo.s
-
-# target to generate assembly for a file
-histo.cpp.s:
-	$(MAKE) -f CMakeFiles/dip_week2.dir/build.make CMakeFiles/dip_week2.dir/histo.cpp.s
-.PHONY : histo.cpp.s
-
-intensity.o: intensity.cpp.o
-
-.PHONY : intensity.o
-
-# target to build an object file
-intensity.cpp.o:
-	$(MAKE) -f CMakeFiles/dip_week2.dir/build.make CMakeFiles/dip_week2.dir/intensity.cpp.o
-.PHONY : intensity.cpp.o
-
-intensity.i: intensity.cpp.i
-
-.PHONY : intensity.i
-
-# target to preprocess a source file
-intensity.cpp.i:
-	$(MAKE) -f CMakeFiles/dip_week2.dir/build.make CMakeFiles/dip_week2.dir/intensity.cpp.i
-.PHONY : intensity.cpp.i
-
-intensity.s: intensity.cpp.s
-
-.PHONY : intensity.s
-
-# target to generate assembly for a file
-intensity.cpp.s:
-	$(MAKE) -f CMakeFiles/dip_week2.dir/build.make CMakeFiles/dip_week2.dir/intensity.cpp.s
-.PHONY : intensity.cpp.s
+dip_anno/fast:
+	$(MAKE) -f CMakeFiles/dip_anno.dir/build.make CMakeFiles/dip_anno.dir/build
+.PHONY : dip_anno/fast
 
 main.o: main.cpp.o
 
@@ -210,7 +129,7 @@ main.o: main.cpp.o
 
 # target to build an object file
 main.cpp.o:
-	$(MAKE) -f CMakeFiles/dip_week2.dir/build.make CMakeFiles/dip_week2.dir/main.cpp.o
+	$(MAKE) -f CMakeFiles/dip_anno.dir/build.make CMakeFiles/dip_anno.dir/main.cpp.o
 .PHONY : main.cpp.o
 
 main.i: main.cpp.i
@@ -219,7 +138,7 @@ main.i: main.cpp.i
 
 # target to preprocess a source file
 main.cpp.i:
-	$(MAKE) -f CMakeFiles/dip_week2.dir/build.make CMakeFiles/dip_week2.dir/main.cpp.i
+	$(MAKE) -f CMakeFiles/dip_anno.dir/build.make CMakeFiles/dip_anno.dir/main.cpp.i
 .PHONY : main.cpp.i
 
 main.s: main.cpp.s
@@ -228,35 +147,8 @@ main.s: main.cpp.s
 
 # target to generate assembly for a file
 main.cpp.s:
-	$(MAKE) -f CMakeFiles/dip_week2.dir/build.make CMakeFiles/dip_week2.dir/main.cpp.s
+	$(MAKE) -f CMakeFiles/dip_anno.dir/build.make CMakeFiles/dip_anno.dir/main.cpp.s
 .PHONY : main.cpp.s
-
-mopology.o: mopology.cpp.o
-
-.PHONY : mopology.o
-
-# target to build an object file
-mopology.cpp.o:
-	$(MAKE) -f CMakeFiles/dip_week2.dir/build.make CMakeFiles/dip_week2.dir/mopology.cpp.o
-.PHONY : mopology.cpp.o
-
-mopology.i: mopology.cpp.i
-
-.PHONY : mopology.i
-
-# target to preprocess a source file
-mopology.cpp.i:
-	$(MAKE) -f CMakeFiles/dip_week2.dir/build.make CMakeFiles/dip_week2.dir/mopology.cpp.i
-.PHONY : mopology.cpp.i
-
-mopology.s: mopology.cpp.s
-
-.PHONY : mopology.s
-
-# target to generate assembly for a file
-mopology.cpp.s:
-	$(MAKE) -f CMakeFiles/dip_week2.dir/build.make CMakeFiles/dip_week2.dir/mopology.cpp.s
-.PHONY : mopology.cpp.s
 
 # Help Target
 help:
@@ -265,23 +157,11 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... rebuild_cache"
-	@echo "... dip_week2"
+	@echo "... dip_anno"
 	@echo "... edit_cache"
-	@echo "... conv.o"
-	@echo "... conv.i"
-	@echo "... conv.s"
-	@echo "... histo.o"
-	@echo "... histo.i"
-	@echo "... histo.s"
-	@echo "... intensity.o"
-	@echo "... intensity.i"
-	@echo "... intensity.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
-	@echo "... mopology.o"
-	@echo "... mopology.i"
-	@echo "... mopology.s"
 .PHONY : help
 
 

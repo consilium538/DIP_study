@@ -301,17 +301,21 @@ std::tuple<int, int> multi_otsu_threshold( cv::Mat Img )
     return var_max_pair;
 }
 
-cv::Mat local_var( cv::Mat Img, unsigned int size )
+cv::Mat local_var( cv::Mat Img )
 {
     cv::Mat ret = cv::Mat_<double>( Img.size() );
 
     ret.forEach<double>( [&]( double& p, const int* i ) {
-        cv::Mat cutImg =
-            Img( cv::Range( i[0] < 1 ? 0 : i[0] - 1,
-                            i[0] > Img.rows - 2 ? Img.rows - 1 : i[0] + 1 ),
-                 cv::Range( i[1] < 1 ? 0 : i[1] - 1,
-                            i[1] > Img.cols - 2 ? Img.cols - 1 : i[1] + 1 ) );
-        p = 1;
+        cv::Mat cutImg, sqrtImg;
+        Img( cv::Range( i[0] < 1 ? 0 : i[0] - 1,
+                        i[0] > Img.rows - 2 ? Img.rows - 1 : i[0] + 1 ),
+             cv::Range( i[1] < 1 ? 0 : i[1] - 1,
+                        i[1] > Img.cols - 2 ? Img.cols - 1 : i[1] + 1 ) )
+            .convertTo( cutImg, CV_64F );
+        cv::pow( cutImg, 2, sqrtImg );
+        double ImgSize = cutImg.rows * cutImg.cols;
+        p = cv::sqrt( cv::sum( sqrtImg )[0] / ImgSize -
+                      cv::pow( cv::sum( cutImg )[0] / ImgSize, 2 ) );
     } );
 
     return ret;

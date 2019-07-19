@@ -15,5 +15,6 @@ double global_threshold( cv::Mat Img );
 double otsu_threshold( cv::Mat Img );
 double otsu_threshold_indexed( cv::Mat Img, cv::Mat Index );
 std::tuple<int, int> multi_otsu_threshold( cv::Mat Img );
+cv::Mat local_var( cv::Mat Img );
 
 #endif  // HISTO_HPP

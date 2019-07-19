@@ -131,7 +131,7 @@ int main( int argv, char** argc )
 
     auto lincoln_eros = erosion( lincoln_orig, rectSE( 3 ) );
     auto lincoln_bound = cv::Mat_<uchar>( lincoln_orig.size(),
-                                          ball_lincoln_origorig.channels() );
+                                          lincoln_orig.channels() );
     lincoln_bound.forEach( [&]( Pixel& p, const int* i ) {
         p = cv::saturate_cast<uchar>( lincoln_orig.at<uchar>( i[0], i[1] ) -
                                       lincoln_eros.at<uchar>( i[0], i[1] ) );
@@ -314,7 +314,7 @@ int main( int argv, char** argc )
 
     log_out << "// reconstruction process end! //\n" << std::endl;
 
-    img_cat( ImgArr );
+    // img_cat( ImgArr );
 
 #endif  // SKIP_RECONSTRUCTION
 ////////////////////////////////////////
@@ -322,24 +322,29 @@ int main( int argv, char** argc )
 
     log_out << "// start of global thresholding process //\n";
 
-    auto finger_orig =
+    auto finger_gray_orig =
         cv::imread( inputPath + "fingerprint.tif", cv::IMREAD_GRAYSCALE );
-    if ( finger_orig.empty() )
+    if ( finger_gray_orig.empty() )
     {
         cout << "image load failed!" << endl;
         return -1;
     }
-    ImgArr.push_back( std::make_tuple( finger_orig, "finger_orig" ) );
-    auto finger_global_th = global_threshold( finger_orig );
+    ImgArr.push_back( std::make_tuple( finger_gray_orig, "finger_gray_orig" ) );
+    for ( auto it : histogram(finger_gray_orig) )
+    {
+        log_out << it << " ";
+    }
+    auto finger_global_th = global_threshold( finger_gray_orig );
+    log_out << "\n" << finger_global_th << std::endl;
 
     auto finger_global_seg =
-        intensityTransform( finger_orig, thresholding( finger_global_th ) );
+        intensityTransform( finger_gray_orig, thresholding( finger_global_th ) );
     ImgArr.push_back(
         std::make_tuple( finger_global_seg, "finger_global_seg" ) );
 
     log_out << "// process end! //\n" << std::endl;
 
-    img_cat( ImgArr );
+    // img_cat( ImgArr );
 
 #endif  // SKIP_GLOBAL
 ////////////////////////////////////////
@@ -354,11 +359,16 @@ int main( int argv, char** argc )
         cout << "image load failed!" << endl;
         return -1;
     }
-    ImgArr.push_back( std::make_tuple( polymercell_orig, "finger_orig" ) );
+    ImgArr.push_back( std::make_tuple( polymercell_orig, "polymercell_orig" ) );
 
     auto start_otsu = chrono::high_resolution_clock::now();
 
+    for ( auto it : histogram(polymercell_orig) )
+    {
+        log_out << it << " ";
+    }
     auto polymercell_otsu_th = otsu_threshold( polymercell_orig );
+    log_out << "\n" << polymercell_otsu_th << std::endl;
     auto polymercell_otsu_seg = intensityTransform(
         polymercell_orig, thresholding( polymercell_otsu_th ) );
     ImgArr.push_back(
@@ -375,7 +385,7 @@ int main( int argv, char** argc )
             << setprecision( 9 );
     log_out << " sec\n" << endl;
 
-    img_cat( ImgArr );
+    // img_cat( ImgArr );
 
 #endif  // SKIP_OTSU
 ////////////////////////////////////////
@@ -422,7 +432,7 @@ int main( int argv, char** argc )
             << fixed << time_taken_smooth_global << setprecision( 9 );
     log_out << " sec\n" << endl;
 
-    img_cat( ImgArr );
+    // img_cat( ImgArr );
 
 #endif  // SKIP_SMOOTH_GLOBAL
 ////////////////////////////////////////
@@ -488,7 +498,7 @@ int main( int argv, char** argc )
             << time_taken_edge_grad << setprecision( 9 );
     log_out << " sec\n" << endl;
 
-    img_cat( ImgArr );
+    // img_cat( ImgArr );
 
 #endif  // SKIP_EDGE_GRAD
 ////////////////////////////////////////
@@ -557,7 +567,7 @@ int main( int argv, char** argc )
             << time_taken_edge_laplace << setprecision( 9 );
     log_out << " sec\n" << endl;
 
-    img_cat( ImgArr );
+    // img_cat( ImgArr );
 
 #endif  // SKIP_EDGE_LAPLACE
 ////////////////////////////////////////
@@ -601,6 +611,9 @@ int main( int argv, char** argc )
 
     log_out << "// start of VARIABLE_IMG_LOCAL process //\n";
 
+    const double alpha = 60.0;
+    const double beta = 1.5;
+
     auto yeast_orig =
         cv::imread( inputPath + "yeast-cells.tif", cv::IMREAD_GRAYSCALE );
     if ( yeast_orig.empty() )
@@ -611,6 +624,27 @@ int main( int argv, char** argc )
     ImgArr.push_back( std::make_tuple( yeast_orig, "yeast_orig" ) );
 
     auto start_img_local = chrono::high_resolution_clock::now();
+
+    auto yeast_local_var = local_var( yeast_orig );
+    cv::Mat yeast_local_var_norm;
+    yeast_local_var.convertTo(yeast_local_var_norm, CV_8U, 20.0);
+    ImgArr.push_back( std::make_tuple( yeast_local_var_norm, "yeast_local_var" ) );
+
+    auto yeast_hist = histogram( yeast_orig );
+    unsigned long long int yeast_sum = 0;
+    for ( int i = 0; i < 256; i++ )
+        yeast_sum += i * yeast_hist[i];
+    double yeast_mean =
+        (double)yeast_sum / (double)( yeast_orig.rows * yeast_orig.cols );
+
+    cv::Mat yeast_local_th = cv::Mat_<uchar>( yeast_orig.size() );
+    yeast_local_th.forEach<uchar>( [&]( uchar& p, const int* i ) {
+        p = (( (double)yeast_orig.at<uchar>( i[0], i[1] ) >
+            alpha * yeast_local_var.at<double>( i[0], i[1] ) ) &&
+            ( (double)yeast_orig.at<uchar>( i[0], i[1] ) >
+              beta * yeast_mean )) ? 255 : 0;
+    } );
+    ImgArr.push_back( std::make_tuple( yeast_local_th, "yeast_local_th" ) );
 
     auto end_img_local = chrono::high_resolution_clock::now();
     double time_taken_img_local =
@@ -634,6 +668,8 @@ int main( int argv, char** argc )
 
 #endif  // SKIP_VARIABLE_MOVING_AVG
     log_out << "/////////////////////////////\n" << std::endl;
+
+    img_save(ImgArr, savepath.string(), ".png");
 
     return 0;
 }
