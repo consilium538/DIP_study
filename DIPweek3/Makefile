@@ -204,6 +204,33 @@ main.cpp.s:
 	$(MAKE) -f CMakeFiles/dip_week3.dir/build.make CMakeFiles/dip_week3.dir/main.cpp.s
 .PHONY : main.cpp.s
 
+unionfind.o: unionfind.cpp.o
+
+.PHONY : unionfind.o
+
+# target to build an object file
+unionfind.cpp.o:
+	$(MAKE) -f CMakeFiles/dip_week3.dir/build.make CMakeFiles/dip_week3.dir/unionfind.cpp.o
+.PHONY : unionfind.cpp.o
+
+unionfind.i: unionfind.cpp.i
+
+.PHONY : unionfind.i
+
+# target to preprocess a source file
+unionfind.cpp.i:
+	$(MAKE) -f CMakeFiles/dip_week3.dir/build.make CMakeFiles/dip_week3.dir/unionfind.cpp.i
+.PHONY : unionfind.cpp.i
+
+unionfind.s: unionfind.cpp.s
+
+.PHONY : unionfind.s
+
+# target to generate assembly for a file
+unionfind.cpp.s:
+	$(MAKE) -f CMakeFiles/dip_week3.dir/build.make CMakeFiles/dip_week3.dir/unionfind.cpp.s
+.PHONY : unionfind.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -222,6 +249,9 @@ help:
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... unionfind.o"
+	@echo "... unionfind.i"
+	@echo "... unionfind.s"
 .PHONY : help
 
 
