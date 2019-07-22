@@ -38,80 +38,6 @@ int main( int argv, char** argc )
     log_out << "Process start at " << std::ctime( &start_time ) << std::endl;
 
     ////////////////////////////////////////
-    // crocodile footprint haze moonlight pollen polygon symbol
-    auto crocodile_orig =
-        cv::imread( inputPath + "crocodile.bmp", cv::IMREAD_GRAYSCALE );
-    ImgArr.push_back( std::make_tuple( crocodile_orig, "crocodile_orig" ) );
-
-    if ( crocodile_orig.empty() )
-    {
-        cout << "image load failed!" << endl;
-        return -1;
-    }
-
-    srcImg["crocodile"] = crocodile_orig;
-
-    auto footprint_orig =
-        cv::imread( inputPath + "footprint.bmp", cv::IMREAD_GRAYSCALE );
-    ImgArr.push_back( std::make_tuple( footprint_orig, "footprint_orig" ) );
-
-    if ( footprint_orig.empty() )
-    {
-        cout << "image load failed!" << endl;
-        return -1;
-    }
-
-    srcImg["footprint"] = footprint_orig;
-
-    cv::Mat crocodile_4, crocodile_8, footpring_4, footpring_8;
-    int crocodile_4_n, crocodile_8_n, footpring_4_n, footpring_8_n;
-
-    auto starttime = std::chrono::high_resolution_clock::now();
-    std::tie( crocodile_4, crocodile_4_n ) = grassfire_4( crocodile_orig );
-    auto crocodile_4_endtime = std::chrono::high_resolution_clock::now();
-    std::tie( crocodile_8, crocodile_8_n ) = grassfire_8( crocodile_orig );
-    auto crocodile_8_endtime = std::chrono::high_resolution_clock::now();
-    std::tie( footpring_4, footpring_4_n ) = grassfire_4( footprint_orig );
-    auto footpring_4_endtime = std::chrono::high_resolution_clock::now();
-    std::tie( footpring_8, footpring_8_n ) = grassfire_8( footprint_orig );
-    auto footpring_8_endtime = std::chrono::high_resolution_clock::now();
-
-    double time_taken_crocodile_4 =
-        (double)( std::chrono::duration_cast<chrono::nanoseconds>(
-                      crocodile_4_endtime - starttime )
-                      .count() ) *
-        1e-9;
-    double time_taken_crocodile_8 =
-        (double)( std::chrono::duration_cast<chrono::nanoseconds>(
-                      crocodile_8_endtime - crocodile_4_endtime )
-                      .count() ) *
-        1e-9;
-    double time_taken_footpring_4 =
-        (double)( std::chrono::duration_cast<chrono::nanoseconds>(
-                      footpring_4_endtime - crocodile_8_endtime )
-                      .count() ) *
-        1e-9;
-    double time_taken_footpring_8 =
-        (double)( std::chrono::duration_cast<chrono::nanoseconds>(
-                      footpring_8_endtime - footpring_4_endtime )
-                      .count() ) *
-        1e-9;
-
-    log_out << "spend time : \n";
-    log_out << "crocodile 4-connectivity : " << fixed << time_taken_crocodile_4
-            << setprecision( 9 ) << "\n";
-    log_out << "crocodile 8-connectivity : " << fixed << time_taken_crocodile_8
-            << setprecision( 9 ) << "\n";
-    log_out << "footpring 4-connectivity : " << fixed << time_taken_footpring_4
-            << setprecision( 9 ) << "\n";
-    log_out << "footpring 8-connectivity : " << fixed << time_taken_footpring_8
-            << setprecision( 9 ) << "\n";
-
-    cv::Mat footpring_8_color = cv::Mat_<cv::Vec3b>( footpring_8.size() );
-    footpring_8_color.forEach<cv::Vec3b>( [&]( cv::Vec3b& p, const int* i ) {
-        int k = footpring_8.at<int>( i[0], i[1] );
-        p = ( k == 0 ? 0 : circularcolor( k ) );
-    } );
 
     ////////////////////////////////////////
 
@@ -146,19 +72,33 @@ int main( int argv, char** argc )
 
         log_out << it << " process done!\n";
         log_out << "4-connectivity component : " << setw( 5 ) << img_4_n
-                << "spend time : " << fixed << time_taken_4
+                << " | spend time : " << fixed << time_taken_4
                 << setprecision( 9 ) << "\n";
         log_out << "8-connectivity component : " << setw( 5 ) << img_8_n
-                << "spend time : " << fixed << time_taken_8
+                << " | spend time : " << fixed << time_taken_8
                 << setprecision( 9 ) << "\n";
         log_out << "//////\n" << std::endl;
+
+        cv::Mat img_4_color = cv::Mat_<cv::Vec3b>( img_4.size() );
+        img_4_color.forEach<cv::Vec3b>( [&]( cv::Vec3b& p, const int* i ) {
+            int k = img_4.at<int>( i[0], i[1] );
+            p = ( k == 0 ? 0 : circularcolor( k ) );
+        } );
+        ImgArr.push_back( std::make_tuple( img_4_color, it + "_4" ) );
+
+        cv::Mat img_8_color = cv::Mat_<cv::Vec3b>( img_8.size() );
+        img_8_color.forEach<cv::Vec3b>( [&]( cv::Vec3b& p, const int* i ) {
+            int k = img_8.at<int>( i[0], i[1] );
+            p = ( k == 0 ? 0 : circularcolor( k ) );
+        } );
+        ImgArr.push_back( std::make_tuple( img_8_color, it + "_8" ) );
     }
 
     ////////////////////////////////////////
 
     log_out << "/////////////////////////////\n" << std::endl;
 
-    // img_save(ImgArr, savepath.string(), ".png");
+    img_save(ImgArr, savepath.string(), ".png");
 
     return 0;
 }
@@ -178,3 +118,10 @@ int main( int argv, char** argc )
 //        }
 //    }
 //    ImgArr.push_back( std::make_tuple( crocodile_color, "crocodile_color" ) );
+
+
+//    cv::Mat footpring_8_color = cv::Mat_<cv::Vec3b>( footpring_8.size() );
+//    footpring_8_color.forEach<cv::Vec3b>( [&]( cv::Vec3b& p, const int* i ) {
+//        int k = footpring_8.at<int>( i[0], i[1] );
+//        p = ( k == 0 ? 0 : circularcolor( k ) );
+//    } );
