@@ -3,6 +3,6 @@
 
 #include "globals.hpp"
 
-cv::Vec3b circularcolor(unsigned int a);
+cv::Vec3b circularcolor( unsigned int a );
 
-#endif // HELPER_HPP
+#endif  // HELPER_HPP

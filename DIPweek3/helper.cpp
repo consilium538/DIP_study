@@ -34,12 +34,12 @@ cv::Vec3b HSI2BGR( cv::Vec3d color )
             256.0;
         R = 3 * (double)color[2] - ( G + B );
     }
-    return cv::Vec3b( cv::saturate_cast<uchar>(B),
-                      cv::saturate_cast<uchar>(G),
-                      cv::saturate_cast<uchar>(R) );
+    return cv::Vec3b( cv::saturate_cast<uchar>( B ),
+                      cv::saturate_cast<uchar>( G ),
+                      cv::saturate_cast<uchar>( R ) );
 }
 
-cv::Vec3b circularcolor(unsigned int a)
+cv::Vec3b circularcolor( unsigned int a )
 {
-    return HSI2BGR(cv::Vec3b(a*7.0*256.0/11.0,128.0,128.0));
+    return HSI2BGR( cv::Vec3b( a * 7.0 * 256.0 / 11.0, 128.0, 128.0 ) );
 }

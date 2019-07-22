@@ -123,6 +123,33 @@ dip_week3/fast:
 	$(MAKE) -f CMakeFiles/dip_week3.dir/build.make CMakeFiles/dip_week3.dir/build
 .PHONY : dip_week3/fast
 
+ccl.o: ccl.cpp.o
+
+.PHONY : ccl.o
+
+# target to build an object file
+ccl.cpp.o:
+	$(MAKE) -f CMakeFiles/dip_week3.dir/build.make CMakeFiles/dip_week3.dir/ccl.cpp.o
+.PHONY : ccl.cpp.o
+
+ccl.i: ccl.cpp.i
+
+.PHONY : ccl.i
+
+# target to preprocess a source file
+ccl.cpp.i:
+	$(MAKE) -f CMakeFiles/dip_week3.dir/build.make CMakeFiles/dip_week3.dir/ccl.cpp.i
+.PHONY : ccl.cpp.i
+
+ccl.s: ccl.cpp.s
+
+.PHONY : ccl.s
+
+# target to generate assembly for a file
+ccl.cpp.s:
+	$(MAKE) -f CMakeFiles/dip_week3.dir/build.make CMakeFiles/dip_week3.dir/ccl.cpp.s
+.PHONY : ccl.cpp.s
+
 helper.o: helper.cpp.o
 
 .PHONY : helper.o
@@ -186,6 +213,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... dip_week3"
 	@echo "... edit_cache"
+	@echo "... ccl.o"
+	@echo "... ccl.i"
+	@echo "... ccl.s"
 	@echo "... helper.o"
 	@echo "... helper.i"
 	@echo "... helper.s"
