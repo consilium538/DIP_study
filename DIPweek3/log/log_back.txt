@@ -1,0 +1,475 @@
+CPU Type: Intel(R) Core(TM) i5-4200H CPU @ 2.80GHz
+Process start at Mon Jul 22 12:25:11 2019
+
+spend time : 
+crocodile 4-connectivity : 0.000543
+crocodile 8-connectivity : 0.000018244
+footpring 4-connectivity : 0.006068885
+footpring 8-connectivity : 0.011204175
+/////////////////////////////
+
+CPU Type: Intel(R) Core(TM) i5-4200H CPU @ 2.80GHz
+Process start at Mon Jul 22 12:25:38 2019
+
+spend time : 
+crocodile 4-connectivity : 0.000032
+crocodile 8-connectivity : 0.000017701
+footpring 4-connectivity : 0.005082070
+footpring 8-connectivity : 0.008697677
+/////////////////////////////
+
+CPU Type: Intel(R) Core(TM) i5-4200H CPU @ 2.80GHz
+Process start at Mon Jul 22 12:32:39 2019
+
+spend time : 
+crocodile 4-connectivity : 0.000024
+crocodile 8-connectivity : 0.000011933
+footpring 4-connectivity : 0.004981165
+footpring 8-connectivity : 0.008441560
+/////////////////////////////
+
+CPU Type: Intel(R) Core(TM) i5-4200H CPU @ 2.80GHz
+Process start at Mon Jul 22 12:34:34 2019
+
+spend time : 
+crocodile 4-connectivity : 0.000025
+crocodile 8-connectivity : 0.000011790
+footpring 4-connectivity : 0.004960091
+footpring 8-connectivity : 0.008438297
+/////////////////////////////
+
+CPU Type: Intel(R) Core(TM) i5-4200H CPU @ 2.80GHz
+Process start at Mon Jul 22 12:56:19 2019
+
+spend time : 
+crocodile 4-connectivity : 0.000024
+crocodile 8-connectivity : 0.000012469
+footpring 4-connectivity : 0.005111057
+footpring 8-connectivity : 0.008708194
+crocodile process done!
+4-connectivity component :     6spend time : 0.000019477
+8-connectivity component :     1spend time : 0.000015272
+//////
+
+footprint process done!
+4-connectivity component :  3022spend time : 0.008326440
+8-connectivity component :  1532spend time : 0.012275453
+//////
+
+haze process done!
+4-connectivity component :    11spend time : 0.076379937
+8-connectivity component :     6spend time : 0.198397432
+//////
+
+CPU Type: Intel(R) Core(TM) i5-4200H CPU @ 2.80GHz
+Process start at Mon Jul 22 12:58:44 2019
+
+crocodile process done!
+4-connectivity component :     6 | spend time : 0.000029
+8-connectivity component :     1 | spend time : 0.000011973
+//////
+
+footprint process done!
+4-connectivity component :  3022 | spend time : 0.005037258
+8-connectivity component :  1532 | spend time : 0.008435566
+//////
+
+haze process done!
+4-connectivity component :    11 | spend time : 0.054512944
+8-connectivity component :     6 | spend time : 0.156123300
+//////
+
+moonlight process done!
+4-connectivity component :   255 | spend time : 0.005313063
+8-connectivity component :    10 | spend time : 0.012671570
+//////
+
+pollen process done!
+4-connectivity component :   774 | spend time : 0.098656781
+8-connectivity component :   360 | spend time : 0.281253359
+//////
+
+polygon process done!
+4-connectivity component :     5 | spend time : 0.017783493
+8-connectivity component :     5 | spend time : 0.048734415
+//////
+
+symbol process done!
+4-connectivity component :    14 | spend time : 0.003443518
+8-connectivity component :    10 | spend time : 0.009319825
+//////
+
+/////////////////////////////
+
+CPU Type: Intel(R) Core(TM) i5-4200H CPU @ 2.80GHz
+Process start at Mon Jul 22 13:06:42 2019
+
+crocodile process done!
+4-connectivity component :     6 | spend time : 0.000027
+8-connectivity component :     1 | spend time : 0.000012508
+//////
+
+footprint process done!
+4-connectivity component :  3022 | spend time : 0.004971979
+8-connectivity component :  1532 | spend time : 0.008420276
+//////
+
+haze process done!
+4-connectivity component :    11 | spend time : 0.054956570
+8-connectivity component :     6 | spend time : 0.157157792
+//////
+
+moonlight process done!
+4-connectivity component :   255 | spend time : 0.004144991
+8-connectivity component :    10 | spend time : 0.011546938
+//////
+
+pollen process done!
+4-connectivity component :   774 | spend time : 0.093668929
+8-connectivity component :   359 | spend time : 0.283822755
+//////
+
+polygon process done!
+4-connectivity component :     5 | spend time : 0.016392149
+8-connectivity component :     5 | spend time : 0.056563288
+//////
+
+symbol process done!
+4-connectivity component :    14 | spend time : 0.004493235
+8-connectivity component :    10 | spend time : 0.011345361
+//////
+
+/////////////////////////////
+
+CPU Type: Intel(R) Core(TM) i5-4200H CPU @ 2.80GHz
+Process start at Mon Jul 22 17:18:30 2019
+
+crocodile process done!
+8-connectivity component :     1 | spend time : 15.637000us
+//////
+
+/////////////////////////////
+
+CPU Type: Intel(R) Core(TM) i5-4200H CPU @ 2.80GHz
+Process start at Mon Jul 22 17:19:20 2019
+
+crocodile process done!
+8-connectivity component :     1 | spend time : 13.793000us
+//////
+
+CPU Type: Intel(R) Core(TM) i5-4200H CPU @ 2.80GHz
+Process start at Mon Jul 22 17:20:40 2019
+
+crocodile process done!
+8-connectivity component :     1 | spend time : 14.369000us
+//////
+
+CPU Type: Intel(R) Core(TM) i5-4200H CPU @ 2.80GHz
+Process start at Mon Jul 22 17:21:49 2019
+
+crocodile process done!
+8-connectivity component :     1 | spend time : 17.220000us
+//////
+
+CPU Type: Intel(R) Core(TM) i5-4200H CPU @ 2.80GHz
+Process start at Mon Jul 22 17:22:36 2019
+
+CPU Type: Intel(R) Core(TM) i5-4200H CPU @ 2.80GHz
+Process start at Mon Jul 22 17:31:56 2019
+
+crocodile process done!
+8-connectivity component :     1 | spend time : 7896812.855000us
+//////
+
+CPU Type: Intel(R) Core(TM) i5-4200H CPU @ 2.80GHz
+Process start at Mon Jul 22 17:36:50 2019
+
+crocodile process done!
+8-connectivity component :     1 | spend time : 14.674000us
+//////
+
+CPU Type: Intel(R) Core(TM) i5-4200H CPU @ 2.80GHz
+Process start at Mon Jul 22 17:45:16 2019
+
+crocodile process done!
+8-connectivity component :     1 | spend time : 14.349000us
+//////
+
+CPU Type: Intel(R) Core(TM) i5-4200H CPU @ 2.80GHz
+Process start at Mon Jul 22 17:45:41 2019
+
+crocodile process done!
+8-connectivity component :     1 | spend time : 18.904000us
+//////
+
+CPU Type: Intel(R) Core(TM) i5-4200H CPU @ 2.80GHz
+Process start at Tue Jul 23 10:20:41 2019
+
+CPU Type: Intel(R) Core(TM) i5-4200H CPU @ 2.80GHz
+Process start at Tue Jul 23 10:22:27 2019
+
+CPU Type: Intel(R) Core(TM) i5-4200H CPU @ 2.80GHz
+Process start at Tue Jul 23 10:23:08 2019
+
+CPU Type: Intel(R) Core(TM) i5-4200H CPU @ 2.80GHz
+Process start at Tue Jul 23 10:28:29 2019
+
+haze process done!
+8-connectivity component :     1 | spend time : 32653149.285000us
+//////
+
+CPU Type: Intel(R) Core(TM) i5-4200H CPU @ 2.80GHz
+Process start at Tue Jul 23 10:31:55 2019
+
+haze process done!
+8-connectivity component :     1 | spend time : 19608.271000us
+//////
+
+CPU Type: Intel(R) Core(TM) i5-4200H CPU @ 2.80GHz
+Process start at Tue Jul 23 10:33:21 2019
+
+haze process done!
+8-connectivity component :     1 | spend time : 23843.139000us
+//////
+
+CPU Type: Intel(R) Core(TM) i5-4200H CPU @ 2.80GHz
+Process start at Tue Jul 23 10:35:20 2019
+
+footprint process done!
+8-connectivity component :     1 | spend time : 18254.435000us
+//////
+
+CPU Type: Intel(R) Core(TM) i5-4200H CPU @ 2.80GHz
+Process start at Tue Jul 23 10:58:20 2019
+
+footprint process done!
+8-connectivity component :  1533 | spend time : 24.745099ms 
+//////
+
+CPU Type: Intel(R) Core(TM) i5-4200H CPU @ 2.80GHz
+Process start at Tue Jul 23 11:02:00 2019
+
+footprint process done!
+4-connectivity component :  3022 | spend time : 5346.165000us
+8-connectivity component :  1533 | spend time : 21.419711000ms 
+//////
+
+CPU Type: Intel(R) Core(TM) i5-4200H CPU @ 2.80GHz
+Process start at Tue Jul 23 11:03:44 2019
+
+footprint process done!
+4-connectivity component :  3023 | spend time : 28.212762ms
+8-connectivity component :  1533 | spend time : 6.387326000ms 
+//////
+
+CPU Type: Intel(R) Core(TM) i5-4200H CPU @ 2.80GHz
+Process start at Tue Jul 23 11:05:19 2019
+
+crocodile process done!
+4-connectivity component :     7 | spend time : 13.822425ms
+8-connectivity component :     2 | spend time : 0.032011000ms 
+//////
+
+CPU Type: Intel(R) Core(TM) i5-4200H CPU @ 2.80GHz
+Process start at Tue Jul 23 11:06:36 2019
+
+haze process done!
+4-connectivity component :    11 | spend time : 19.040810ms
+8-connectivity component :     6 | spend time : 6.702957000ms 
+//////
+
+CPU Type: Intel(R) Core(TM) i5-4200H CPU @ 2.80GHz
+Process start at Tue Jul 23 11:09:45 2019
+
+CPU Type: Intel(R) Core(TM) i5-4200H CPU @ 2.80GHz
+Process start at Tue Jul 23 11:19:03 2019
+
+haze process done!
+4-connectivity component :    11 | spend time : 1556.475207ms
+8-connectivity component :     6 | spend time : 10.758003000ms 
+//////
+
+CPU Type: Intel(R) Core(TM) i5-4200H CPU @ 2.80GHz
+Process start at Tue Jul 23 11:19:37 2019
+
+moonlight process done!
+4-connectivity component :   255 | spend time : 5959.207922ms
+8-connectivity component :    10 | spend time : 1.068555000ms 
+//////
+
+CPU Type: Intel(R) Core(TM) i5-4200H CPU @ 2.80GHz
+Process start at Tue Jul 23 11:20:29 2019
+
+moonlight process done!
+4-connectivity component :   255 | spend time : 19.122376ms
+8-connectivity component :    10 | spend time : 2.217972000ms 
+//////
+
+/////////////////////////////
+
+CPU Type: Intel(R) Core(TM) i5-4200H CPU @ 2.80GHz
+Process start at Tue Jul 23 11:21:41 2019
+
+crocodile process done!
+4-connectivity component :     6 | spend time : 12.647195ms
+8-connectivity component :     1 | spend time : 0.031209000ms 
+//////
+
+footprint process done!
+4-connectivity component :  3022 | spend time : 6.206591000ms
+8-connectivity component :  1532 | spend time : 4.682151000ms 
+//////
+
+haze process done!
+4-connectivity component :    11 | spend time : 4.347758000ms
+8-connectivity component :     6 | spend time : 5.269603000ms 
+//////
+
+moonlight process done!
+4-connectivity component :   255 | spend time : 0.998733000ms
+8-connectivity component :    10 | spend time : 0.907138000ms 
+//////
+
+pollen process done!
+4-connectivity component :   774 | spend time : 7.232145000ms
+8-connectivity component :   360 | spend time : 9.483812000ms 
+//////
+
+polygon process done!
+4-connectivity component :     5 | spend time : 1.287813000ms
+8-connectivity component :     5 | spend time : 1.573751000ms 
+//////
+
+symbol process done!
+4-connectivity component :    14 | spend time : 0.737189000ms
+8-connectivity component :    10 | spend time : 0.943715000ms 
+//////
+
+/////////////////////////////
+
+CPU Type: Intel(R) Core(TM) i5-4200H CPU @ 2.80GHz
+Process start at Tue Jul 23 11:31:50 2019
+
+Test for Label-propagation(grassfire)
+crocodile process done!
+4-connectivity component :     6 | spend time : 0.034479ms
+8-connectivity component :     1 | spend time : 0.016394000ms 
+//-------------------------//
+footprint process done!
+4-connectivity component :  3022 | spend time : 5.584897000ms
+8-connectivity component :  1532 | spend time : 12.679785000ms 
+//-------------------------//
+haze process done!
+4-connectivity component :    11 | spend time : 56.446771000ms
+8-connectivity component :     6 | spend time : 157.282123000ms 
+//-------------------------//
+moonlight process done!
+4-connectivity component :   255 | spend time : 3.963955000ms
+8-connectivity component :    10 | spend time : 11.488185000ms 
+//-------------------------//
+pollen process done!
+4-connectivity component :   774 | spend time : 94.827591000ms
+8-connectivity component :   359 | spend time : 283.090212000ms 
+//-------------------------//
+polygon process done!
+4-connectivity component :     5 | spend time : 15.581945000ms
+8-connectivity component :     5 | spend time : 48.596375000ms 
+//-------------------------//
+symbol process done!
+4-connectivity component :    14 | spend time : 3.499882000ms
+8-connectivity component :    10 | spend time : 9.236913000ms 
+//-------------------------//
+Test for Label-equivalent-resolving(Equivalent-label-set)
+crocodile process done!
+4-connectivity component :     6 | spend time : 0.099828000ms
+8-connectivity component :     1 | spend time : 0.020435000ms 
+//-------------------------//
+footprint process done!
+4-connectivity component :  3022 | spend time : 6.094095000ms
+8-connectivity component :  1532 | spend time : 4.836450000ms 
+//-------------------------//
+haze process done!
+4-connectivity component :    11 | spend time : 4.373089000ms
+8-connectivity component :     6 | spend time : 5.777407000ms 
+//-------------------------//
+moonlight process done!
+4-connectivity component :   255 | spend time : 0.723290000ms
+8-connectivity component :    10 | spend time : 0.632029000ms 
+//-------------------------//
+pollen process done!
+4-connectivity component :   774 | spend time : 7.153840000ms
+8-connectivity component :   360 | spend time : 8.500308000ms 
+//-------------------------//
+polygon process done!
+4-connectivity component :     5 | spend time : 1.102025000ms
+8-connectivity component :     5 | spend time : 1.483971000ms 
+//-------------------------//
+symbol process done!
+4-connectivity component :    14 | spend time : 0.861537000ms
+8-connectivity component :    10 | spend time : 1.130057000ms 
+//-------------------------//
+/////////////////////////////
+
+CPU Type: Intel(R) Core(TM) i5-4200H CPU @ 2.80GHz
+Process start at Tue Jul 23 11:39:18 2019
+
+Test for Label-propagation(grassfire)
+crocodile process done!
+4-connectivity component :     6 | spend time : 0.027280ms
+8-connectivity component :     1 | spend time : 0.012256000ms 
+//-------------------------//
+footprint process done!
+4-connectivity component :  3022 | spend time : 5.504261000ms
+8-connectivity component :  1532 | spend time : 8.602274000ms 
+//-------------------------//
+haze process done!
+4-connectivity component :    11 | spend time : 54.138221000ms
+8-connectivity component :     6 | spend time : 160.616806000ms 
+//-------------------------//
+moonlight process done!
+4-connectivity component :   255 | spend time : 4.018276000ms
+8-connectivity component :    10 | spend time : 11.464456000ms 
+//-------------------------//
+pollen process done!
+4-connectivity component :   774 | spend time : 94.241978000ms
+8-connectivity component :   359 | spend time : 284.805970000ms 
+//-------------------------//
+polygon process done!
+4-connectivity component :     5 | spend time : 15.882557000ms
+8-connectivity component :     5 | spend time : 48.236185000ms 
+//-------------------------//
+symbol process done!
+4-connectivity component :    14 | spend time : 3.318759000ms
+8-connectivity component :    10 | spend time : 8.989589000ms 
+//-------------------------//
+Test for Label-equivalent-resolving(Equivalent-label-set)
+crocodile process done!
+4-connectivity component :     6 | spend time : 0.084075000ms
+8-connectivity component :     1 | spend time : 0.028594000ms 
+//-------------------------//
+footprint process done!
+4-connectivity component :  3022 | spend time : 5.779286000ms
+8-connectivity component :  1532 | spend time : 4.693799000ms 
+//-------------------------//
+haze process done!
+4-connectivity component :    11 | spend time : 4.296427000ms
+8-connectivity component :     6 | spend time : 5.595488000ms 
+//-------------------------//
+moonlight process done!
+4-connectivity component :   255 | spend time : 0.715915000ms
+8-connectivity component :    10 | spend time : 0.565901000ms 
+//-------------------------//
+pollen process done!
+4-connectivity component :   774 | spend time : 6.560413000ms
+8-connectivity component :   360 | spend time : 8.263483000ms 
+//-------------------------//
+polygon process done!
+4-connectivity component :     5 | spend time : 1.103170000ms
+8-connectivity component :     5 | spend time : 1.416669000ms 
+//-------------------------//
+symbol process done!
+4-connectivity component :    14 | spend time : 0.738292000ms
+8-connectivity component :    10 | spend time : 0.828285000ms 
+//-------------------------//
+/////////////////////////////
+

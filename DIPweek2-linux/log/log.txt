@@ -1,0 +1,94 @@
+CPU Type: Intel(R) Core(TM) i5-4200H CPU @ 2.80GHz
+Process start at Fri Jul 19 11:43:44 2019
+
+/////////////////////////////
+// process end! //
+
+/////////////////////////////
+// process end! //
+
+/////////////////////////////
+// process end! //
+
+/////////////////////////////
+// process end! //
+
+/////////////////////////////
+// process end! //
+
+/////////////////////////////
+// process end! //
+
+// start of reconstruction process //
+// start of reconstruction_open process //
+// reconstruction_open process end! //
+time taken by reconstruction_open process is : 11.371288 sec
+
+// start of reconstruction_fill process //
+// reconstruction_fill process end! //
+time taken by reconstruction_fill process is : 49.347979389 sec
+
+// start of reconstruction_border process //
+// reconstruction_border process end! //
+time taken by reconstruction_border process is : 3.139356096 sec
+
+// reconstruction process end! //
+
+// start of global thresholding process //
+// process end! //
+
+// start of otsu process //
+// otsu process end! //
+time taken by otsu process is : 0.003244139 sec
+
+// start of global thresholding by smoothing process //
+// global thresholding by smoothing process end! //
+time taken by global thresholding by smoothing process is : 0.686248456 sec
+
+// start of EDGE_GRAD process //
+// EDGE_GRAD process end! //
+time taken by EDGE_GRAD process is : 1.165539325 sec
+
+// start of EDGE_LAPLACE process //
+// EDGE_LAPLACE process end! //
+time taken by EDGE_LAPLACE process is : 0.646690900 sec
+
+// start of MULTIPLE_TH process //
+// MULTIPLE_TH process end! //
+time taken by MULTIPLE_TH process is : 0.007976052 sec
+
+// start of VARIABLE_IMG_LOCAL process //
+// VARIABLE_IMG_LOCAL process end! //
+time taken by VARIABLE_IMG_LOCAL process is : 0.386433442 sec
+
+/////////////////////////////
+
+CPU Type: Intel(R) Core(TM) i5-4200H CPU @ 2.80GHz
+Process start at Fri Jul 19 12:46:24 2019
+
+/////////////////////////////
+// process end! //
+
+// start of otsu process //
+// otsu process end! //
+time taken by otsu process is : 0.004925 sec
+
+/////////////////////////////
+
+CPU Type: Intel(R) Core(TM) i5-4200H CPU @ 2.80GHz
+Process start at Fri Jul 19 14:18:18 2019
+
+// start of global thresholding process //
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 8 8 28 28 44 84 122 216 304 472 644 902 1366 1888 2454 3296 3610 4624 5922 6902 8002 8964 10012 10780 11654 11010 11560 11636 11232 11126 10278 9774 8710 7580 6506 5682 5016 4406 3972 3296 3244 2920 2850 2788 2586 2876 2772 3016 3096 3028 2882 2890 2818 2568 2656 2612 2458 2648 2402 2180 2344 2392 2488 2140 2226 2200 2214 1956 1966 1852 1658 1428 1278 1044 904 722 516 480 342 340 226 136 172 96 140 100 96 88 54 68 60 44 52 44 28 44 44 56 52 60 56 48 76 96 48 84 124 116 192 240 252 312 396 568 740 736 900 1092 1340 1460 1690 1760 2128 1920 2256 2194 2404 2440 2410 2262 2436 2512 2522 2408 2552 2758 2738 2944 2788 3042 3248 3004 3104 3230 3212 3338 3248 3320 3488 4092 4434 5456 6988 8174 9596 11316 13382 15054 16846 19014 20430 21498 22580 23014 22662 22206 20882 19466 17546 15566 13988 11912 8902 8030 6246 4826 3628 2628 1938 1350 1162 688 440 274 172 96 100 36 30 28 10 0 0 4 0 4 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+125.386
+// process end! //
+
+CPU Type: Intel(R) Core(TM) i5-4200H CPU @ 2.80GHz
+Process start at Fri Jul 19 14:51:10 2019
+
+// start of otsu process //
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 7 26 24 26 17 21 21 33 30 30 37 41 37 48 57 78 72 74 76 87 79 105 150 173 190 247 208 127 107 118 144 170 177 171 133 136 102 111 118 118 136 130 140 130 143 129 153 443 1045 1681 1922 1574 1025 865 894 1239 1878 2496 3062 2256 1262 1052 1097 1731 3060 3431 5929 6323 2819 2634 3537 13602 51417 13114 11964 18619 32481 4527 4753 13762 33099 12665 15820 26627 40387 7869 8154 12595 15913 4546 3684 3427 2614 2070 2260 3246 3273 2120 1975 1672 1272 1049 1015 1081 986 1004 1051 1020 947 863 879 848 887 928 1017 1053 1056 794 700 766 1017 933 789 792 650 486 469 468 524 526 463 386 351 147 141 155 218 262 179 81 57 46 28 32 44 62 57 54 34 15 10 7 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+181
+// otsu process end! //
+time taken by otsu process is : 0.033578 sec
+
