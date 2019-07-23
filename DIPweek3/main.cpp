@@ -30,7 +30,7 @@ int main( int argv, char** argc )
     std::vector<std::tuple<cv::Mat, string>> ImgArr;
     std::unordered_map<std::string, cv::Mat> srcImg;
     std::vector<std::string> testcase = {"crocodile", "footprint", "haze",
-                                         "moonlight", "pollen", "polygon",
+                                         "moonlight", "pollen",    "polygon",
                                          "symbol"};
 
     catCPUID( log_out );
@@ -70,18 +70,16 @@ int main( int argv, char** argc )
             1e-6;
 
         log_out << it << " process done!\n";
-        log_out << "4-connectivity component : " << setw( 5 ) <<
-        img_4_n
+        log_out << "4-connectivity component : " << setw( 5 ) << img_4_n
                 << " | spend time : " << fixed << time_taken_4
                 << setprecision( 9 ) << "ms\n";
         log_out << "8-connectivity component : " << setw( 5 ) << img_8_n
                 << " | spend time : " << fixed << time_taken_8
-                << setprecision( 9 ) << "ms \n";
+                << setprecision( 9 ) << "ms\n";
         log_out << "//-------------------------//" << std::endl;
 
         cv::Mat img_4_color = cv::Mat_<cv::Vec3b>( img_4.size() );
-        img_4_color.forEach<cv::Vec3b>( [&]( cv::Vec3b& p, const int*
-        i ) {
+        img_4_color.forEach<cv::Vec3b>( [&]( cv::Vec3b& p, const int* i ) {
             int k = img_4.at<int>( i[0], i[1] );
             p = ( k == 0 ? 0 : circularcolor( k ) );
         } );
@@ -97,7 +95,8 @@ int main( int argv, char** argc )
 
     ////////////////////////////////////////
 
-    log_out << "Test for Label-equivalent-resolving(Equivalent-label-set)" << std::endl;
+    log_out << "Test for Label-equivalent-resolving(Equivalent-label-set)"
+            << std::endl;
     for ( auto it : testcase )
     {
         auto img_orig =
@@ -128,29 +127,29 @@ int main( int argv, char** argc )
             1e-6;
 
         log_out << it << " process done!\n";
-        log_out << "4-connectivity component : " << setw( 5 ) <<
-        img_4_n
+        log_out << "4-connectivity component : " << setw( 5 ) << img_4_n
                 << " | spend time : " << fixed << time_taken_4
                 << setprecision( 9 ) << "ms\n";
         log_out << "8-connectivity component : " << setw( 5 ) << img_8_n
                 << " | spend time : " << fixed << time_taken_8
-                << setprecision( 9 ) << "ms \n";
+                << setprecision( 9 ) << "ms\n";
         log_out << "//-------------------------//" << std::endl;
 
         cv::Mat img_4_color = cv::Mat_<cv::Vec3b>( img_4.size() );
-        img_4_color.forEach<cv::Vec3b>( [&]( cv::Vec3b& p, const int*
-        i ) {
+        img_4_color.forEach<cv::Vec3b>( [&]( cv::Vec3b& p, const int* i ) {
             int k = img_4.at<int>( i[0], i[1] );
             p = ( k == 0 ? 0 : circularcolor( k ) );
         } );
-        ImgArr.push_back( std::make_tuple( img_4_color, it + "_4_eq_label_set" ) );
+        ImgArr.push_back(
+            std::make_tuple( img_4_color, it + "_4_eq_label_set" ) );
 
         cv::Mat img_8_color = cv::Mat_<cv::Vec3b>( img_8.size() );
         img_8_color.forEach<cv::Vec3b>( [&]( cv::Vec3b& p, const int* i ) {
             int k = img_8.at<int>( i[0], i[1] );
             p = ( k == 0 ? 0 : circularcolor( k ) );
         } );
-        ImgArr.push_back( std::make_tuple( img_8_color, it + "_8_eq_label_set" ) );
+        ImgArr.push_back(
+            std::make_tuple( img_8_color, it + "_8_eq_label_set" ) );
     }
 
     ////////////////////////////////////////

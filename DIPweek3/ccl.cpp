@@ -286,7 +286,7 @@ std::tuple<cv::Mat, int> eq_label_set_8( cv::Mat img )
     for ( auto it : rl_table )
         label_count.insert( it );
 
-    return std::make_tuple( img_label_final, label_count.size()-1 );
+    return std::make_tuple( img_label_final, label_count.size() - 1 );
 }
 
 std::tuple<cv::Mat, int> eq_label_set_4( cv::Mat img )
@@ -365,5 +365,5 @@ std::tuple<cv::Mat, int> eq_label_set_4( cv::Mat img )
     for ( auto it : rl_table )
         label_count.insert( it );
 
-    return std::make_tuple( img_label_final, label_count.size()-1 );
+    return std::make_tuple( img_label_final, label_count.size() - 1 );
 }
