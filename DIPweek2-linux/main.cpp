@@ -130,8 +130,8 @@ int main( int argv, char** argc )
     }
 
     auto lincoln_eros = erosion( lincoln_orig, rectSE( 3 ) );
-    auto lincoln_bound = cv::Mat_<uchar>( lincoln_orig.size(),
-                                          lincoln_orig.channels() );
+    auto lincoln_bound =
+        cv::Mat_<uchar>( lincoln_orig.size(), lincoln_orig.channels() );
     lincoln_bound.forEach( [&]( Pixel& p, const int* i ) {
         p = cv::saturate_cast<uchar>( lincoln_orig.at<uchar>( i[0], i[1] ) -
                                       lincoln_eros.at<uchar>( i[0], i[1] ) );
@@ -330,15 +330,15 @@ int main( int argv, char** argc )
         return -1;
     }
     ImgArr.push_back( std::make_tuple( finger_gray_orig, "finger_gray_orig" ) );
-    for ( auto it : histogram(finger_gray_orig) )
+    for ( auto it : histogram( finger_gray_orig ) )
     {
         log_out << it << " ";
     }
     auto finger_global_th = global_threshold( finger_gray_orig );
     log_out << "\n" << finger_global_th << std::endl;
 
-    auto finger_global_seg =
-        intensityTransform( finger_gray_orig, thresholding( finger_global_th ) );
+    auto finger_global_seg = intensityTransform(
+        finger_gray_orig, thresholding( finger_global_th ) );
     ImgArr.push_back(
         std::make_tuple( finger_global_seg, "finger_global_seg" ) );
 
@@ -363,7 +363,7 @@ int main( int argv, char** argc )
 
     auto start_otsu = chrono::high_resolution_clock::now();
 
-    for ( auto it : histogram(polymercell_orig) )
+    for ( auto it : histogram( polymercell_orig ) )
     {
         log_out << it << " ";
     }
@@ -627,8 +627,9 @@ int main( int argv, char** argc )
 
     auto yeast_local_var = local_var( yeast_orig );
     cv::Mat yeast_local_var_norm;
-    yeast_local_var.convertTo(yeast_local_var_norm, CV_8U, 20.0);
-    ImgArr.push_back( std::make_tuple( yeast_local_var_norm, "yeast_local_var" ) );
+    yeast_local_var.convertTo( yeast_local_var_norm, CV_8U, 20.0 );
+    ImgArr.push_back(
+        std::make_tuple( yeast_local_var_norm, "yeast_local_var" ) );
 
     auto yeast_hist = histogram( yeast_orig );
     unsigned long long int yeast_sum = 0;
@@ -639,10 +640,12 @@ int main( int argv, char** argc )
 
     cv::Mat yeast_local_th = cv::Mat_<uchar>( yeast_orig.size() );
     yeast_local_th.forEach<uchar>( [&]( uchar& p, const int* i ) {
-        p = (( (double)yeast_orig.at<uchar>( i[0], i[1] ) >
-            alpha * yeast_local_var.at<double>( i[0], i[1] ) ) &&
-            ( (double)yeast_orig.at<uchar>( i[0], i[1] ) >
-              beta * yeast_mean )) ? 255 : 0;
+        p = ( ( (double)yeast_orig.at<uchar>( i[0], i[1] ) >
+                alpha * yeast_local_var.at<double>( i[0], i[1] ) ) &&
+              ( (double)yeast_orig.at<uchar>( i[0], i[1] ) >
+                beta * yeast_mean ) )
+                ? 255
+                : 0;
     } );
     ImgArr.push_back( std::make_tuple( yeast_local_th, "yeast_local_th" ) );
 
@@ -664,12 +667,43 @@ int main( int argv, char** argc )
 
     log_out << "// start of VARIABLE_MOVING_AVG process //\n";
 
+    std::vector<std::string> testset = {"text-sineshade", "text-spotshade"};
+    for ( auto it : testset )
+    {
+        auto img_orig =
+            cv::imread( inputPath + it + ".tif", cv::IMREAD_GRAYSCALE );
+        if ( img_orig.empty() )
+        {
+            cout << "image load failed!" << endl;
+            return -1;
+        }
+        ImgArr.push_back( std::make_tuple( img_orig, it + "_orig" ) );
+
+        auto img_mov_avg = cv::Mat( img_orig.size(), CV_8U );
+        auto testimg = img_orig(cv::Rect(cv::Point(0,0),cv::Point(20,1)));
+        double avgval = 0.0;
+        
+        for ( int k = 0; ; k++ )
+        {
+            int i,j,p,q;
+            std::tie(i,j) = zigzag(k,img_orig.rows, img_orig.cols);
+            std::tie(p,q) = zigzag(k - AVG_RANGE,img_orig.rows, img_orig.cols);
+            if ( i == img_orig.rows ) break;
+            if ( k < AVG_RANGE )
+                avgval = cv::mean(img_orig(cv::Rect(cv::Point(0,0),cv::Point(k,1))))[0];
+            else
+                avgval += (double)(img_orig.at<uchar>( i, j ) - img_orig.at<uchar>( p, q ))/(double)AVG_RANGE;
+            img_mov_avg.at<uchar>( i, j ) = img_orig.at<uchar>( i, j ) > avgval * AVG_COIFF ? 255 : 0;
+        }
+        ImgArr.push_back( std::make_tuple( img_mov_avg, it + "_mov_avg" ) );
+    }
+
     log_out << "// process end! //\n" << std::endl;
 
 #endif  // SKIP_VARIABLE_MOVING_AVG
     log_out << "/////////////////////////////\n" << std::endl;
 
-    img_save(ImgArr, savepath.string(), ".png");
+    img_save( ImgArr, savepath.string(), ".png" );
 
     return 0;
 }
