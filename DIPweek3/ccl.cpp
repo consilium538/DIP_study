@@ -2,7 +2,7 @@
 
 std::tuple<cv::Mat, int> grassfire_4( cv::Mat img )
 {
-    cv::Mat img_lable = cv::Mat_<int>( img.size(), 0 );
+    cv::Mat img_label = cv::Mat_<int>( img.size(), 0 );
     cv::Mat img_marked = cv::Mat_<uchar>( img.size(), 0 );
     std::vector<std::tuple<int, int>> marker;
     std::tuple<int, int> cur_mark;
@@ -21,7 +21,7 @@ std::tuple<cv::Mat, int> grassfire_4( cv::Mat img )
                 {
                     cur_mark = marker.back();
                     marker.pop_back();
-                    img_lable.at<int>( std::get<0>( cur_mark ),
+                    img_label.at<int>( std::get<0>( cur_mark ),
                                        std::get<1>( cur_mark ) ) = mark_lable;
                     img_marked.at<uchar>( std::get<0>( cur_mark ),
                                           std::get<1>( cur_mark ) ) = 255;
@@ -66,12 +66,12 @@ std::tuple<cv::Mat, int> grassfire_4( cv::Mat img )
             }
         }
     }
-    return std::make_tuple( img_lable, mark_lable );
+    return std::make_tuple( img_label, mark_lable );
 }
 
 std::tuple<cv::Mat, int> grassfire_8( cv::Mat img )
 {
-    cv::Mat img_lable = cv::Mat_<int>( img.size(), 0 );
+    cv::Mat img_label = cv::Mat_<int>( img.size(), 0 );
     cv::Mat img_marked = cv::Mat_<uchar>( img.size(), 0 );
     std::vector<std::tuple<int, int>> marker;
     std::tuple<int, int> cur_mark;
@@ -90,7 +90,7 @@ std::tuple<cv::Mat, int> grassfire_8( cv::Mat img )
                 {
                     cur_mark = marker.back();
                     marker.pop_back();
-                    img_lable.at<int>( std::get<0>( cur_mark ),
+                    img_label.at<int>( std::get<0>( cur_mark ),
                                        std::get<1>( cur_mark ) ) = mark_lable;
                     img_marked.at<uchar>( std::get<0>( cur_mark ),
                                           std::get<1>( cur_mark ) ) = 255;
@@ -180,12 +180,12 @@ std::tuple<cv::Mat, int> grassfire_8( cv::Mat img )
             }
         }
     }
-    return std::make_tuple( img_lable, mark_lable );
+    return std::make_tuple( img_label, mark_lable );
 }
 
 std::tuple<cv::Mat, int> eq_label_set_8( cv::Mat img )
 {
-    cv::Mat img_lable = cv::Mat_<int>( img.size(), 0 );
+    cv::Mat img_label = cv::Mat_<int>( img.size(), 0 );
     std::vector<int> rl_table = {0}, next_label = {0}, tail_label = {0};
     int last_label = 1;
     for ( int i = 0; i < img.rows; i++ )
@@ -197,45 +197,56 @@ std::tuple<cv::Mat, int> eq_label_set_8( cv::Mat img )
                 // First Scan
                 int mask_min = 0;
                 bool hasNeighber = false;
-                if ( i > 0 )  // upper mask
+
+                const uchar upleftpixel =
+                    ( ( i > 0 && j > 0 ) ? img.at<uchar>( i - 1, j - 1 ) : 0 );
+                const uchar upperpixel =
+                    ( ( i > 0 ) ? img.at<uchar>( i - 1, j ) : 0 );
+                const uchar uprightpixel = ( ( i > 0 && j < img.cols - 1 )
+                                                 ? img.at<uchar>( i - 1, j + 1 )
+                                                 : 0 );
+                const uchar leftpixel =
+                    ( ( j > 0 ) ? img.at<uchar>( i, j - 1 ) : 0 );
+
+                const int uplefttable =
+                    ( ( i > 0 && j > 0 ) ? img_label.at<int>( i - 1, j - 1 )
+                                         : 0 );
+                const int uppertable =
+                    ( ( i > 0 ) ? img_label.at<int>( i - 1, j ) : 0 );
+                const int uprighttable =
+                    ( ( i > 0 && j < img.cols - 1 )
+                          ? img_label.at<int>( i - 1, j + 1 )
+                          : 0 );
+                const int lefttable =
+                    ( ( j > 0 ) ? img_label.at<int>( i, j - 1 ) : 0 );
+
+                if ( upleftpixel == 255 )
                 {
-                    if ( j > 0 && img.at<uchar>( i - 1, j - 1 ) == 255 )
-                    {
-                        mask_min = img_lable.at<int>( i - 1, j - 1 );
-                        hasNeighber = true;
-                    }
-                    if ( img.at<uchar>( i - 1, j ) == 255 )
-                    {
-                        mask_min =
-                            hasNeighber
-                                ? std::min( img_lable.at<int>( i - 1, j ),
-                                            mask_min )
-                                : img_lable.at<int>( i - 1, j );
-                        hasNeighber = true;
-                    }
-                    if ( j < img.cols - 1 &&
-                         img.at<uchar>( i - 1, j + 1 ) == 255 )
-                    {
-                        mask_min =
-                            hasNeighber
-                                ? std::min( img_lable.at<int>( i - 1, j + 1 ),
-                                            mask_min )
-                                : img_lable.at<int>( i - 1, j + 1 );
-                        hasNeighber = true;
-                    }
+                    mask_min = uplefttable;
+                    hasNeighber = true;
                 }
-                if ( j > 0 && img.at<uchar>( i, j - 1 ) == 255 )
+                if ( upperpixel == 255 )
                 {
-                    mask_min = hasNeighber
-                                   ? std::min( img_lable.at<int>( i, j - 1 ),
-                                               mask_min )
-                                   : img_lable.at<int>( i, j - 1 );
+                    mask_min = hasNeighber ? std::min( uppertable, mask_min )
+                                           : uppertable;
+                    hasNeighber = true;
+                }
+                if ( uprightpixel == 255 )
+                {
+                    mask_min = hasNeighber ? std::min( uprighttable, mask_min )
+                                           : uprighttable;
+                    hasNeighber = true;
+                }
+                if ( leftpixel == 255 )
+                {
+                    mask_min = hasNeighber ? std::min( lefttable, mask_min )
+                                           : lefttable;
                     hasNeighber = true;
                 }
 
                 if ( !hasNeighber )
                 {
-                    img_lable.at<int>( i, j ) = last_label;
+                    img_label.at<int>( i, j ) = last_label;
                     rl_table.push_back( last_label );
                     next_label.push_back( -1 );
                     tail_label.push_back( last_label );
@@ -243,28 +254,116 @@ std::tuple<cv::Mat, int> eq_label_set_8( cv::Mat img )
                 }
                 else
                 {
-                    img_lable.at<int>( i, j ) = mask_min;
+                    img_label.at<int>( i, j ) = mask_min;
                 }
 
                 // label equivalence resolving
-                if ( img_lable.at<int>( i, j - 1 ) != 0 &&
-                     ( ( img_lable.at<int>( i - 1, j + 1 ) != 0 &&
-                         rl_table[img_lable.at<int>( i, j - 1 )] !=
-                             rl_table[img_lable.at<int>( i - 1, j + 1 )] ) ||
-                       ( img_lable.at<int>( i - 1, j - 1 ) != 0 &&
-                         rl_table[img_lable.at<int>( i, j - 1 )] !=
-                             rl_table[img_lable.at<int>( i - 1, j - 1 )] ) ) )
+                const int right_value = rl_table[uprighttable];
+                const int left_value = uplefttable == 0 ? rl_table[lefttable]
+                                                        : rl_table[uplefttable];
+                if ( right_value != 0 && left_value != 0 &&
+                     right_value != left_value )
                 {
-                    int large_value = rl_table[img_lable.at<int>( i, j - 1 )];
-                    int small_value =
-                        img_lable.at<int>( i - 1, j + 1 ) == 0
-                            ? rl_table[img_lable.at<int>( i - 1, j - 1 )]
-                            : rl_table[img_lable.at<int>( i - 1, j + 1 )];
-                    rl_table;
+                    const int large_value =
+                        right_value < left_value ? left_value : right_value;
+                    const int small_value =
+                        right_value < left_value ? right_value : left_value;
+                    for ( int i = large_value; i != -1; i = next_label[i] )
+                        rl_table[i] = small_value;
+                    next_label[tail_label[small_value]] = large_value;
+                    tail_label[small_value] = tail_label[large_value];
                 }
             }
         }
     }
 
-    return std::make_tuple( img_lable, 1 );
+    // second scan, not need to rester scan
+    cv::Mat img_label_final = img_label.clone();
+    img_label_final.forEach<int>(
+        [&]( int& p, const int* i ) { p = rl_table[p]; } );
+
+    std::set<int> label_count;
+    for ( auto it : rl_table )
+        label_count.insert( it );
+
+    return std::make_tuple( img_label_final, label_count.size()-1 );
+}
+
+std::tuple<cv::Mat, int> eq_label_set_4( cv::Mat img )
+{
+    cv::Mat img_label = cv::Mat_<int>( img.size(), 0 );
+    std::vector<int> rl_table = {0}, next_label = {0}, tail_label = {0};
+    int last_label = 1;
+    for ( int i = 0; i < img.rows; i++ )
+    {
+        for ( int j = 0; j < img.cols; j++ )
+        {
+            if ( img.at<uchar>( i, j ) == 255 )
+            {
+                // First Scan
+                int mask_min = 0;
+                bool hasNeighber = false;
+                const uchar upperpixel =
+                    ( ( i > 0 ) ? img.at<uchar>( i - 1, j ) : 0 );
+                const uchar leftpixel =
+                    ( ( j > 0 ) ? img.at<uchar>( i, j - 1 ) : 0 );
+
+                const int uppertable =
+                    ( ( i > 0 ) ? img_label.at<int>( i - 1, j ) : 0 );
+                const int lefttable =
+                    ( ( j > 0 ) ? img_label.at<int>( i, j - 1 ) : 0 );
+                if ( upperpixel == 255 )
+                {
+                    mask_min = uppertable;
+                    hasNeighber = true;
+                }
+                if ( leftpixel == 255 )
+                {
+                    mask_min = hasNeighber ? std::min( lefttable, mask_min )
+                                           : lefttable;
+                    hasNeighber = true;
+                }
+
+                if ( !hasNeighber )
+                {
+                    img_label.at<int>( i, j ) = last_label;
+                    rl_table.push_back( last_label );
+                    next_label.push_back( -1 );
+                    tail_label.push_back( last_label );
+                    last_label++;
+                }
+                else
+                {
+                    img_label.at<int>( i, j ) = mask_min;
+                }
+
+                // label equivalence resolving
+                const int right_value = rl_table[uppertable];
+                const int left_value = rl_table[lefttable];
+                if ( right_value != 0 && left_value != 0 &&
+                     right_value != left_value )
+                {
+                    const int large_value =
+                        right_value < left_value ? left_value : right_value;
+                    const int small_value =
+                        right_value < left_value ? right_value : left_value;
+                    for ( int i = large_value; i != -1; i = next_label[i] )
+                        rl_table[i] = small_value;
+                    next_label[tail_label[small_value]] = large_value;
+                    tail_label[small_value] = tail_label[large_value];
+                }
+            }
+        }
+    }
+
+    // second scan, not need to rester scan
+    cv::Mat img_label_final = img_label.clone();
+    img_label_final.forEach<int>(
+        [&]( int& p, const int* i ) { p = rl_table[p]; } );
+
+    std::set<int> label_count;
+    for ( auto it : rl_table )
+        label_count.insert( it );
+
+    return std::make_tuple( img_label_final, label_count.size()-1 );
 }

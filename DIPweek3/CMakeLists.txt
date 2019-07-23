@@ -23,7 +23,7 @@ message(STATUS "    include path: ${OpenCV_INCLUDE_DIRS}")
 INCLUDE_DIRECTORIES( /usr/include/opencv4 )
 
 add_executable(
-    dip_week3 main.cpp helper.cpp ccl.cpp unionfind.cpp
+    dip_week3 main.cpp helper.cpp ccl.cpp
 )
 
 target_link_libraries(dip_week3

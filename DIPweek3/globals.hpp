@@ -11,6 +11,7 @@
 #include <numeric>
 #include <opencv2/core/utility.hpp>
 #include <random>
+#include <set>
 #include <vector>
 
 using Pixel = uchar;
