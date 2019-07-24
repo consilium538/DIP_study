@@ -211,3 +211,61 @@ Process start at Tue Jul 23 21:31:28 2019
 CPU Type: Intel(R) Core(TM) i5-4200H CPU @ 2.80GHz
 Process start at Tue Jul 23 21:33:35 2019
 
+CPU Type: Intel(R) Core(TM) i5-4200H CPU @ 2.80GHz
+Process start at Wed Jul 24 09:51:31 2019
+
+// start of global thresholding by smoothing process //
+// global thresholding by smoothing process end! //
+time taken by global thresholding by smoothing process is : 0.689137 sec
+
+// start of EDGE_GRAD process //
+// EDGE_GRAD process end! //
+time taken by EDGE_GRAD process is : 0.995792304 sec
+
+// start of EDGE_LAPLACE process //
+// EDGE_LAPLACE process end! //
+time taken by EDGE_LAPLACE process is : 0.581138296 sec
+
+// start of MULTIPLE_TH process //
+// MULTIPLE_TH process end! //
+time taken by MULTIPLE_TH process is : 0.006177676 sec
+
+// start of VARIABLE_IMG_LOCAL process //
+// VARIABLE_IMG_LOCAL process end! //
+time taken by VARIABLE_IMG_LOCAL process is : 0.352698669 sec
+
+// start of VARIABLE_MOVING_AVG process //
+// process end! //
+
+/////////////////////////////
+
+CPU Type: Intel(R) Core(TM) i5-4200H CPU @ 2.80GHz
+Process start at Wed Jul 24 10:49:47 2019
+
+CPU Type: Intel(R) Core(TM) i5-4200H CPU @ 2.80GHz
+Process start at Wed Jul 24 10:50:24 2019
+
+// start of EDGE_LAPLACE process //
+// EDGE_LAPLACE process end! //
+time taken by EDGE_LAPLACE process is : 0.560292 sec
+
+// start of VARIABLE_MOVING_AVG process //
+// process end! //
+
+/////////////////////////////
+
+CPU Type: Intel(R) Core(TM) i5-4200H CPU @ 2.80GHz
+Process start at Wed Jul 24 10:50:56 2019
+
+CPU Type: Intel(R) Core(TM) i5-4200H CPU @ 2.80GHz
+Process start at Wed Jul 24 10:53:30 2019
+
+// start of EDGE_LAPLACE process //
+// EDGE_LAPLACE process end! //
+time taken by EDGE_LAPLACE process is : 0.624591 sec
+
+// start of VARIABLE_MOVING_AVG process //
+// process end! //
+
+/////////////////////////////
+

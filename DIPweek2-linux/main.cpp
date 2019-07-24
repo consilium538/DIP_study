@@ -523,7 +523,7 @@ int main( int argv, char** argc )
         conv2d( yeast_cell_double, laplacian_filter( LaplaceOption::eight ),
                 Padding::replicate ) );
     cv::Mat yeast_cell_laplace_norm;
-    yeast_cell_laplace.convertTo( yeast_cell_laplace_norm, CV_8U, 0.25 );
+    yeast_cell_laplace.convertTo( yeast_cell_laplace_norm, CV_8U, 8 );
     ImgArr.push_back(
         std::make_tuple( yeast_cell_laplace_norm, "yeast_cell_laplace_norm" ) );
     auto yeast_cell_laplace_hist = histogram_ex( yeast_cell_laplace );
