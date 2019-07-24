@@ -183,6 +183,8 @@ std::tuple<cv::Mat, int> grassfire_8( cv::Mat img )
     return std::make_tuple( img_label, mark_lable );
 }
 
+/////////////////////////////////////////////////////
+
 std::tuple<cv::Mat, int> eq_label_set_8( cv::Mat img )
 {
     cv::Mat img_label = cv::Mat_<int>( img.size(), 0 );
@@ -366,4 +368,62 @@ std::tuple<cv::Mat, int> eq_label_set_4( cv::Mat img )
         label_count.insert( it );
 
     return std::make_tuple( img_label_final, label_count.size() - 1 );
+}
+
+/////////////////////////////////////////////////////
+
+inline int dir_x( const int x, const unsigned char direction )
+{
+    if ( direction == 1 || direction == 2 || direction == 3 ) return x + 1;
+    else if ( direction == 4 || direction == 0 ) return x;
+    else return x - 1;
+}
+
+inline int dir_y( const int y, const unsigned char direction )
+{
+    if ( direction == 0 || direction == 1 || direction == 7 ) return y + 1;
+    else if ( direction == 2 || direction == 6 ) return y;
+    else return y - 1;
+}
+
+inline int directionx( int x, int y, unsigned char direction );
+
+std::tuple<cv::Mat, int> contour_tarck_8( cv::Mat img )
+{
+    cv::Mat img_label = cv::Mat_<int>( img.size(), 0 );
+    cv::Mat img_marked = cv::Mat_<uchar>( img.size(), 0 );
+
+    int mark_label = 0;
+
+    for ( int i = 0; i < img.rows; i++ )
+    {
+        for ( int j = 0; j < img.cols; j++ )
+        {
+            if ( img.at<uchar>( i, j ) == 255 && img_label.at<int>( i, j ) == 0 )
+            {
+                if ( ( i > 0 ? img.at<int>( i - 1, j ) : 0 ) == 0 )
+                { // external contour first encounter
+                    mark_label++;
+                    unsigned char priv_dir = 4;
+                    int x = i, y = j;
+                    while ( img_label.at<int>( x, y ) == 0 )
+                    {
+                        unsigned char next_dir = ( priv_dir + 2 ) % 8;
+                        int next_x, next_y;
+                    }
+                }
+
+                if ( ( i < img.rows - 1 ? img.at<uchar>( i + 1, j ) : 255 ) == 0 &&
+                          ( img_label.at<int>( i + 1, j ) != -1 ) )
+                { // internal contour first encounter
+                }
+
+                if ( img.at<uchar>( i, j ) == 255 )
+                { // unlabeled object pixel
+                    img_label.at<int>( i, j ) = img_label.at<int>( i, j - 1 );
+                }
+            }
+        }
+    }
+    return std::make_tuple( img_label, mark_label );
 }
