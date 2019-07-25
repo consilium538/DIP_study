@@ -51,6 +51,8 @@
         "atomic": "cpp",
         "list": "cpp",
         "numeric": "cpp",
-        "codecvt": "cpp"
+        "codecvt": "cpp",
+        "map": "cpp",
+        "set": "cpp"
     }
 }

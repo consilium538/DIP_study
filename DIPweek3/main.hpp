@@ -7,6 +7,10 @@
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/imgproc.hpp>
 
+#include <fmt/core.h>
+#include <fmt/ostream.h>
+#include <fmt/time.h>
+
 #include <cpuid.h>
 #include <chrono>
 #include <cstring>
@@ -14,6 +18,7 @@
 #include <filesystem>
 #include <fstream>
 #include <iomanip>
+#include <map>
 #include <string>
 
 #include "ccl.hpp"
@@ -25,7 +30,7 @@ using namespace cv;
 
 const bool isLogFile = true;
 
-void catCPUID( std::ostream& out )
+std::string CPUID_string()
 {
     char CPUBrandString[0x40];
     unsigned int CPUInfo[4] = {0, 0, 0, 0};
@@ -47,7 +52,7 @@ void catCPUID( std::ostream& out )
             memcpy( CPUBrandString + 32, CPUInfo, sizeof( CPUInfo ) );
     }
 
-    out << "CPU Type: " << CPUBrandString << std::endl;
+    return fmt::format( "CPU Type: {}", CPUBrandString );
 }
 
 void img_cat( std::vector<std::tuple<cv::Mat, string>> ImgArr )

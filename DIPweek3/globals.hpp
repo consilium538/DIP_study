@@ -8,6 +8,7 @@
 #include <cmath>
 #include <functional>
 #include <iostream>
+#include <map>
 #include <numeric>
 #include <opencv2/core/utility.hpp>
 #include <random>

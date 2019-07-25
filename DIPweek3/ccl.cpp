@@ -374,16 +374,22 @@ std::tuple<cv::Mat, int> eq_label_set_4( cv::Mat img )
 
 inline int dir_x( const int x, const unsigned char direction )
 {
-    if ( direction == 1 || direction == 2 || direction == 3 ) return x + 1;
-    else if ( direction == 4 || direction == 0 ) return x;
-    else return x - 1;
+    if ( direction == 1 || direction == 2 || direction == 3 )
+        return x + 1;
+    else if ( direction == 4 || direction == 0 )
+        return x;
+    else
+        return x - 1;
 }
 
 inline int dir_y( const int y, const unsigned char direction )
 {
-    if ( direction == 0 || direction == 1 || direction == 7 ) return y + 1;
-    else if ( direction == 2 || direction == 6 ) return y;
-    else return y - 1;
+    if ( direction == 0 || direction == 1 || direction == 7 )
+        return y + 1;
+    else if ( direction == 2 || direction == 6 )
+        return y;
+    else
+        return y - 1;
 }
 
 inline int directionx( int x, int y, unsigned char direction );
@@ -399,10 +405,11 @@ std::tuple<cv::Mat, int> contour_tarck_8( cv::Mat img )
     {
         for ( int j = 0; j < img.cols; j++ )
         {
-            if ( img.at<uchar>( i, j ) == 255 && img_label.at<int>( i, j ) == 0 )
+            if ( img.at<uchar>( i, j ) == 255 &&
+                 img_label.at<int>( i, j ) == 0 )
             {
                 if ( ( i > 0 ? img.at<int>( i - 1, j ) : 0 ) == 0 )
-                { // external contour first encounter
+                {  // external contour first encounter
                     mark_label++;
                     unsigned char priv_dir = 4;
                     int x = i, y = j;
@@ -413,13 +420,14 @@ std::tuple<cv::Mat, int> contour_tarck_8( cv::Mat img )
                     }
                 }
 
-                if ( ( i < img.rows - 1 ? img.at<uchar>( i + 1, j ) : 255 ) == 0 &&
-                          ( img_label.at<int>( i + 1, j ) != -1 ) )
-                { // internal contour first encounter
+                if ( ( i < img.rows - 1 ? img.at<uchar>( i + 1, j ) : 255 ) ==
+                         0 &&
+                     ( img_label.at<int>( i + 1, j ) != -1 ) )
+                {  // internal contour first encounter
                 }
 
                 if ( img.at<uchar>( i, j ) == 255 )
-                { // unlabeled object pixel
+                {  // unlabeled object pixel
                     img_label.at<int>( i, j ) = img_label.at<int>( i, j - 1 );
                 }
             }

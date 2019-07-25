@@ -13,6 +13,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 
 find_package(OpenCV REQUIRED)
+find_package(fmt)
 
 message(STATUS "OpenCV library status:")
 message(STATUS "    config: ${OpenCV_DIR}")
@@ -28,4 +29,5 @@ add_executable(
 
 target_link_libraries(dip_week3
     ${OpenCV_LIBS}
+    fmt::fmt
 )
