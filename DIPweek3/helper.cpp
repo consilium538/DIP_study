@@ -43,3 +43,14 @@ cv::Vec3b circularcolor( unsigned int a )
 {
     return HSI2BGR( cv::Vec3b( a * 39, 128, 128 ) );
 }
+
+cv::Mat colormap_custom( cv::Mat img )
+{
+    cv::Mat rt_img = cv::Mat_<cv::Vec3b>( img.size() );
+    rt_img.forEach<cv::Vec3b>( [&]( cv::Vec3b& p, const int* i ) {
+        p = img.at<int>( i[0], i[1] ) > 0
+                ? circularcolor( img.at<int>( i[0], i[1] ) )
+                : 0;
+    } );
+    return rt_img;
+}

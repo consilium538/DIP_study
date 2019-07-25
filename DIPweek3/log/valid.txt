@@ -1,10 +1,30 @@
 
 CPU Type: Intel(R) Core(TM) i5-4200H CPU @ 2.80GHz
-Process start at : Thu Jul 25 16:08:51 2019
+Process start at : Thu Jul 25 18:22:28 2019
 
-file\algo	N_ctl_8
+file\algo	N_grass_4	N_grass_8	N_ctl_4	N_ctl_8	N_eq_set_4	N_eq_set_8	
+checkerboard512	32768	1	32768	1	32768	1	
+crocodile	6	1	6	1	6	1	
+footprint	3022	1532	3022	1532	3022	1532	
+haze	11	6	11	6	11	6	
+moonlight	255	10	255	10	255	10	
+pollen	774	360	774	360	774	360	
+polygon	5	5	5	5	5	5	
+symbol	14	10	14	10	14	10	
+white512	1	1	1	1	1	1	
+////////////////
 
 CPU Type: Intel(R) Core(TM) i5-4200H CPU @ 2.80GHz
-Process start at : Thu Jul 25 16:10:32 2019
+Process start at : Thu Jul 25 19:22:04 2019
 
-file\algo	N_ctl_8
+file\algo	N_grass_4	N_grass_8	N_ctl_4	N_ctl_8	N_eq_set_4	N_eq_set_8	
+checkerboard512	32768	1	32768	1	32768	1	
+crocodile	6	1	6	1	6	1	
+footprint	3022	1532	3022	1532	3022	1532	
+haze	11	6	11	6	11	6	
+moonlight	255	10	255	10	255	10	
+pollen	774	360	774	360	774	360	
+polygon	5	5	5	5	5	5	
+symbol	14	10	14	10	14	10	
+white512	1	1	1	1	1	1	
+////////////////

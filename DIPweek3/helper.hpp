@@ -3,6 +3,6 @@
 
 #include "globals.hpp"
 
-cv::Vec3b circularcolor( unsigned int a );
+cv::Mat colormap_custom( cv::Mat img );
 
 #endif  // HELPER_HPP
