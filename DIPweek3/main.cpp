@@ -2,63 +2,63 @@
 
 int main( int argv, char** argc )
 {
+    ////////////////////////////////////
+
     namespace fs = std::filesystem;
 
     auto inputPath = fs::path( "./srcImg/" );
     auto savepath = fs::path( "./dstImg/" );
+    auto logpath = fs::path( "./log" );
 
     if ( !fs::exists( savepath ) )
         fs::create_directory( savepath );
-
-    auto logpath = fs::path( "./log" );
     if ( !fs::exists( logpath ) )
         fs::create_directory( logpath );
-    auto logfile = logpath / "bench.txt";
+
+    auto bench_out_file = logpath / "bench.txt";
     auto valid_out_file = logpath / "valid.txt";
 
     std::streambuf* log_buf;
     std::ofstream log_fs;
     if ( isLogFile )
     {
-        log_fs.open( logfile.string(), std::ios::app );
+        log_fs.open( valid_out_file.string(), std::ios::app );
         log_buf = log_fs.rdbuf();
     }
     else
     {
         log_buf = std::cout.rdbuf();
     }
-    std::ostream bench_out( log_buf );
+    std::ostream valid_out( log_buf );
+    std::ofstream bench_out;
+    bench_out.open( bench_out_file.string(), std::ios::app );
 
-    std::ofstream valid_out;
-    valid_out.open( valid_out_file.string(), std::ios::app );
+    ////////////////////////////////////
 
     std::vector<std::tuple<cv::Mat, string>> ImgArr;
     std::unordered_map<std::string, cv::Mat> srcImg;
-    std::vector<std::string> testcase = {"crocodile", "footprint", "haze",
-                                        "moonlight", "pollen", "polygon",
-                                        "symbol",
-                                        "checkerboard512","white512"};
-    // std::vector<std::string> testcase = {"crocodile"};
-
     std::map<std::string, cv::Mat> test_img;
+
+    // std::vector<std::string> testcase = {
+    //     "checkerboard512", "crocodile", "footprint", "haze",    "moonlight",
+    //     "pollen",          "polygon",   "symbol",    "white512"};  // latterB
+    std::vector<std::string> testcase = {"checkerboard512"};
+
+    const string header_pattern =
+        // "{0}_grass_4\t{0}_grass_8\t{0}_eq_set_4\t{0}_eq_set_8\t";
+        "{0}_ctl_8";
+    std::vector label_method = {contour_tarck_8};
+
+    ////////////////////////////////////
 
     auto cpu_string = CPUID_string();
     auto start_time = std::time( nullptr );
-    bench_out << fmt::format( "\n{}\nProcess start at : {:%c}\n",
-                            cpu_string, *std::localtime(&start_time) )
-            << std::endl;
-    valid_out << fmt::format( "\n{}\nProcess start at : {:%c}\n",
-                              cpu_string, *std::localtime(&start_time) )
+    bench_out << fmt::format( "\n{}\nProcess start at : {:%c}\n", cpu_string,
+                              *std::localtime( &start_time ) )
               << std::endl;
-
-    const string header_pattern =
-//        "{0}_grass_4\t{0}_grass_8\t{0}_eq_set_4\t{0}_eq_set_8\t";
-        "{0}_grass_4\t{0}_grass_8\t";
-    // std::vector<std::function<std::tuple<cv::Mat,int>(cv::Mat)>>
-    // std::vector label_method = {
-    //     grassfire_4, grassfire_8,
-    //     eq_label_set_4, eq_label_set_8
-    // };
+    valid_out << fmt::format( "\n{}\nProcess start at : {:%c}\n", cpu_string,
+                              *std::localtime( &start_time ) )
+              << std::endl;
 
     for ( auto it : testcase )
     {
@@ -76,7 +76,7 @@ int main( int argv, char** argc )
     for ( auto it : test_img )
         bench_out << fmt::format( header_pattern, std::get<0>( it ) );
 
-    valid_out << "file_algo\t" << fmt::format( header_pattern, "N" )
+    valid_out << "file\\algo\t" << fmt::format( header_pattern, "N" )
               << std::endl;
     bench_out << std::endl;
 
@@ -86,52 +86,27 @@ int main( int argv, char** argc )
     {
         for ( auto it : test_img )
         {
-            cv::Mat img_4_g, img_8_g;
-            int img_4_n_g, img_8_n_g;
-            auto starttime_g = std::chrono::high_resolution_clock::now();
-            std::tie( img_4_g, img_4_n_g ) = grassfire_4( std::get<1>( it ) );
-            // std::tie( img_4_g, img_4_n_g ) = grassfire_4( std::get<1>( it ) );
-            auto enttime_4_g = std::chrono::high_resolution_clock::now();
-            std::tie( img_8_g, img_8_n_g ) = grassfire_8( std::get<1>( it ) );
-            // std::tie( img_8_g, img_8_n_g ) = grassfire_8( std::get<1>( it ) );
-            auto enttime_8_g = std::chrono::high_resolution_clock::now();
-            double time_taken_4_g =
-                (double)( std::chrono::duration_cast<chrono::nanoseconds>(
-                              enttime_4_g - starttime_g )
-                              .count() ) *
-                1e-6;
-            double time_taken_8_g =
-                (double)( std::chrono::duration_cast<chrono::nanoseconds>(
-                              enttime_8_g - enttime_4_g )
-                              .count() ) *
-                1e-6;
-            cv::Mat img_4_e, img_8_e;
-            int img_4_n_e, img_8_n_e;
-            auto starttime_e = std::chrono::high_resolution_clock::now();
-            std::tie( img_4_e, img_4_n_e ) =
-                eq_label_set_4( std::get<1>( it ) );
-            auto enttime_4_e = std::chrono::high_resolution_clock::now();
-            std::tie( img_8_e, img_8_n_e ) =
-                eq_label_set_8( std::get<1>( it ) );
-            auto enttime_8_e = std::chrono::high_resolution_clock::now();
-            double time_taken_4_e =
-                (double)( std::chrono::duration_cast<chrono::nanoseconds>(
-                              enttime_4_e - starttime_e )
-                              .count() ) *
-                1e-6;
-            double time_taken_8_e =
-                (double)( std::chrono::duration_cast<chrono::nanoseconds>(
-                              enttime_8_e - enttime_4_e )
-                              .count() ) *
-                1e-6;
             if ( i == 0 )
-                valid_out << fmt::format( "{}\t{}\t{}\t{}\t{}\t\n",
-                                          std::get<0>( it ), img_4_n_g,
-                                          img_8_n_g, img_4_n_e, img_8_n_e );
-            else
-                bench_out << fmt::format( "{:.6g}\t{:.6g}\t{:.6g}\t{:.6g}\t",
-                                        time_taken_4_g, time_taken_8_g,
-                                        time_taken_4_e, time_taken_8_e );
+                valid_out << fmt::format( "{}\t", std::get<0>( it ) );
+            for ( auto method : label_method )
+            {
+                cv::Mat img_test;
+                int img_test_n;
+                auto starttime = std::chrono::high_resolution_clock::now();
+                std::tie( img_test, img_test_n ) = method( std::get<1>( it ) );
+                auto endtime = std::chrono::high_resolution_clock::now();
+                double time_taken_ms =
+                    (double)( std::chrono::duration_cast<chrono::nanoseconds>(
+                                  endtime - starttime )
+                                  .count() ) *
+                    1e-6;
+                if ( i == 0 )
+                    valid_out << fmt::format( "{}\t", img_test_n );
+                else
+                    bench_out << fmt::format( "{:.6g}\t", time_taken_ms );
+            }
+            if ( i == 0 )
+                valid_out << "\n";
         }
         if ( i != 0 )
             bench_out << "\n";
@@ -139,6 +114,8 @@ int main( int argv, char** argc )
 
     valid_out << "////////////////" << std::endl;
     bench_out << "////////////////" << std::endl;
+
+    ////////////////////////////////////
 
     return 0;
 }

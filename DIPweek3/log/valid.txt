@@ -1,0 +1,10 @@
+
+CPU Type: Intel(R) Core(TM) i5-4200H CPU @ 2.80GHz
+Process start at : Thu Jul 25 16:08:51 2019
+
+file\algo	N_ctl_8
+
+CPU Type: Intel(R) Core(TM) i5-4200H CPU @ 2.80GHz
+Process start at : Thu Jul 25 16:10:32 2019
+
+file\algo	N_ctl_8

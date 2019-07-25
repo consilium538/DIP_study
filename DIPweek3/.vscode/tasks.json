@@ -44,10 +44,29 @@
                 }
             }
         },
+        {
+            "label": "make",
+            "command": "cd ${workspaceRoot} && make -j",
+            "group": "build",
+            "problemMatcher": {
+                "fileLocation": [
+                    "relative",
+                    "${workspaceRoot}"
+                ],
+                "pattern": {
+                    "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning error):\\s+(.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "severity": 4,
+                    "message": 5
+                }
+            }
+        },
 
         {
             "label": "execute",
-            "command": "cd ${workspaceRoot} && ./dip_week2 ",
+            "command": "cd ${workspaceRoot} && rm log/bench.txt && rm log/valid.txt && ./dip_week3 ",
             "group": "test"
         },
 

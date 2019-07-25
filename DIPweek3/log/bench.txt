@@ -1,0 +1,10 @@
+
+CPU Type: Intel(R) Core(TM) i5-4200H CPU @ 2.80GHz
+Process start at : Thu Jul 25 16:08:51 2019
+
+checkerboard512_ctl_8crocodile_ctl_8footprint_ctl_8haze_ctl_8moonlight_ctl_8pollen_ctl_8polygon_ctl_8symbol_ctl_8white512_ctl_8
+
+CPU Type: Intel(R) Core(TM) i5-4200H CPU @ 2.80GHz
+Process start at : Thu Jul 25 16:10:32 2019
+
+checkerboard512_ctl_8crocodile_ctl_8footprint_ctl_8haze_ctl_8moonlight_ctl_8pollen_ctl_8polygon_ctl_8symbol_ctl_8white512_ctl_8

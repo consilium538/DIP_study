@@ -392,12 +392,17 @@ inline int dir_y( const int y, const unsigned char direction )
         return y - 1;
 }
 
-inline int directionx( int x, int y, unsigned char direction );
+inline bool inbound( const int x, const int y, const int nrow, const int ncol )
+{
+    if ( x < 0 || x >= nrow || y < 0 || y >= ncol )
+        return false;
+    else
+        return true;
+}
 
 std::tuple<cv::Mat, int> contour_tarck_8( cv::Mat img )
 {
     cv::Mat img_label = cv::Mat_<int>( img.size(), 0 );
-    cv::Mat img_marked = cv::Mat_<uchar>( img.size(), 0 );
 
     int mark_label = 0;
 
@@ -408,25 +413,101 @@ std::tuple<cv::Mat, int> contour_tarck_8( cv::Mat img )
             if ( img.at<uchar>( i, j ) == 255 &&
                  img_label.at<int>( i, j ) == 0 )
             {
-                if ( ( i > 0 ? img.at<int>( i - 1, j ) : 0 ) == 0 )
+                if ( ( i > 0 ? img_label.at<int>( i - 1, j ) : 0 ) == 0 )
                 {  // external contour first encounter
                     mark_label++;
-                    unsigned char priv_dir = 4;
+                    img_label.at<int>( i, j ) = mark_label;
+                    unsigned char priv_dir = 2;
                     int x = i, y = j;
-                    while ( img_label.at<int>( x, y ) == 0 )
+                    if ( img.at<uchar>( i + 1, j - 1 ) == 0 )
+                        img_label.at<int>( i + 1, j - 1 ) =
+                            -1;  // for "the hole"
+                    do
                     {
                         unsigned char next_dir = ( priv_dir + 2 ) % 8;
-                        int next_x, next_y;
-                    }
-                }
+
+                        for ( int k = 0; k < 8; k++ )
+                        {
+                            unsigned char lookup_dir = ( next_dir + k ) % 8;
+                            int lookup_x = dir_x( x, lookup_dir );
+                            int lookup_y = dir_y( y, lookup_dir );
+                            if ( inbound( lookup_x, lookup_y, img.rows,
+                                          img.cols ) )
+                            {
+                                if ( img.at<uchar>( lookup_x, lookup_y ) == 0 &&
+                                     img_label.at<int>( lookup_x, lookup_y ) ==
+                                         0 )
+                                {  // mark as contour
+                                    img_label.at<int>( lookup_x, lookup_y ) =
+                                        -1;
+                                }
+                                else if ( img.at<uchar>( lookup_x, lookup_y ) >
+                                          0 )
+                                {
+                                    if ( img_label.at<int>( lookup_x,
+                                                            lookup_y ) == 0 )
+                                    {
+                                        img_label.at<int>( lookup_x,
+                                                           lookup_y ) =
+                                            img_label.at<int>( x, y );
+                                    }
+                                    priv_dir = ( lookup_dir + 4 ) % 8;
+                                    x = lookup_x;
+                                    y = lookup_y;
+                                    break;
+                                }
+                            }
+                        }
+                    } while ( x != i || y != j );
+                }  // external contour end
 
                 if ( ( i < img.rows - 1 ? img.at<uchar>( i + 1, j ) : 255 ) ==
                          0 &&
                      ( img_label.at<int>( i + 1, j ) != -1 ) )
                 {  // internal contour first encounter
-                }
+                    img_label.at<int>( i, j ) = img_label.at<int>( i, j - 1 );
+                    unsigned char priv_dir = 0;
+                    int x = i, y = j;
+                    do
+                    {
+                        unsigned char next_dir = ( priv_dir + 2 ) % 8;
 
-                if ( img.at<uchar>( i, j ) == 255 )
+                        for ( int k = 0; k < 8; k++ )
+                        {
+                            unsigned char lookup_dir = ( next_dir + k ) % 8;
+                            int lookup_x = dir_x( x, lookup_dir );
+                            int lookup_y = dir_y( y, lookup_dir );
+                            if ( inbound( lookup_x, lookup_y, img.rows,
+                                          img.cols ) )
+                            {
+                                if ( img.at<uchar>( lookup_x, lookup_y ) == 0 &&
+                                     img_label.at<int>( lookup_x, lookup_y ) ==
+                                         0 )
+                                {  // mark as contour
+                                    img_label.at<int>( lookup_x, lookup_y ) =
+                                        -1;
+                                }
+                                else if ( img.at<uchar>( lookup_x, lookup_y ) >
+                                          0 )
+                                {
+                                    if ( img_label.at<int>( lookup_x,
+                                                            lookup_y ) == 0 )
+                                    {
+                                        img_label.at<int>( lookup_x,
+                                                           lookup_y ) =
+                                            img_label.at<int>( x, y );
+                                    }
+                                    priv_dir = ( lookup_dir + 4 ) % 8;
+                                    x = lookup_x;
+                                    y = lookup_y;
+                                    break;
+                                }
+                            }
+                        }
+                    } while ( x != i || y != j );
+                }  // internal contour end
+
+                if ( img_label.at<int>( i, j ) == 0 )
                 {  // unlabeled object pixel
                     img_label.at<int>( i, j ) = img_label.at<int>( i, j - 1 );
                 }
