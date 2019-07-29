@@ -54,3 +54,13 @@ cv::Mat colormap_custom( cv::Mat img )
     } );
     return rt_img;
 }
+
+cv::Mat random_noise( int size, double ratio )
+{
+    ratio = ratio > 1 ? 1 : ( ratio < 0 ? 0 : ratio );
+    cv::Mat rt_img = cv::Mat_<uchar>(cv::Size(size,size),0);
+
+
+
+    return rt_img;
+}

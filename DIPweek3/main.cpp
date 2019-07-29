@@ -44,9 +44,9 @@ int main( int argv, char** argc )
         "pollen",          "polygon",   "symbol",    "white512"};  // latterB
     // std::vector<std::string> testcase = {"footprint", "pollen"};
 
-    const string header_pattern =
-        "{0}_grass_4\t{0}_grass_8\t{0}_ctl_4\t{0}_ctl_8"
-        "\t{0}_eq_set_4\t{0}_eq_set_8\t";
+    std::string header_pattern = "";
+    //    "{0}_grass_4\t{0}_grass_8\t{0}_ctl_4\t{0}_ctl_8"
+    //    "\t{0}_eq_set_4\t{0}_eq_set_8\t";
     std::vector label_method = {
         std::make_tuple( grassfire_4, "4_grassfire" ),
         std::make_tuple( grassfire_8, "8_grassfire" ),
@@ -54,6 +54,8 @@ int main( int argv, char** argc )
         std::make_tuple( contour_tarck_8, "8_ctl" ),
         std::make_tuple( eq_label_set_4, "4_eq_label_set" ),
         std::make_tuple( eq_label_set_8, "8_eq_label_set" )};
+    for ( auto it : label_method )
+        header_pattern += fmt::format("{{0}}_{}\t",std::get<1>(it));
 
     ////////////////////////////////////
 
@@ -131,8 +133,8 @@ int main( int argv, char** argc )
     valid_out << "////////////////" << std::endl;
     bench_out << "////////////////" << std::endl;
 
-    // img_save( ImgArr, savepath.string(), "png",
-    //           std::vector( cv::IMWRITE_PNG_COMPRESSION, 9 ) );
+    img_save( ImgArr, savepath.string(), ".png",
+              std::vector<int>{ cv::IMWRITE_PNG_COMPRESSION, 9 } );
 
     ////////////////////////////////////
 
