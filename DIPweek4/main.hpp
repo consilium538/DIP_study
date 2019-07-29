@@ -21,6 +21,8 @@
 #include <map>
 #include <string>
 
+#include "globals.hpp"
+
 using namespace std;
 using namespace cv;
 

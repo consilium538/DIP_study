@@ -42,11 +42,14 @@ int main( int argv, char** argc )
     std::vector<std::string> testcase = {}; 
 
     std::string header_pattern = "";
-    std::vector label_method = {
-    //    std::make_tuple( grassfire_4, "4_grassfire" )
+    std::vector<std::tuple<int,int>> test_method = {
+        std::make_tuple(1,2)
     };
-    for ( auto it : label_method )
-        header_pattern += fmt::format("{{0}}_{}\t",std::get<1>(it));
+    // std::vector label_method = {
+    //     std::make_tuple( grassfire_4, "4_grassfire" )
+    // };
+    // for ( auto it : label_method )
+    //     header_pattern += fmt::format("{{0}}_{}\t",std::get<1>(it));
 
     ////////////////////////////////////
 
@@ -61,7 +64,7 @@ int main( int argv, char** argc )
 
     for ( auto it : testcase )
     {
-        auto img_path = inputPath / ( it + ".bmp" );
+        auto img_path = inputPath / ( it + ".tif" );
         auto img_tmp = cv::imread( img_path.string(), cv::IMREAD_GRAYSCALE );
         if ( img_tmp.empty() )
         {
@@ -89,27 +92,25 @@ int main( int argv, char** argc )
         {
             if ( i == 0 )
                 valid_out << fmt::format( "{}\t", std::get<0>( it ) );
-            for ( auto method : label_method )
+            for ( auto method : test_method )
             {
                 cv::Mat img_test;
                 cv::Mat img_ref = std::get<1>( it );
                 int img_test_n;
                 auto starttime = std::chrono::high_resolution_clock::now();
-                std::tie( img_test, img_test_n ) =
-                    std::get<0>( method )( std::get<1>( it ) );
+                //test image
                 auto endtime = std::chrono::high_resolution_clock::now();
                 double time_taken_ms =
                     (double)( std::chrono::duration_cast<chrono::nanoseconds>(
                                   endtime - starttime )
                                   .count() ) *
                     1e-6;
-                auto img_colored = colormap_custom( img_test );
                 if ( i == 0 )
                 {
                     valid_out << fmt::format( "{}\t", img_test_n );
-                    ImgArr.push_back( std::make_tuple(
-                        img_colored, fmt::format( "{}_{}", std::get<0>( it ),
-                                                  std::get<1>( method ) ) ) );
+                    // ImgArr.push_back( std::make_tuple(
+                    //     img_colored, fmt::format( "{}_{}", std::get<0>( it ),
+                    //                               std::get<1>( method ) ) ) );
                 }
                 else
                     bench_out << fmt::format( "{:.6g}\t", time_taken_ms );

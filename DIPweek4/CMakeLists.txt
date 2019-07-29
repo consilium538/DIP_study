@@ -7,8 +7,7 @@ project(dip_week4
 
 set(CMAKE_MAKE_PROGRAM make)
 
-set(CMAKE_C_COMPILER gcc)
-set(CMAKE_CXX_COMPILER g++)
+set(CMAKE_CXX_COMPILER /usr/bin/c++)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 
@@ -24,7 +23,7 @@ message(STATUS "    include path: ${OpenCV_INCLUDE_DIRS}")
 INCLUDE_DIRECTORIES( /usr/include/opencv4 )
 
 add_executable(
-    dip_week4 main.cpp helper.cpp ccl.cpp
+    dip_week4 main.cpp
 )
 
 target_link_libraries(dip_week4
