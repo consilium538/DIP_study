@@ -92,7 +92,7 @@ int main( int argv, char** argc )
 
     ////////////////////////////////////////
 
-    for ( int i = 0; i < 2; i++ )
+    for ( int i = 0; i < 41; i++ )
     {
         for ( auto it : test_img )
         {

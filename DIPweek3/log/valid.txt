@@ -118,3 +118,18 @@ polygon	5	5	5	5	5	5
 symbol	14	10	14	10	14	10	
 white512	1	1	1	1	1	1	
 ////////////////
+
+CPU Type: Intel(R) Core(TM) i5-4200H CPU @ 2.80GHz
+Process start at : Mon Jul 29 13:50:42 2019
+
+file\algo	N_4_grassfire	N_8_grassfire	N_4_ctl	N_8_ctl	N_4_eq_label_set	N_8_eq_label_set	
+checkerboard512	32768	1	32768	1	32768	1	
+crocodile	6	1	6	1	6	1	
+footprint	3022	1532	3022	1532	3022	1532	
+haze	11	6	11	6	11	6	
+moonlight	255	10	255	10	255	10	
+pollen	774	360	774	360	774	360	
+polygon	5	5	5	5	5	5	
+symbol	14	10	14	10	14	10	
+white512	1	1	1	1	1	1	
+////////////////
