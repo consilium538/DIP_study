@@ -1,23 +1,23 @@
 #include "metric.hpp"
 
 double
-mad_patch( cv::Mat ref,
-           cv::Mat comp,
-           double dx,
-           double dy,
-           std::vector<double>& args )
+mad_patch( const cv::Mat ref,
+           const cv::Mat comp,
+           const double dx,
+           const double dy,
+           const std::vector<double>& args )
 {
-    return cv::mean( cv::abs( ref - comp ) )[0];
+    return cv::sum( cv::abs( ref - comp ) )[0];
 }
 
 double
-mse_patch( cv::Mat ref,
-           cv::Mat comp,
+mse_patch( const cv::Mat ref,
+           const cv::Mat comp,
            const double dx,
            const double dy,
-           std::vector<double>& args )
+           const std::vector<double>& args )
 {
-    return cv::mean( ( ref - comp ) * ( ref - comp ) )[0];
+    return cv::sum( ( ref - comp ) * ( ref - comp ) )[0];
 }
 
 // std::optional<double>

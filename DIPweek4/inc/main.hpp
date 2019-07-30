@@ -23,8 +23,7 @@
 
 #include "globals.hpp"
 #include "json/json.h"
-
-#define BLOCK_SIZE 4
+#include "metric.hpp"
 
 std::string
 CPUID_string()
