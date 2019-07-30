@@ -20,10 +20,10 @@ message(STATUS "    version: ${OpenCV_VERSION}")
 message(STATUS "    libraries: ${OpenCV_LIBS}")
 message(STATUS "    include path: ${OpenCV_INCLUDE_DIRS}")
 
-INCLUDE_DIRECTORIES( /usr/include/opencv4 )
+INCLUDE_DIRECTORIES( /usr/include/opencv4 ./inc )
 
 add_executable(
-    dip_week4 main.cpp
+    dip_week4 ./src/main.cpp ./src/metric.cpp ./src/jsoncpp/jsoncpp.cpp
 )
 
 target_link_libraries(dip_week4

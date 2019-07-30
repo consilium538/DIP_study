@@ -22,9 +22,7 @@
 #include <string>
 
 #include "globals.hpp"
-
-using namespace std;
-using namespace cv;
+#include "json/json.h"
 
 const bool isLogFile = true;
 
@@ -53,7 +51,7 @@ std::string CPUID_string()
     return fmt::format( "CPU Type: {}", CPUBrandString );
 }
 
-void img_cat( std::vector<std::tuple<cv::Mat, string>> ImgArr )
+void img_cat( std::vector<std::tuple<cv::Mat, std::string>> ImgArr )
 {
     int a = 20;
     for ( auto it : ImgArr )
@@ -73,9 +71,9 @@ void img_cat( std::vector<std::tuple<cv::Mat, string>> ImgArr )
     return;
 }
 
-void img_save( std::vector<std::tuple<cv::Mat, string>> ImgArr,
-               const string savepath,
-               const string postfix,
+void img_save( std::vector<std::tuple<cv::Mat, std::string>> ImgArr,
+               const std::string savepath,
+               const std::string postfix,
                const std::vector<int>& params = std::vector<int>() )
 {
     for ( auto it : ImgArr )

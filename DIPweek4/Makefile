@@ -123,32 +123,86 @@ dip_week4/fast:
 	$(MAKE) -f CMakeFiles/dip_week4.dir/build.make CMakeFiles/dip_week4.dir/build
 .PHONY : dip_week4/fast
 
-main.o: main.cpp.o
+src/jsoncpp/jsoncpp.o: src/jsoncpp/jsoncpp.cpp.o
 
-.PHONY : main.o
+.PHONY : src/jsoncpp/jsoncpp.o
 
 # target to build an object file
-main.cpp.o:
-	$(MAKE) -f CMakeFiles/dip_week4.dir/build.make CMakeFiles/dip_week4.dir/main.cpp.o
-.PHONY : main.cpp.o
+src/jsoncpp/jsoncpp.cpp.o:
+	$(MAKE) -f CMakeFiles/dip_week4.dir/build.make CMakeFiles/dip_week4.dir/src/jsoncpp/jsoncpp.cpp.o
+.PHONY : src/jsoncpp/jsoncpp.cpp.o
 
-main.i: main.cpp.i
+src/jsoncpp/jsoncpp.i: src/jsoncpp/jsoncpp.cpp.i
 
-.PHONY : main.i
+.PHONY : src/jsoncpp/jsoncpp.i
 
 # target to preprocess a source file
-main.cpp.i:
-	$(MAKE) -f CMakeFiles/dip_week4.dir/build.make CMakeFiles/dip_week4.dir/main.cpp.i
-.PHONY : main.cpp.i
+src/jsoncpp/jsoncpp.cpp.i:
+	$(MAKE) -f CMakeFiles/dip_week4.dir/build.make CMakeFiles/dip_week4.dir/src/jsoncpp/jsoncpp.cpp.i
+.PHONY : src/jsoncpp/jsoncpp.cpp.i
 
-main.s: main.cpp.s
+src/jsoncpp/jsoncpp.s: src/jsoncpp/jsoncpp.cpp.s
 
-.PHONY : main.s
+.PHONY : src/jsoncpp/jsoncpp.s
 
 # target to generate assembly for a file
-main.cpp.s:
-	$(MAKE) -f CMakeFiles/dip_week4.dir/build.make CMakeFiles/dip_week4.dir/main.cpp.s
-.PHONY : main.cpp.s
+src/jsoncpp/jsoncpp.cpp.s:
+	$(MAKE) -f CMakeFiles/dip_week4.dir/build.make CMakeFiles/dip_week4.dir/src/jsoncpp/jsoncpp.cpp.s
+.PHONY : src/jsoncpp/jsoncpp.cpp.s
+
+src/main.o: src/main.cpp.o
+
+.PHONY : src/main.o
+
+# target to build an object file
+src/main.cpp.o:
+	$(MAKE) -f CMakeFiles/dip_week4.dir/build.make CMakeFiles/dip_week4.dir/src/main.cpp.o
+.PHONY : src/main.cpp.o
+
+src/main.i: src/main.cpp.i
+
+.PHONY : src/main.i
+
+# target to preprocess a source file
+src/main.cpp.i:
+	$(MAKE) -f CMakeFiles/dip_week4.dir/build.make CMakeFiles/dip_week4.dir/src/main.cpp.i
+.PHONY : src/main.cpp.i
+
+src/main.s: src/main.cpp.s
+
+.PHONY : src/main.s
+
+# target to generate assembly for a file
+src/main.cpp.s:
+	$(MAKE) -f CMakeFiles/dip_week4.dir/build.make CMakeFiles/dip_week4.dir/src/main.cpp.s
+.PHONY : src/main.cpp.s
+
+src/metric.o: src/metric.cpp.o
+
+.PHONY : src/metric.o
+
+# target to build an object file
+src/metric.cpp.o:
+	$(MAKE) -f CMakeFiles/dip_week4.dir/build.make CMakeFiles/dip_week4.dir/src/metric.cpp.o
+.PHONY : src/metric.cpp.o
+
+src/metric.i: src/metric.cpp.i
+
+.PHONY : src/metric.i
+
+# target to preprocess a source file
+src/metric.cpp.i:
+	$(MAKE) -f CMakeFiles/dip_week4.dir/build.make CMakeFiles/dip_week4.dir/src/metric.cpp.i
+.PHONY : src/metric.cpp.i
+
+src/metric.s: src/metric.cpp.s
+
+.PHONY : src/metric.s
+
+# target to generate assembly for a file
+src/metric.cpp.s:
+	$(MAKE) -f CMakeFiles/dip_week4.dir/build.make CMakeFiles/dip_week4.dir/src/metric.cpp.s
+.PHONY : src/metric.cpp.s
 
 # Help Target
 help:
@@ -159,9 +213,15 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... dip_week4"
 	@echo "... edit_cache"
-	@echo "... main.o"
-	@echo "... main.i"
-	@echo "... main.s"
+	@echo "... src/jsoncpp/jsoncpp.o"
+	@echo "... src/jsoncpp/jsoncpp.i"
+	@echo "... src/jsoncpp/jsoncpp.s"
+	@echo "... src/main.o"
+	@echo "... src/main.i"
+	@echo "... src/main.s"
+	@echo "... src/metric.o"
+	@echo "... src/metric.i"
+	@echo "... src/metric.s"
 .PHONY : help
 
 
