@@ -349,10 +349,9 @@ healthchecksdb
 MigrationBackup/
 
 #Cmake file
-/CMakeCache.txt
-/cmake_install.cmake
-/CmakeFiles
-/Makefile
-
+CMakeCache.txt
+cmake_install.cmake
+CmakeFiles/
+Makefile
 
 .venv/
