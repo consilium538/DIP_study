@@ -3,4 +3,4 @@
 
 #include "globals.hpp"
 
-#endif // BMA_HPP
+#endif  // BMA_HPP

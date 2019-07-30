@@ -3,7 +3,17 @@
 
 #include "globals.hpp"
 
-double mad_patch( cv::Mat ref, cv::Mat comp );
-double mse_patch( cv::Mat ref, cv::Mat comp );
+double
+mad_patch( cv::Mat ref,
+           cv::Mat comp,
+           double dx,
+           double dy,
+           std::vector<double>& args );
+double
+mse_patch( cv::Mat ref,
+           cv::Mat comp,
+           double dx,
+           double dy,
+           std::vector<double>& args );
 
-#endif // METRIC_HPP
+#endif  // METRIC_HPP

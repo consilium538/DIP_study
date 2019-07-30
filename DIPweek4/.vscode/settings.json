@@ -55,5 +55,6 @@
         "map": "cpp",
         "set": "cpp",
         "hash_map": "cpp"
-    }
+    },
+    "debug.internalConsoleOptions": "neverOpen"
 }

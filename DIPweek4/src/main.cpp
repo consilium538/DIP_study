@@ -1,6 +1,7 @@
 #include "main.hpp"
 
-int main( int argv, char** argc )
+int
+main( int argv, char** argc )
 {
     ////////////////////////////////////
 
@@ -8,11 +9,11 @@ int main( int argv, char** argc )
     using namespace cv;
     namespace fs = std::filesystem;
 
-    auto config_file = fs::path("./config.json");
+    auto config_file = fs::path( "./config.json" );
     auto inputPath = fs::path( "./srcImg/" );
     auto savepath = fs::path( "./dstImg/" );
     auto logpath = fs::path( "./log" );
-    
+
     if ( !fs::exists( config_file ) )
     {
         std::cout << "no configure file!" << std::endl;
@@ -25,109 +26,53 @@ int main( int argv, char** argc )
     if ( !fs::exists( logpath ) )
         fs::create_directory( logpath );
 
-    Json::Value config_root;
-    std::ifstream config_in;
-    config_in.open( config_file.string() );
+    auto mv_out_file = logpath / "mv.csv";
 
-    config_in >> config_root;
+    std::ofstream mv_out;
+    mv_out.open( mv_out_file.string(), std::ios::app );
 
-    auto bench_out_file = logpath / "bench.txt";
-    auto valid_out_file = logpath / "valid.txt";
-
-    std::ofstream valid_out;
-    valid_out.open( valid_out_file.string(), std::ios::app );
-    std::ofstream bench_out;
-    bench_out.open( bench_out_file.string(), std::ios::app );
-
-    ////////////////////////////////////
-
-    std::vector<std::tuple<cv::Mat, string>> ImgArr;
-    std::unordered_map<std::string, cv::Mat> srcImg;
-    std::map<std::string, cv::Mat> test_img;
-
-    std::vector<std::string> testcase = {};
-
-    std::string header_pattern = "";
-    std::vector<std::tuple<std::string,int>> test_method = {
-        std::make_tuple("1",2)
-    };
-
-    ////////////////////////////////////
-
-    auto cpu_string = CPUID_string();
-    auto start_time = std::time( nullptr );
-    bench_out << fmt::format( "\n{}\nProcess start at : {:%c}\n", cpu_string,
-                              *std::localtime( &start_time ) )
-              << std::endl;
-    valid_out << fmt::format( "\n{}\nProcess start at : {:%c}\n", cpu_string,
-                              *std::localtime( &start_time ) )
-              << std::endl;
-
-    for ( auto it : testcase )
+    auto ref_path = inputPath / ( "cubecut1.tif" );
+    auto ref_img = cv::imread( ref_path.string(), cv::IMREAD_GRAYSCALE );
+    if ( ref_img.empty() )
     {
-        auto img_path = inputPath / ( it + ".tif" );
-        auto img_tmp = cv::imread( img_path.string(), cv::IMREAD_GRAYSCALE );
-        if ( img_tmp.empty() )
-        {
-            cout << "image load failed!" << endl;
-            bench_out << "\nimage load failed!\n" << std::endl;
-            return -1;
-        }
-        test_img[it] = img_tmp;
-        ImgArr.push_back(
-            std::make_tuple( img_tmp, fmt::format( "{}_{}", it, "orig" ) ) );
+        std::cout << "image load failed!" << std::endl;
+        return -1;
     }
 
-    for ( auto it : test_img )
-        bench_out << fmt::format( header_pattern, std::get<0>( it ) );
-
-    valid_out << "file\\algo\t" << fmt::format( header_pattern, "N" )
-              << std::endl;
-    bench_out << std::endl;
-
-    ////////////////////////////////////////
-
-    for ( int i = 0; i < 41; i++ )
+    auto anch_path = inputPath / ( "cubecut2.tif" );
+    auto anch_img = cv::imread( anch_path.string(), cv::IMREAD_GRAYSCALE );
+    if ( anch_img.empty() )
     {
-        for ( auto it : test_img )
-        {
-            if ( i == 0 )
-                valid_out << fmt::format( "{}\t", std::get<0>( it ) );
-            for ( auto method : test_method )
-            {
-                cv::Mat img_test;
-                cv::Mat img_ref = std::get<1>( it );
-                int img_test_n;
-                auto starttime = std::chrono::high_resolution_clock::now();
-                //test image
-                auto endtime = std::chrono::high_resolution_clock::now();
-                double time_taken_ms =
-                    (double)( std::chrono::duration_cast<chrono::nanoseconds>(
-                                  endtime - starttime )
-                                  .count() ) *
-                    1e-6;
-                if ( i == 0 )
-                {
-                    valid_out << fmt::format( "{}\t", img_test_n );
-                    // ImgArr.push_back( std::make_tuple(
-                    //     img_colored, fmt::format( "{}_{}", std::get<0>( it ),
-                    //                               std::get<1>( method ) ) ) );
-                }
-                else
-                    bench_out << fmt::format( "{:.6g}\t", time_taken_ms );
-            }
-            if ( i == 0 )
-                valid_out << "\n";
-        }
-        if ( i != 0 )
-            bench_out << "\n";
+        std::cout << "image load failed!" << std::endl;
+        return -1;
     }
 
-    valid_out << "////////////////" << std::endl;
-    bench_out << "////////////////" << std::endl;
+    const int nrow_ref = ref_img.rows;
+    const int ncol_ref = ref_img.cols;
+    const int nrow_anch = anch_img.rows;
+    const int ncol_anch = anch_img.cols;
+    const int nrow_block = 1 + ( ( nrow_ref - 1 ) / BLOCK_SIZE );
+    const int ncol_block = 1 + ( ( ncol_ref - 1 ) / BLOCK_SIZE );
 
-    img_save( ImgArr, savepath.string(), ".png",
-              std::vector<int>{ cv::IMWRITE_PNG_COMPRESSION, 9 } );
+    if ( nrow_anch != nrow_ref || ncol_anch != ncol_ref )
+    {
+        std::cout << "image size is not same!" << std::endl;
+        return -1;
+    }
+
+    for ( int i = 0; i < nrow_block; i++ )
+    {
+        for ( int j = 0; j < ncol_block; j++ )
+        {
+            cv::Mat ref_cut = ref_img(
+                cv::Range( i * BLOCK_SIZE, ( i + 1 ) * BLOCK_SIZE > nrow_ref
+                                               ? nrow_ref
+                                               : ( i + 1 ) * BLOCK_SIZE ),
+                cv::Range( j * BLOCK_SIZE, ( j + 1 ) * BLOCK_SIZE > ncol_ref
+                                               ? ncol_ref
+                                               : ( j + 1 ) * BLOCK_SIZE ) );
+        }
+    }
 
     ////////////////////////////////////
 

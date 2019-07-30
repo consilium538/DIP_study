@@ -24,7 +24,10 @@
 #include "globals.hpp"
 #include "json/json.h"
 
-std::string CPUID_string()
+#define BLOCK_SIZE 4
+
+std::string
+CPUID_string()
 {
     char CPUBrandString[0x40];
     unsigned int CPUInfo[4] = {0, 0, 0, 0};
@@ -49,7 +52,8 @@ std::string CPUID_string()
     return fmt::format( "CPU Type: {}", CPUBrandString );
 }
 
-void img_cat( std::vector<std::tuple<cv::Mat, std::string>> ImgArr )
+void
+img_cat( std::vector<std::tuple<cv::Mat, std::string>> ImgArr )
 {
     int a = 20;
     for ( auto it : ImgArr )
@@ -69,10 +73,11 @@ void img_cat( std::vector<std::tuple<cv::Mat, std::string>> ImgArr )
     return;
 }
 
-void img_save( std::vector<std::tuple<cv::Mat, std::string>> ImgArr,
-               const std::string savepath,
-               const std::string postfix,
-               const std::vector<int>& params = std::vector<int>() )
+void
+img_save( std::vector<std::tuple<cv::Mat, std::string>> ImgArr,
+          const std::string savepath,
+          const std::string postfix,
+          const std::vector<int>& params = std::vector<int>() )
 {
     for ( auto it : ImgArr )
     {
