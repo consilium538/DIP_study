@@ -24,8 +24,6 @@
 #include "globals.hpp"
 #include "json/json.h"
 
-const bool isLogFile = true;
-
 std::string CPUID_string()
 {
     char CPUBrandString[0x40];
