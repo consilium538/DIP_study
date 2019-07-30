@@ -354,4 +354,9 @@ cmake_install.cmake
 CMakeFiles/
 Makefile
 
+#executable
+dip_week2
+dip_week3
+dip_week4
+
 .venv/
