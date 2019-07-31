@@ -5,6 +5,11 @@ project(dip_week4
         VERSION     0.0.1
 )
 
+project(dip_week4_reconst
+        LANGUAGES    CXX
+        VERSION     0.0.1
+)
+
 set(CMAKE_MAKE_PROGRAM make)
 
 set(CMAKE_CXX_COMPILER /usr/bin/c++)
@@ -26,7 +31,16 @@ add_executable(
     dip_week4 ./src/main.cpp ./src/metric.cpp ./src/jsoncpp/jsoncpp.cpp
 )
 
+add_executable(
+    dip_week4_reconst ./src/main_reconst.cpp ./src/metric.cpp ./src/jsoncpp/jsoncpp.cpp
+)
+
 target_link_libraries(dip_week4
+    ${OpenCV_LIBS}
+    fmt::fmt
+)
+
+target_link_libraries(dip_week4_reconst
     ${OpenCV_LIBS}
     fmt::fmt
 )

@@ -14,20 +14,14 @@
             "cwd": "${workspaceFolder}",
             "environment": [],
             "externalConsole": false,
-            "internalConsoleOptions": "neverOpen",
             "MIMode": "gdb",
             "setupCommands": [
                 {
                     "description": "Enable pretty-printing for gdb",
                     "text": "-enable-pretty-printing",
                     "ignoreFailures": true
-                },
-                {
-                    "description": "",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
                 }
-            ],
+            ]
         }
     ]
 }

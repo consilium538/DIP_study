@@ -123,6 +123,19 @@ dip_week4/fast:
 	$(MAKE) -f CMakeFiles/dip_week4.dir/build.make CMakeFiles/dip_week4.dir/build
 .PHONY : dip_week4/fast
 
+#=============================================================================
+# Target rules for targets named dip_week4_reconst
+
+# Build rule for target.
+dip_week4_reconst: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 dip_week4_reconst
+.PHONY : dip_week4_reconst
+
+# fast build rule for target.
+dip_week4_reconst/fast:
+	$(MAKE) -f CMakeFiles/dip_week4_reconst.dir/build.make CMakeFiles/dip_week4_reconst.dir/build
+.PHONY : dip_week4_reconst/fast
+
 src/jsoncpp/jsoncpp.o: src/jsoncpp/jsoncpp.cpp.o
 
 .PHONY : src/jsoncpp/jsoncpp.o
@@ -130,6 +143,7 @@ src/jsoncpp/jsoncpp.o: src/jsoncpp/jsoncpp.cpp.o
 # target to build an object file
 src/jsoncpp/jsoncpp.cpp.o:
 	$(MAKE) -f CMakeFiles/dip_week4.dir/build.make CMakeFiles/dip_week4.dir/src/jsoncpp/jsoncpp.cpp.o
+	$(MAKE) -f CMakeFiles/dip_week4_reconst.dir/build.make CMakeFiles/dip_week4_reconst.dir/src/jsoncpp/jsoncpp.cpp.o
 .PHONY : src/jsoncpp/jsoncpp.cpp.o
 
 src/jsoncpp/jsoncpp.i: src/jsoncpp/jsoncpp.cpp.i
@@ -139,6 +153,7 @@ src/jsoncpp/jsoncpp.i: src/jsoncpp/jsoncpp.cpp.i
 # target to preprocess a source file
 src/jsoncpp/jsoncpp.cpp.i:
 	$(MAKE) -f CMakeFiles/dip_week4.dir/build.make CMakeFiles/dip_week4.dir/src/jsoncpp/jsoncpp.cpp.i
+	$(MAKE) -f CMakeFiles/dip_week4_reconst.dir/build.make CMakeFiles/dip_week4_reconst.dir/src/jsoncpp/jsoncpp.cpp.i
 .PHONY : src/jsoncpp/jsoncpp.cpp.i
 
 src/jsoncpp/jsoncpp.s: src/jsoncpp/jsoncpp.cpp.s
@@ -148,6 +163,7 @@ src/jsoncpp/jsoncpp.s: src/jsoncpp/jsoncpp.cpp.s
 # target to generate assembly for a file
 src/jsoncpp/jsoncpp.cpp.s:
 	$(MAKE) -f CMakeFiles/dip_week4.dir/build.make CMakeFiles/dip_week4.dir/src/jsoncpp/jsoncpp.cpp.s
+	$(MAKE) -f CMakeFiles/dip_week4_reconst.dir/build.make CMakeFiles/dip_week4_reconst.dir/src/jsoncpp/jsoncpp.cpp.s
 .PHONY : src/jsoncpp/jsoncpp.cpp.s
 
 src/main.o: src/main.cpp.o
@@ -177,6 +193,33 @@ src/main.cpp.s:
 	$(MAKE) -f CMakeFiles/dip_week4.dir/build.make CMakeFiles/dip_week4.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
+src/main_reconst.o: src/main_reconst.cpp.o
+
+.PHONY : src/main_reconst.o
+
+# target to build an object file
+src/main_reconst.cpp.o:
+	$(MAKE) -f CMakeFiles/dip_week4_reconst.dir/build.make CMakeFiles/dip_week4_reconst.dir/src/main_reconst.cpp.o
+.PHONY : src/main_reconst.cpp.o
+
+src/main_reconst.i: src/main_reconst.cpp.i
+
+.PHONY : src/main_reconst.i
+
+# target to preprocess a source file
+src/main_reconst.cpp.i:
+	$(MAKE) -f CMakeFiles/dip_week4_reconst.dir/build.make CMakeFiles/dip_week4_reconst.dir/src/main_reconst.cpp.i
+.PHONY : src/main_reconst.cpp.i
+
+src/main_reconst.s: src/main_reconst.cpp.s
+
+.PHONY : src/main_reconst.s
+
+# target to generate assembly for a file
+src/main_reconst.cpp.s:
+	$(MAKE) -f CMakeFiles/dip_week4_reconst.dir/build.make CMakeFiles/dip_week4_reconst.dir/src/main_reconst.cpp.s
+.PHONY : src/main_reconst.cpp.s
+
 src/metric.o: src/metric.cpp.o
 
 .PHONY : src/metric.o
@@ -184,6 +227,7 @@ src/metric.o: src/metric.cpp.o
 # target to build an object file
 src/metric.cpp.o:
 	$(MAKE) -f CMakeFiles/dip_week4.dir/build.make CMakeFiles/dip_week4.dir/src/metric.cpp.o
+	$(MAKE) -f CMakeFiles/dip_week4_reconst.dir/build.make CMakeFiles/dip_week4_reconst.dir/src/metric.cpp.o
 .PHONY : src/metric.cpp.o
 
 src/metric.i: src/metric.cpp.i
@@ -193,6 +237,7 @@ src/metric.i: src/metric.cpp.i
 # target to preprocess a source file
 src/metric.cpp.i:
 	$(MAKE) -f CMakeFiles/dip_week4.dir/build.make CMakeFiles/dip_week4.dir/src/metric.cpp.i
+	$(MAKE) -f CMakeFiles/dip_week4_reconst.dir/build.make CMakeFiles/dip_week4_reconst.dir/src/metric.cpp.i
 .PHONY : src/metric.cpp.i
 
 src/metric.s: src/metric.cpp.s
@@ -202,6 +247,7 @@ src/metric.s: src/metric.cpp.s
 # target to generate assembly for a file
 src/metric.cpp.s:
 	$(MAKE) -f CMakeFiles/dip_week4.dir/build.make CMakeFiles/dip_week4.dir/src/metric.cpp.s
+	$(MAKE) -f CMakeFiles/dip_week4_reconst.dir/build.make CMakeFiles/dip_week4_reconst.dir/src/metric.cpp.s
 .PHONY : src/metric.cpp.s
 
 # Help Target
@@ -211,14 +257,18 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... rebuild_cache"
-	@echo "... dip_week4"
 	@echo "... edit_cache"
+	@echo "... dip_week4"
+	@echo "... dip_week4_reconst"
 	@echo "... src/jsoncpp/jsoncpp.o"
 	@echo "... src/jsoncpp/jsoncpp.i"
 	@echo "... src/jsoncpp/jsoncpp.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
+	@echo "... src/main_reconst.o"
+	@echo "... src/main_reconst.i"
+	@echo "... src/main_reconst.s"
 	@echo "... src/metric.o"
 	@echo "... src/metric.i"
 	@echo "... src/metric.s"
