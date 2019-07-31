@@ -18,7 +18,9 @@ isInside( const int nrow_anch,
 int
 main( int argv, char** argc )
 {
-    const int block_size = 4;
+    using namespace std::placeholders;
+
+    const int block_size = 3;
     const int search_range = 7;
     ////////////////////////////////////
 
@@ -73,39 +75,42 @@ main( int argv, char** argc )
     }
 
     std::vector test_set = {
-        std::make_tuple(mad_patch,std::vector<double>(),"mv_t.csv"),
-        std::make_tuple(mad_dist,std::vector<double>({1.0}),"mv_c_1_t.csv")
-    };
+        std::make_tuple( mad_patch, std::vector<double>(), "mv_t.csv" ),
+        std::make_tuple( mad_dist, std::vector<double>( {1.0} ),
+                         "mv_c_1_t.csv" )};
 
     for ( auto it : test_set )
     {
         std::ofstream mv_out;
-        mv_out.open( ( logpath / std::get<2>(it) ).string(), std::ios::trunc );
+        mv_out.open( ( logpath / std::get<2>( it ) ).string(),
+                     std::ios::trunc );
         mv_out << "xpos, ypos, xvec, yvec, cost\n";
 
         for ( int i = 0; i < nrow_block; i++ )
         {
             const int i_idx = i * block_size;
+            const int i_size =
+                i_idx + block_size > nrow_ref ? nrow_ref : i_idx + block_size;
+
             for ( int j = 0; j < ncol_block; j++ )
             {
                 const int j_idx = j * block_size;
-                cv::Mat ref_cut =
-                    ref_img( cv::Range( i_idx, i_idx + block_size > nrow_ref
-                                                   ? nrow_ref
-                                                   : i_idx + block_size ),
-                             cv::Range( j_idx, j_idx + block_size > ncol_ref
-                                                   ? ncol_ref
-                                                   : j_idx + block_size ) );
+                const int j_size = j_idx + block_size > ncol_ref
+                                       ? ncol_ref
+                                       : j_idx + block_size;
+                cv::Mat ref_cut = ref_img( cv::Range( i_idx, i_size ),
+                                           cv::Range( j_idx, j_size ) );
 
                 std::vector<std::tuple<double, int, int>> valid_error;
 
                 for ( int x = -( (int)search_range ); x < search_range; x++ )
                 {
-                    for ( int y = -( (int)search_range ); y < search_range; y++ )
+                    for ( int y = -( (int)search_range ); y < search_range;
+                          y++ )
                     {
                         std::optional<cv::Mat> anch_cut =
-                            isInside( nrow_anch, ncol_anch, i_idx + x, j_idx + y,
-                                      ref_cut.rows, ref_cut.cols )
+                            isInside( nrow_anch, ncol_anch, i_idx + x,
+                                      j_idx + y, ref_cut.rows, ref_cut.cols )
                                 ? make_optional( anch_img(
                                       cv::Range( i_idx + x,
                                                  i_idx + x + ref_cut.rows ),
@@ -113,13 +118,13 @@ main( int argv, char** argc )
                                                  j_idx + y + ref_cut.cols ) ) )
                                 : std::nullopt;
 
-                        int a = 1;
+                        auto method = std::bind( std::get<0>( it ), ref_cut, _1,
+                                                 x, y, std::get<1>( it ) );
+
                         std::optional<double> error_local =
-                            anch_cut.has_value()
-                                ? std::make_optional(
-                                      std::get<0>(it)( ref_cut, anch_cut.value(), x, y,
-                                                std::get<1>(it) ) )
-                                : std::nullopt;
+                            anch_cut.has_value() ? std::make_optional( method(
+                                                       anch_cut.value() ) )
+                                                 : std::nullopt;
 
                         if ( error_local.has_value() )
                             valid_error.push_back(
@@ -130,8 +135,8 @@ main( int argv, char** argc )
                 std::sort( valid_error.begin(), valid_error.end() );
                 mv_out << fmt::format(
                     "{0:.2f}, {1:.2f}, {2:.2f}, {3:.2f}, {4:.4f}\n",
-                    ( j_idx + (double)block_size / 2 ), // ncol_ref,
-                    ( i_idx + (double)block_size / 2 ), // nrow_ref,
+                    ( j_idx + (double)block_size / 2 ),
+                    ( i_idx + (double)block_size / 2 ),
                     (double)std::get<2>( valid_error[0] ),
                     (double)std::get<1>( valid_error[0] ),
                     std::get<0>( valid_error[0] ) );
@@ -139,7 +144,8 @@ main( int argv, char** argc )
         }
 
         mv_out << std::endl;
-        std::cout << fmt::format("end of {} computation!",std::get<2>(it)) << std::endl;
+        std::cout << fmt::format( "end of {} computation!", std::get<2>( it ) )
+                  << std::endl;
     }
 
     ////////////////////////////////////
