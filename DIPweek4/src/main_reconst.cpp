@@ -5,32 +5,18 @@ main()
 {
     namespace fs = std::filesystem;
 
-    fs::path test_meta_path = "./log/meta.json";
-    if ( !fs::exists( test_meta_path ) )
-    {
-        std::cout << "motion vector data not found!" << std::endl;
-        return -1;
-    }
-    std::ifstream test_meta_in( test_meta_path.string() );
-    Json::Value log_root;
-    test_meta_in >> log_root;
+    cv::VideoWriter orig_forman;
+    cv::Mat sample_forman = cv::imread("/home/dhej1/Downloads/Telegram Desktop/2014_DIP/FOREMAN(300)/FOREMAN000.tif");
+    orig_forman.open("./forman_orig.mp4",(int)cv::VideoWriter::fourcc('a','v','c','1'),30.0,sample_forman.size());
 
-    for ( auto test : log_root["tests"] )
-    {
-        // std::cout << fmt::format(
-        //                  "anchor loc : {}\ntracked loc : {}\nmethod : {}",
-        //                  test["file_loc"]["anchor_img_path"].asString(),
-        //                  test["file_loc"]["tracked_img_path"].asString(),
-        //                  test["method"].asString() )
-        //           << "\n/////////////"
-        //           << std::endl;
+    auto img_iter = fs::directory_iterator("/home/dhej1/Downloads/Telegram Desktop/2014_DIP/FOREMAN(300)");
+    std::vector img_vec(begin(img_iter), end(img_iter));
+    std::sort(img_vec.begin(),img_vec.end());
 
-        cv::Mat anchor_img =
-            cv::imread( test["file_loc"]["anchor_img_path"].asString() );
-        cv::Mat tracked_img =
-            cv::imread( test["file_loc"]["tracked_img_path"].asString() );
-        std::vector<std::tuple<double, double, double, double, double>>
-            motion_vec;
+    for ( auto& it : img_vec )
+    {
+        cv::Mat img = cv::imread( it.path().string() );
+        orig_forman.write(img);
     }
 
     return 0;
