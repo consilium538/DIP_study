@@ -358,5 +358,7 @@ Makefile
 dip_week2
 dip_week3
 dip_week4
+dip_week4_reconst
+dip_video
 
 .venv/

@@ -19,11 +19,20 @@ using bma_f = std::function<mv_t( cv::Mat,
                                   const std::vector<int>& )>;
 
 std::vector<mv_t>
-ebma( cv::Mat ancher_img,
-      cv::Mat tracked_img,
-      const int block_size,
-      const int search_range,
-      obj_f objective,
-      const std::vector<double>& obj_args );
+bma( cv::Mat ancher_img,
+     cv::Mat tracked_img,
+     const int block_size,
+     obj_f objective,
+     const std::vector<double>& obj_args,
+     bma_f matcher,
+     const std::vector<int>& bma_args );
+
+mv_t
+ebma_f( cv::Mat ancher_img,
+        cv::Mat tracked_img,
+        const cv::Rect ancher_rect,
+        obj_f objective,
+        const std::vector<double>& obj_args,
+        const std::vector<int>& bma_args );
 
 #endif  // MOTION_HPP

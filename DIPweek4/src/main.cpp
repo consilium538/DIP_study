@@ -79,8 +79,9 @@ main( int argv, char** argc )
         std::vector<std::tuple<int, int, int, int, int, int, double>>
             motion_vec;
 
-        motion_vec = ebma( ancher_img, tracked_img, block_size, search_range,
-                           std::get<0>( it ), std::get<1>( it ) );
+        motion_vec =
+            bma( ancher_img, tracked_img, block_size, std::get<0>( it ),
+                 std::get<1>( it ), ebma_f, {search_range} );
 
         for ( auto& mv : motion_vec )
         {
