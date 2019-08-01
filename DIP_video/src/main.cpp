@@ -8,13 +8,13 @@ main( int argv, char** argc )
     std::uniform_int_distribution<int> unif_dist(0,255);
 
     cv::VideoWriter video_test;
-    cv::Mat framebuf = cv::Mat_<cv::Vec3b>(cv::Size(240,320),0);
+    cv::Mat framebuf = cv::Mat_<cv::Vec3b>(cv::Size(320,240),0);
 
-    video_test.open("./test.mp4",(int)cv::VideoWriter::fourcc('H','2','6','4'),30.0,cv::Size(240,320));
+    video_test.open("./test.mp4",(int)cv::VideoWriter::fourcc('a','v','c','1'),30.0,cv::Size(320,240));
 
     for ( int i = 0; i < 150; i++)
     {
-        framebuf(cv::Range(60,180),cv::Range(80,240)) = unif_dist(e1);
+        framebuf(cv::Range(60,180),cv::Range(80,240)) = cv::Scalar(unif_dist(e1),unif_dist(e1),unif_dist(e1));
         video_test.write(framebuf);
     }
 
