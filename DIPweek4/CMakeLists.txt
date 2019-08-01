@@ -28,7 +28,7 @@ message(STATUS "    include path: ${OpenCV_INCLUDE_DIRS}")
 INCLUDE_DIRECTORIES( /usr/include/opencv4 ./inc )
 
 add_executable(
-    dip_week4 ./src/main.cpp ./src/metric.cpp ./src/jsoncpp/jsoncpp.cpp
+    dip_week4 ./src/main.cpp ./src/metric.cpp ./src/motion.cpp ./src/jsoncpp/jsoncpp.cpp
 )
 
 add_executable(

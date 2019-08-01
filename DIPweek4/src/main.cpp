@@ -1,82 +1,45 @@
 #include "main.hpp"
 
-template <typename Iterable>
-Json::Value
-iterable2json( Iterable const& cont )
+std::optional<cv::Mat>
+openImg( std::filesystem::path path )
 {
-    Json::Value v;
-    for ( auto&& element : cont )
-    {
-        v.append( element );
-    }
-    return v;
-}
+    cv::Mat img = cv::imread( path.string(), cv::IMREAD_GRAYSCALE );
 
-bool
-isInside( const int nrow_anch,
-          const int ncol_anch,
-          const int i_idx,
-          const int j_idx,
-          const int size_x,
-          const int size_y )
-{
-    if ( i_idx >= 0 && j_idx >= 0 && i_idx <= nrow_anch - size_x &&
-         j_idx <= ncol_anch - size_y )
-        return true;
-    else
-        return false;
+    return img.empty() ? std::nullopt : std::make_optional( img );
 }
 
 int
 main( int argv, char** argc )
 {
     using namespace std::placeholders;
-    Json::Value log_root = {};
-    auto start_time = std::time( nullptr );
-    log_root["start_datetime"] =
-        fmt::format( "{:%c}", *std::localtime( &start_time ) );
+    using namespace std;
+    using namespace cv;
+    namespace fs = std::filesystem;
 
     const int block_size = 8;
     const int search_range = 15;
 
-    Json::Value block_param = {};
-    block_param["block_size"] = block_size;
-    block_param["search_range"] = search_range;
     ////////////////////////////////////
-
-    using namespace std;
-    using namespace cv;
-    namespace fs = std::filesystem;
 
     auto config_file = fs::path( "./config.json" );
     auto inputPath = fs::path( "./srcImg/" );
     auto savepath = fs::path( "./dstImg/" );
     auto logpath = fs::path( "./log" );
 
-    if ( !fs::exists( config_file ) )
-    {
-        std::cout << "no configure file!" << std::endl;
-
-        return 0;
-    }
-
     if ( !fs::exists( savepath ) )
         fs::create_directory( savepath );
     if ( !fs::exists( logpath ) )
         fs::create_directory( logpath );
 
-    Json::Value file_loc = {};
-
-    auto ancher_path = inputPath / ( "street1.tif" );
+    auto ancher_path = inputPath / ( "cubecut1.tif" );
     auto ancher_img = cv::imread( ancher_path.string(), cv::IMREAD_GRAYSCALE );
     if ( ancher_img.empty() )
     {
         std::cout << "image load failed!" << std::endl;
         return -1;
     }
-    file_loc["anchor_img_path"] = ancher_path.string();
 
-    auto tracked_path = inputPath / ( "street2.tif" );
+    auto tracked_path = inputPath / ( "cubecut2.tif" );
     auto tracked_img =
         cv::imread( tracked_path.string(), cv::IMREAD_GRAYSCALE );
     if ( tracked_img.empty() )
@@ -84,7 +47,6 @@ main( int argv, char** argc )
         std::cout << "image load failed!" << std::endl;
         return -1;
     }
-    file_loc["tracked_img_path"] = tracked_path.string();
 
     const int nrow_ref = ancher_img.rows;
     const int ncol_ref = ancher_img.cols;
@@ -100,20 +62,13 @@ main( int argv, char** argc )
     }
 
     std::vector test_set = {
-        //          std::make_tuple( mad_patch, std::vector<double>(), "mad",
-        //                           "MAD without constraint" )
+        // std::make_tuple( mad_patch, std::vector<double>(), "mad",
+        //                  "MAD without constraint" )
         std::make_tuple( mad_dist, std::vector<double>( {0.1} ), "mad_c_1",
                          "MAD with distance constraint" )};
 
-    for ( auto it : test_set )
+    for ( auto& it : test_set )
     {
-        Json::Value test_env = {};
-        test_env["block_param"] = block_param;
-        test_env["file_loc"] = file_loc;
-        test_env["method"] = std::get<3>( it );
-        test_env["mt"] = std::get<2>( it );
-        test_env["value"] = iterable2json( std::get<1>( it ) );
-
         std::ofstream mv_out;
         mv_out.open(
             ( logpath / fmt::format( "{}{}", std::get<2>( it ), ".csv" ) )
@@ -124,70 +79,17 @@ main( int argv, char** argc )
         std::vector<std::tuple<int, int, int, int, int, int, double>>
             motion_vec;
 
-        for ( int i = 0; i < nrow_block; i++ )
+        motion_vec = ebma( ancher_img, tracked_img, block_size, search_range,
+                           std::get<0>( it ), std::get<1>( it ) );
+
+        for ( auto& mv : motion_vec )
         {
-            const int i_idx = i * block_size;
-            const int i_size =
-                i_idx + block_size > nrow_ref ? nrow_ref : i_idx + block_size;
-
-            for ( int j = 0; j < ncol_block; j++ )
-            {
-                const int j_idx = j * block_size;
-                const int j_size = j_idx + block_size > ncol_ref
-                                       ? ncol_ref
-                                       : j_idx + block_size;
-                cv::Mat ancher_cut = ancher_img( cv::Range( i_idx, i_size ),
-                                                 cv::Range( j_idx, j_size ) );
-
-                std::vector<std::tuple<double, int, int>> valid_error;
-
-                for ( int x = -( (int)search_range ); x < search_range; x++ )
-                {
-                    for ( int y = -( (int)search_range ); y < search_range;
-                          y++ )
-                    {
-                        std::optional<cv::Mat> tracked_cut =
-                            isInside( nrow_anch, ncol_anch, i_idx + x,
-                                      j_idx + y, ancher_cut.rows,
-                                      ancher_cut.cols )
-                                ? make_optional( tracked_img(
-                                      cv::Range( i_idx + x,
-                                                 i_idx + x + ancher_cut.rows ),
-                                      cv::Range(
-                                          j_idx + y,
-                                          j_idx + y + ancher_cut.cols ) ) )
-                                : std::nullopt;
-
-                        auto method = std::bind( std::get<0>( it ), ancher_cut,
-                                                 _1, x, y, std::get<1>( it ) );
-
-                        std::optional<double> error_local =
-                            tracked_cut.has_value()
-                                ? std::make_optional(
-                                      method( tracked_cut.value() ) )
-                                : std::nullopt;
-
-                        if ( error_local.has_value() )
-                            valid_error.push_back(
-                                std::make_tuple( error_local.value(), x, y ) );
-                    }
-                }
-
-                std::sort( valid_error.begin(), valid_error.end() );
-                auto least_pos =
-                    std::make_tuple( i_idx, i_size, j_idx, j_size,
-                                     std::get<1>( valid_error[0] ),  // x
-                                     std::get<2>( valid_error[0] ),  // y
-                                     (double)std::get<0>( valid_error[0] ) );
-
-                mv_out << fmt::format( "{0:f}, {1:f}, {2:f}, {3:f}, {4:f}\n",
-                                       ( j_idx + (double)block_size / 2 ),
-                                       ( i_idx + (double)block_size / 2 ),
-                                       (double)std::get<2>( valid_error[0] ),
-                                       (double)std::get<1>( valid_error[0] ),
-                                       (double)std::get<0>( valid_error[0] ) );
-                motion_vec.push_back( least_pos );
-            }
+            mv_out << fmt::format(
+                "{0:f}, {1:f}, {2:f}, {3:f}, {4:f}\n",
+                ( std::get<2>( mv ) + (double)block_size / 2 ),
+                ( std::get<0>( mv ) + (double)block_size / 2 ),
+                (double)std::get<5>( mv ), (double)std::get<4>( mv ),
+                (double)std::get<6>( mv ) );
         }
 
         cv::Mat testImg = cv::Mat_<uchar>( tracked_img.size(), 0 );
@@ -206,12 +108,7 @@ main( int argv, char** argc )
         mv_out << std::endl;
         std::cout << fmt::format( "end of {} computation!", std::get<2>( it ) )
                   << std::endl;
-        log_root["tests"].append( test_env );
     }
-
-    std::ofstream meta_out;
-    meta_out.open( ( logpath / "meta.json" ).string(), std::ios::trunc );
-    meta_out << log_root << std::endl;
 
     ////////////////////////////////////
 

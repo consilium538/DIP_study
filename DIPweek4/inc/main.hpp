@@ -24,6 +24,7 @@
 #include "globals.hpp"
 #include "json/json.h"
 #include "metric.hpp"
+#include "motion.hpp"
 
 std::string
 CPUID_string()

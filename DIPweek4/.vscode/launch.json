@@ -8,7 +8,7 @@
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/dip_week4_reconst",
+            "program": "${workspaceFolder}/dip_week4",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",

@@ -250,6 +250,33 @@ src/metric.cpp.s:
 	$(MAKE) -f CMakeFiles/dip_week4_reconst.dir/build.make CMakeFiles/dip_week4_reconst.dir/src/metric.cpp.s
 .PHONY : src/metric.cpp.s
 
+src/motion.o: src/motion.cpp.o
+
+.PHONY : src/motion.o
+
+# target to build an object file
+src/motion.cpp.o:
+	$(MAKE) -f CMakeFiles/dip_week4.dir/build.make CMakeFiles/dip_week4.dir/src/motion.cpp.o
+.PHONY : src/motion.cpp.o
+
+src/motion.i: src/motion.cpp.i
+
+.PHONY : src/motion.i
+
+# target to preprocess a source file
+src/motion.cpp.i:
+	$(MAKE) -f CMakeFiles/dip_week4.dir/build.make CMakeFiles/dip_week4.dir/src/motion.cpp.i
+.PHONY : src/motion.cpp.i
+
+src/motion.s: src/motion.cpp.s
+
+.PHONY : src/motion.s
+
+# target to generate assembly for a file
+src/motion.cpp.s:
+	$(MAKE) -f CMakeFiles/dip_week4.dir/build.make CMakeFiles/dip_week4.dir/src/motion.cpp.s
+.PHONY : src/motion.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -272,6 +299,9 @@ help:
 	@echo "... src/metric.o"
 	@echo "... src/metric.i"
 	@echo "... src/metric.s"
+	@echo "... src/motion.o"
+	@echo "... src/motion.i"
+	@echo "... src/motion.s"
 .PHONY : help
 
 
