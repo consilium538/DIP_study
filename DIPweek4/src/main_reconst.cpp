@@ -29,9 +29,8 @@ main()
             cv::imread( test["file_loc"]["anchor_img_path"].asString() );
         cv::Mat tracked_img =
             cv::imread( test["file_loc"]["tracked_img_path"].asString() );
-        std::vector<std::tuple<double,double,double,double,double>>
+        std::vector<std::tuple<double, double, double, double, double>>
             motion_vec;
-        
     }
 
     return 0;
