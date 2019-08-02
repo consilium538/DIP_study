@@ -5,9 +5,16 @@ using namespace std::placeholders;
 bool
 isInsideRect( cv::Rect img, cv::Rect rect )
 {
-    auto tmp = rect & img;
-    auto tmpa = tmp == rect;
-    return tmpa;
+    return ( rect & img ) == rect;
+}
+
+std::optional<cv::Mat>
+safecrop( cv::Mat img, cv::Rect rect )
+{
+    if ( !isInsideRect( cv::Rect( cv::Point( 0, 0 ), img.size() ), rect ) )
+        return std::nullopt;
+    else
+        return std::make_optional( img( rect ) );
 }
 
 std::vector<mv_t>
@@ -15,9 +22,9 @@ bma( cv::Mat ancher_img,
      cv::Mat tracked_img,
      const int block_size,
      obj_f objective,
-     const std::vector<double>& obj_args,
+     const obj_arg_t& obj_args,
      bma_f matcher,
-     const std::vector<int>& bma_args )
+     const bma_arg_t& bma_args )
 {
     const int nrow = ancher_img.rows;
     const int ncol = ancher_img.cols;
@@ -56,8 +63,8 @@ ebma_f( cv::Mat ancher_img,
         cv::Mat tracked_img,
         const cv::Rect ancher_rect,
         obj_f objective,
-        const std::vector<double>& obj_args,
-        const std::vector<int>& bma_args )
+        const obj_arg_t& obj_args,
+        const bma_arg_t& bma_args )
 {
     std::vector<std::tuple<double, int, int>> valid_error;
     cv::Mat ancher_cut = ancher_img( ancher_rect );
@@ -78,11 +85,11 @@ ebma_f( cv::Mat ancher_img,
                 y, x ) );
         }
     }
-    // end of block match algorithm
-    std::sort( valid_error.begin(), valid_error.end() );
+
+    auto& [error, x_min, y_min] =
+        *std::min_element( valid_error.begin(), valid_error.end() );
+
     return std::make_tuple( ancher_rect.tl().y, ancher_rect.br().y,
-                            ancher_rect.tl().x, ancher_rect.br().x,
-                            std::get<1>( valid_error[0] ),  // x
-                            std::get<2>( valid_error[0] ),  // y
-                            (double)std::get<0>( valid_error[0] ) );
+                            ancher_rect.tl().x, ancher_rect.br().x, x_min,
+                            y_min, (double)error );
 }
