@@ -1,12 +1,22 @@
 #include "main.hpp"
 
-std::unordered_map<std::string, bma_f> bma_map = {{"ebma", ebma_f}};
+std::unordered_map<std::string, bma_f> bma_map = {{"ebma", ebma_f},
+                                                  {"tss", tss_f}};
 
 std::unordered_map<std::string, obj_f> obj_map = {
     {"mad_patch", mad_patch},
     {"mse_patch", mse_patch},
     {"mad_dist", mad_dist},
 };
+
+double
+psnr( cv::Mat orig, cv::Mat noised )
+{
+    cv::Mat square_error;
+    cv::multiply( ( orig - noised ), ( orig - noised ), square_error );
+    return 10.0 *
+           std::log10( 255.0 * 255.0 / (double)cv::mean( square_error )[0] );
+}
 
 int
 main( int argv, char** argc )
@@ -26,30 +36,21 @@ main( int argv, char** argc )
     if ( !fs::exists( logpath ) )
         fs::create_directory( logpath );
 
+    std::vector<std::tuple<cv::Mat, std::string>> ImgArr;
+
     std::vector test_set = {
-        std::make_tuple( "cubecut", 8, "ebma", bma_arg_t( {15} ), "mad_dist",
-                         obj_arg_t( {0.1} ) ),
-        std::make_tuple( "cubecut", 8, "ebma", bma_arg_t( {15} ), "mad_patch",
-                         obj_arg_t( {} ) ),
-        std::make_tuple( "street", 8, "ebma", bma_arg_t( {15} ), "mad_dist",
-                         obj_arg_t( {0.1} ) ),
-        std::make_tuple( "street", 8, "ebma", bma_arg_t( {15} ), "mad_patch",
-                         obj_arg_t( {} ) )};
+        std::make_tuple( "cubecut", 8, "ebma", 15, "mad_dist", 0.1 ),
+        std::make_tuple( "cubecut", 8, "tss", 15, "mad_dist", 0.1 )
+        // std::make_tuple( "cubecut", 8, "ebma", 15, "mad_patch", 0 ),
+        // std::make_tuple( "street", 8, "ebma", 15, "mad_dist", 0.1 ),
+        // std::make_tuple( "street", 8, "ebma", 15, "mad_patch", 0 )
+    };
 
     for ( auto& [img_str, block_size, bma_str, bma_args, obj_str, obj_args] :
           test_set )
     {
-        std::string obj_arg_str = "";
-        std::string bma_arg_str = "";
-
-        for ( auto& bma_arg : bma_args )
-        {
-            bma_arg_str += fmt::format( "{}-", bma_arg );
-        }
-        for ( auto& obj_arg : obj_args )
-        {
-            obj_arg_str += fmt::format( "{}-", obj_arg );
-        }
+        std::string bma_arg_str = fmt::format( "{}", bma_args );
+        std::string obj_arg_str = fmt::format( "{}", obj_args );
 
         std::string option_str =
             fmt::format( "{}({})_{}({})_{}({})", img_str, block_size, bma_str,
@@ -63,6 +64,8 @@ main( int argv, char** argc )
             std::cout << "image load failed!" << std::endl;
             return -1;
         }
+        ImgArr.push_back( std::make_tuple(
+            ancher_img, fmt::format( "{}_{}", option_str, "ancher" ) ) );
 
         auto tracked_path = inputPath / fmt::format( "{}2.tif", img_str );
         auto tracked_img =
@@ -72,6 +75,8 @@ main( int argv, char** argc )
             std::cout << "image load failed!" << std::endl;
             return -1;
         }
+        ImgArr.push_back( std::make_tuple(
+            tracked_img, fmt::format( "{}_{}", option_str, "tracked" ) ) );
 
         const int nrow_ref = ancher_img.rows;
         const int ncol_ref = ancher_img.cols;
@@ -106,23 +111,29 @@ main( int argv, char** argc )
                                    (double)error );
         }
 
-        cv::Mat testImg = cv::Mat_<uchar>( tracked_img.size(), 0 );
+        cv::Mat reconst_img = cv::Mat_<uchar>( tracked_img.size(), 0 );
 
         for ( auto& [tlx, brx, tly, bry, vec_x, vex_y, error] : motion_vec )
         {
-            cv::Mat testImgPatch =
+            cv::Mat reconst_Patch =
                 tracked_img( cv::Range( tlx + vec_x, brx + vec_x ),
                              cv::Range( tly + vex_y, bry + vex_y ) );
-            testImgPatch.copyTo(
-                testImg( cv::Range( tlx, brx ), cv::Range( tly, bry ) ) );
+            reconst_Patch.copyTo(
+                reconst_img( cv::Range( tlx, brx ), cv::Range( tly, bry ) ) );
         }
+        ImgArr.push_back( std::make_tuple(
+            reconst_img, fmt::format( "{}_{}", option_str, "reconst" ) ) );
 
         // do psnr calculation
 
         mv_out << std::endl;
-        std::cout << fmt::format( "end of {} computation!", option_str )
+        std::cout << fmt::format( "end of {} computation!\npsnr : {:f}",
+                                  option_str, psnr( ancher_img, reconst_img ) )
                   << std::endl;
     }
+
+    img_save( ImgArr, savepath.string(), ".png",
+              {cv::IMWRITE_PNG_COMPRESSION, 9} );
 
     ////////////////////////////////////
 

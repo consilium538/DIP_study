@@ -3,7 +3,7 @@
 
 #include "globals.hpp"
 
-using obj_arg_t = std::vector<double>;
+using obj_arg_t = double;
 using obj_f = std::function<double( const cv::Mat,
                                     const cv::Mat,
                                     const double,

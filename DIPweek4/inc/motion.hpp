@@ -5,7 +5,7 @@
 #include "metric.hpp"
 
 using mv_t = std::tuple<int, int, int, int, int, int, double>;
-using bma_arg_t = std::vector<int>;
+using bma_arg_t = int;
 
 using bma_f = std::function<mv_t( cv::Mat,
                                   cv::Mat,
@@ -33,6 +33,14 @@ ebma_f( cv::Mat ancher_img,
 
 mv_t
 tss_f( cv::Mat ancher_img,
+       cv::Mat tracked_img,
+       const cv::Rect ancher_rect,
+       obj_f objective,
+       const obj_arg_t& obj_args,
+       const bma_arg_t& bma_args );
+
+mv_t
+tdls_f( cv::Mat ancher_img,
        cv::Mat tracked_img,
        const cv::Rect ancher_rect,
        obj_f objective,
