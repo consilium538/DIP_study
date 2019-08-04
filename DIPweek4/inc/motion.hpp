@@ -41,10 +41,10 @@ tss_f( cv::Mat ancher_img,
 
 mv_t
 tdls_f( cv::Mat ancher_img,
-       cv::Mat tracked_img,
-       const cv::Rect ancher_rect,
-       obj_f objective,
-       const obj_arg_t& obj_args,
-       const bma_arg_t& bma_args );
+        cv::Mat tracked_img,
+        const cv::Rect ancher_rect,
+        obj_f objective,
+        const obj_arg_t& obj_args,
+        const bma_arg_t& bma_args );
 
 #endif  // MOTION_HPP

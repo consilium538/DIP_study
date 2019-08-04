@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/dhej1/Desktop/DIP/DIP_study/DIPweek4
+CMAKE_SOURCE_DIR = /mnt/data/study/sogang/19ysum/DIP_study/DIPweek4
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/dhej1/Desktop/DIP/DIP_study/DIPweek4
+CMAKE_BINARY_DIR = /mnt/data/study/sogang/19ysum/DIP_study/DIPweek4
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/dhej1/Desktop/DIP/DIP_study/DIPweek4/CMakeFiles /home/dhej1/Desktop/DIP/DIP_study/DIPweek4/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/data/study/sogang/19ysum/DIP_study/DIPweek4/CMakeFiles /mnt/data/study/sogang/19ysum/DIP_study/DIPweek4/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/dhej1/Desktop/DIP/DIP_study/DIPweek4/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/data/study/sogang/19ysum/DIP_study/DIPweek4/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -257,6 +257,7 @@ src/motion.o: src/motion.cpp.o
 # target to build an object file
 src/motion.cpp.o:
 	$(MAKE) -f CMakeFiles/dip_week4.dir/build.make CMakeFiles/dip_week4.dir/src/motion.cpp.o
+	$(MAKE) -f CMakeFiles/dip_week4_reconst.dir/build.make CMakeFiles/dip_week4_reconst.dir/src/motion.cpp.o
 .PHONY : src/motion.cpp.o
 
 src/motion.i: src/motion.cpp.i
@@ -266,6 +267,7 @@ src/motion.i: src/motion.cpp.i
 # target to preprocess a source file
 src/motion.cpp.i:
 	$(MAKE) -f CMakeFiles/dip_week4.dir/build.make CMakeFiles/dip_week4.dir/src/motion.cpp.i
+	$(MAKE) -f CMakeFiles/dip_week4_reconst.dir/build.make CMakeFiles/dip_week4_reconst.dir/src/motion.cpp.i
 .PHONY : src/motion.cpp.i
 
 src/motion.s: src/motion.cpp.s
@@ -275,6 +277,7 @@ src/motion.s: src/motion.cpp.s
 # target to generate assembly for a file
 src/motion.cpp.s:
 	$(MAKE) -f CMakeFiles/dip_week4.dir/build.make CMakeFiles/dip_week4.dir/src/motion.cpp.s
+	$(MAKE) -f CMakeFiles/dip_week4_reconst.dir/build.make CMakeFiles/dip_week4_reconst.dir/src/motion.cpp.s
 .PHONY : src/motion.cpp.s
 
 # Help Target

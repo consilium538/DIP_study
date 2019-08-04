@@ -86,4 +86,14 @@ img_save( std::vector<std::tuple<cv::Mat, std::string>> ImgArr,
     }
 }
 
+std::unordered_map<std::string, bma_f> bma_map = {{"ebma", ebma_f},
+                                                  {"tss", tss_f},
+                                                  {"tdls", tdls_f}};
+
+std::unordered_map<std::string, obj_f> obj_map = {
+    {"mad_patch", mad_patch},
+    {"mse_patch", mse_patch},
+    {"mad_dist", mad_dist},
+};
+
 #endif  // MAIN_HPP

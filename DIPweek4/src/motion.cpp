@@ -107,23 +107,21 @@ tss_f( cv::Mat ancher_img,
     std::tuple<double, int, int> cur_pos = {
         objective( ancher_cut, tracked_img( ancher_rect ), 0, 0, obj_args ), 0,
         0};
-    int search_step = bma_args / 2;
-    const std::vector<std::tuple<int, int>> xypos( {{-1, -1},
-                                                    {-1, 0},
-                                                    {-1, 1},
-                                                    {0, -1},
-                                                    {0, 1},
-                                                    {1, -1},
-                                                    {1, 0},
-                                                    {1, +1}} );
+    constexpr std::array<std::tuple<int, int>, 8> xypos{
+        std::make_tuple( -1, -1 ), std::make_tuple( -1, 0 ),
+        std::make_tuple( -1, 1 ),  std::make_tuple( 0, -1 ),
+        std::make_tuple( 0, 1 ),   std::make_tuple( 1, -1 ),
+        std::make_tuple( 1, 0 ),   std::make_tuple( 1, +1 )};
 
-    for ( int iter = 0; iter < 3; iter++ )
+    for ( int search_step = bma_args / 2; search_step != 0; search_step /= 2 )
     {
         valid_error.push_back( cur_pos );
+        auto& [cur_error, cur_y, cur_x] = cur_pos;
         for ( auto& [x, y] : xypos )
         {
             cv::Rect tracked_rect =
-                ancher_rect + cv::Point( x * search_step, y * search_step );
+                ancher_rect +
+                cv::Point( cur_x + x * search_step, cur_y + y * search_step );
             if ( !isInsideRect(
                      cv::Rect( cv::Point( 0, 0 ), ancher_img.size() ),
                      tracked_rect ) )
@@ -131,12 +129,12 @@ tss_f( cv::Mat ancher_img,
 
             valid_error.push_back( std::make_tuple(
                 objective( ancher_cut, tracked_img( tracked_rect ),
-                           y * search_step, x * search_step, obj_args ),
-                y, x ) );
+                           cur_y + y * search_step, cur_x + x * search_step,
+                           obj_args ),
+                cur_y + y * search_step, cur_x + x * search_step ) );
         }
         cur_pos = *std::min_element( valid_error.begin(), valid_error.end() );
         valid_error.clear();
-        search_step /= 2;
     }
 
     auto& [error, x_min, y_min] = cur_pos;
@@ -148,29 +146,32 @@ tss_f( cv::Mat ancher_img,
 
 mv_t
 tdls_f( cv::Mat ancher_img,
-       cv::Mat tracked_img,
-       const cv::Rect ancher_rect,
-       obj_f objective,
-       const obj_arg_t& obj_args,
-       const bma_arg_t& bma_args )
+        cv::Mat tracked_img,
+        const cv::Rect ancher_rect,
+        obj_f objective,
+        const obj_arg_t& obj_args,
+        const bma_arg_t& bma_args )
 {
     std::vector<std::tuple<double, int, int>> valid_error;
     cv::Mat ancher_cut = ancher_img( ancher_rect );
     std::tuple<double, int, int> cur_pos = {
         objective( ancher_cut, tracked_img( ancher_rect ), 0, 0, obj_args ), 0,
         0};
-    const std::vector<std::tuple<int, int>> xypos( {{-1, 0},
-                                                    {0, -1},
-                                                    {0, 1},
-                                                    {1, 0}} );
+    constexpr std::array<std::tuple<int, int>, 4> xypos{
+        std::make_tuple( -1, 0 ), std::make_tuple( 0, -1 ),
+        std::make_tuple( 0, 1 ), std::make_tuple( 1, 0 )};
+    int search_step = static_cast<int>( std::max(
+        2.0, std::pow( 2, std::floor( std::log2( bma_args ) ) - 1 ) ) );
 
-    for ( int search_step = bma_args / 2; search_step == 0; search_step /= 2 )
+    while ( search_step != 0 )
     {
         valid_error.push_back( cur_pos );
+        auto& [cur_error, cur_y, cur_x] = cur_pos;
         for ( auto& [x, y] : xypos )
         {
             cv::Rect tracked_rect =
-                ancher_rect + cv::Point( x * search_step, y * search_step );
+                ancher_rect +
+                cv::Point( cur_x + x * search_step, cur_y + y * search_step );
             if ( !isInsideRect(
                      cv::Rect( cv::Point( 0, 0 ), ancher_img.size() ),
                      tracked_rect ) )
@@ -178,10 +179,17 @@ tdls_f( cv::Mat ancher_img,
 
             valid_error.push_back( std::make_tuple(
                 objective( ancher_cut, tracked_img( tracked_rect ),
-                           y * search_step, x * search_step, obj_args ),
-                y, x ) );
+                           cur_y + y * search_step, cur_x + x * search_step,
+                           obj_args ),
+                cur_y + y * search_step, cur_x + x * search_step ) );
         }
-        cur_pos = *std::min_element( valid_error.begin(), valid_error.end() );
+        auto next_pos =
+            *std::min_element( valid_error.begin(), valid_error.end() );
+        if ( next_pos == cur_pos )
+            search_step /= 2;
+        else
+            cur_pos = next_pos;
+
         valid_error.clear();
     }
 

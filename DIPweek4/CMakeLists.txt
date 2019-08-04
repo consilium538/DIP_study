@@ -32,7 +32,8 @@ add_executable(
 )
 
 add_executable(
-    dip_week4_reconst ./src/main_reconst.cpp ./src/metric.cpp ./src/jsoncpp/jsoncpp.cpp
+    dip_week4_reconst ./src/main_reconst.cpp ./src/metric.cpp ./src/motion.cpp
+     ./src/jsoncpp/jsoncpp.cpp
 )
 
 target_link_libraries(dip_week4

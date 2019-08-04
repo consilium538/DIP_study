@@ -1,14 +1,5 @@
 #include "main.hpp"
 
-std::unordered_map<std::string, bma_f> bma_map = {{"ebma", ebma_f},
-                                                  {"tss", tss_f}};
-
-std::unordered_map<std::string, obj_f> obj_map = {
-    {"mad_patch", mad_patch},
-    {"mse_patch", mse_patch},
-    {"mad_dist", mad_dist},
-};
-
 double
 psnr( cv::Mat orig, cv::Mat noised )
 {
@@ -39,8 +30,12 @@ main( int argv, char** argc )
     std::vector<std::tuple<cv::Mat, std::string>> ImgArr;
 
     std::vector test_set = {
-        std::make_tuple( "cubecut", 8, "ebma", 15, "mad_dist", 0.1 ),
-        std::make_tuple( "cubecut", 8, "tss", 15, "mad_dist", 0.1 )
+        std::make_tuple( "street", 4, "ebma", 15, "mad_dist", 0.1 ),
+        std::make_tuple( "street", 4, "ebma", 7, "mad_dist", 0.1 ),
+        std::make_tuple( "street", 4, "ebma", 3, "mad_dist", 0.1 ),
+        std::make_tuple( "street", 4, "ebma", 1, "mad_dist", 0.1 ),
+        // std::make_tuple( "street", 8, "tss", 15, "mad_dist", 0.1 ),
+        // std::make_tuple( "street", 8, "tdls", 15, "mad_dist", 0.1 )
         // std::make_tuple( "cubecut", 8, "ebma", 15, "mad_patch", 0 ),
         // std::make_tuple( "street", 8, "ebma", 15, "mad_dist", 0.1 ),
         // std::make_tuple( "street", 8, "ebma", 15, "mad_patch", 0 )
@@ -127,9 +122,12 @@ main( int argv, char** argc )
         // do psnr calculation
 
         mv_out << std::endl;
-        std::cout << fmt::format( "end of {} computation!\npsnr : {:f}",
-                                  option_str, psnr( ancher_img, reconst_img ) )
-                  << std::endl;
+        std::cout
+            << fmt::format(
+                   "end of {} computation!\npsnr : {:f}\nancher-traced : {:f}",
+                   option_str, psnr( ancher_img, reconst_img ),
+                   psnr( ancher_img, tracked_img ) )
+            << std::endl;
     }
 
     img_save( ImgArr, savepath.string(), ".png",
