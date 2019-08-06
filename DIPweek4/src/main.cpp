@@ -30,10 +30,8 @@ main( int argv, char** argc )
     std::vector<std::tuple<cv::Mat, std::string>> ImgArr;
 
     std::vector test_set = {
-        std::make_tuple( "street", 4, "ebma", 15, "mad_dist", 0.1 ),
-        std::make_tuple( "street", 4, "ebma", 7, "mad_dist", 0.1 ),
-        std::make_tuple( "street", 4, "ebma", 3, "mad_dist", 0.1 ),
-        std::make_tuple( "street", 4, "ebma", 1, "mad_dist", 0.1 ),
+        std::make_tuple( "cubecut", 8, "ebma", 15, "mad_patch", 0.0 ),
+        std::make_tuple( "cubecut", 8, "ebma", 15, "mad_dist", 0.1 ),
         // std::make_tuple( "street", 8, "tss", 15, "mad_dist", 0.1 ),
         // std::make_tuple( "street", 8, "tdls", 15, "mad_dist", 0.1 )
         // std::make_tuple( "cubecut", 8, "ebma", 15, "mad_patch", 0 ),
@@ -94,8 +92,15 @@ main( int argv, char** argc )
 
         std::vector<mv_t> motion_vec;
 
+        auto starttime = std::chrono::high_resolution_clock::now();
         motion_vec = bma( ancher_img, tracked_img, block_size, obj_map[obj_str],
                           obj_args, bma_map[bma_str], bma_args );
+        auto endtime = std::chrono::high_resolution_clock::now();
+        double time_taken_ms =
+            (double)( std::chrono::duration_cast<std::chrono::nanoseconds>(
+                            endtime - starttime )
+                            .count() ) *
+            1e-6;
 
         for ( auto& [tlx, brx, tly, bry, vec_x, vex_y, error] : motion_vec )
         {
@@ -124,9 +129,9 @@ main( int argv, char** argc )
         mv_out << std::endl;
         std::cout
             << fmt::format(
-                   "end of {} computation!\npsnr : {:f}\nancher-traced : {:f}",
+                   "end of {} computation!\npsnr : {:f} processing time : {:f}\t",
                    option_str, psnr( ancher_img, reconst_img ),
-                   psnr( ancher_img, tracked_img ) )
+                   time_taken_ms)
             << std::endl;
     }
 
