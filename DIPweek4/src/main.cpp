@@ -32,6 +32,8 @@ main( int argv, char** argc )
     std::vector test_set = {
         std::make_tuple( "cubecut", 8, "ebma", 15, "mad_patch", 0.0 ),
         std::make_tuple( "cubecut", 8, "ebma", 15, "mad_dist", 0.1 ),
+        std::make_tuple( "street", 8, "ebma", 15, "mad_dist", 0.1 ),
+        std::make_tuple( "test", 8, "ebma", 15, "mad_dist", 0.1 ),
         // std::make_tuple( "street", 8, "tss", 15, "mad_dist", 0.1 ),
         // std::make_tuple( "street", 8, "tdls", 15, "mad_dist", 0.1 )
         // std::make_tuple( "cubecut", 8, "ebma", 15, "mad_patch", 0 ),
